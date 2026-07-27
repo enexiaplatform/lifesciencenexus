@@ -15,7 +15,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check": "npm run typecheck && npm run lint && npm test"
+    "check": "npm run typecheck && npm run lint && npm test",
+    "db:migrate": "supabase db push",
+    "verify:rls": "psql \"$DATABASE_URL\" -f scripts/verify-rls.sql",
+    "verify:data-isolation": "psql \"$DATABASE_URL\" -f scripts/verify-data-isolation.sql",
+    "verify:evidence": "node scripts/verify-migrations.mjs",
+    "verify:demo-separation": "node scripts/verify-migrations.mjs --demo-checks",
+    "verify:integrations": "vitest run src/lib/integrations",
+    "verify:production-readiness": "npm run check && node scripts/verify-migrations.mjs && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.1.23",
