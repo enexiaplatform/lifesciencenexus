@@ -132,8 +132,10 @@ export interface SkuDetail {
   manufacturer: Organization | null;
   format: ProductFormat | null;
   packConfigurations: PackConfiguration[];
-  edges: ProductEdge[];
-  listings: SupplierListing[];
+  /** Edges enriched with the resolved display name of each edge target. */
+  edges: Array<ProductEdge & { targetName: string | null }>;
+  /** Listings enriched with the supplier organization display name. */
+  listings: Array<SupplierListing & { supplierName: string | null }>;
   prices: PriceObservation[];
   documents: ProductDocument[];
 }

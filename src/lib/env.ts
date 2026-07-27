@@ -80,7 +80,7 @@ export function getServiceRoleKey(): string | null {
   return env.SUPABASE_SERVICE_ROLE_KEY ?? null;
 }
 
-export const demoTenantId = env.NEXUS_DEMO_TENANT_ID ?? "demo-tenant";
+export const demoTenantId = env.NEXUS_DEMO_TENANT_ID ?? "tenant_demo";
 
 export const featureFlags = {
   aiExtraction: env.NEXUS_ENABLE_AI_EXTRACTION,

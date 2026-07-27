@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { DemoRepository } from "./demo-repository";
+import { DEMO_TENANT_ID } from "../demo";
+import { createDemoRepository, DemoRepository } from "./demo-repository";
 
 const FIXED_NOW = new Date("2026-07-01T00:00:00.000Z");
 
@@ -291,26 +292,22 @@ describe("DemoRepository dashboard, signals and merges", () => {
     expect(summary.highValueSignals).toEqual([]);
   });
 
-  it("acknowledgeSignal and dismissSignal update status", async () => {
-    const r = repo();
-    const signal = await r.createEntity("opportunity_signal", {
-      tenantId: "tenant-test",
-      type: "price_stale",
-      relatedEntities: [{ entityType: "sku", entityId: "sku-1" }],
-      triggeringRecordIds: ["po-1"],
-      reason: "Price is 200 days old.",
-      confidence: 0.8,
-      commercialRelevance: "medium",
-      generatedAt: FIXED_NOW.toISOString(),
-      recommendedAction: "Request a fresh quotation.",
-      status: "new",
-      visibility: "tenant_private",
-      isDemo: true,
-    });
-    expect((await r.acknowledgeSignal(signal.id)).status).toBe("acknowledged");
-    expect((await r.dismissSignal(signal.id)).status).toBe("dismissed");
-    const listed = await r.listSignals({ filters: { status: "dismissed" } });
+  it("listSignals computes signals from the dataset and keeps ack/dismiss state in memory", async () => {
+    const r = createDemoRepository({ tenantId: DEMO_TENANT_ID, userId: "user-test", now: () => FIXED_NOW });
+    const signals = await r.listSignals({ pageSize: 100 });
+    expect(signals.total).toBeGreaterThanOrEqual(5);
+    const target = signals.items[0];
+    expect(target.status).toBe("new");
+    expect(target.tenantId).toBe(DEMO_TENANT_ID);
+
+    expect((await r.acknowledgeSignal(target.id)).status).toBe("acknowledged");
+    expect((await r.dismissSignal(target.id)).status).toBe("dismissed");
+
+    const listed = await r.listSignals({ filters: { status: "dismissed" }, pageSize: 100 });
     expect(listed.total).toBe(1);
+    expect(listed.items[0].id).toBe(target.id);
+
+    await expect(r.acknowledgeSignal("sig-missing")).rejects.toThrow(/not found/);
   });
 
   it("mergeEntities preserves aliases, archives the loser and records the event", async () => {

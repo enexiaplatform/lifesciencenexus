@@ -1,8 +1,11 @@
+import { buildDemoDataset, DEMO_TENANT_ID, type DemoDataset } from "../demo";
 import { buildMergePlan } from "../domain/entity-resolution";
 import { daysUntil, freshnessBucket, isReviewDue } from "../domain/freshness";
 import { newId } from "../domain/id";
 import type { SearchableRecord } from "../domain/search-rank";
 import { rankSearchResults } from "../domain/search-rank";
+import type { SignalSnapshot } from "../domain/signals";
+import { generateSignals } from "../domain/signals";
 import type {
   CreateEntityInput,
   DuplicateCandidate,
@@ -11,6 +14,8 @@ import type {
   EntityTypeMap,
   NexusEntity,
   OpportunitySignal,
+  ProductEdge,
+  SignalStatus,
   UpdateEntityInput,
   Visibility,
 } from "../domain/types";
@@ -42,6 +47,15 @@ import { DEFAULT_LIST_PARAMS } from "./repository";
  * queue and merges. Everything lives in process memory — nothing persists
  * across restarts, which is exactly what a demo backend should promise.
  *
+ * `createDemoRepository()` loads the full synthetic dataset from `@/lib/demo`
+ * (the factory in `./index` goes through this path); `new DemoRepository()`
+ * without a dataset stays empty, which keeps unit tests small.
+ *
+ * Tenant isolation: records carrying a `tenantId` are visible only to the
+ * matching active tenant; `tenant_private` records without one belong to the
+ * demo workspace tenant (`tenant_demo`) by convention; canonical records are
+ * visible to everyone.
+ *
  * Context (tenantId/userId) is injected at construction and used to fill
  * audit fields; `now` is injectable for deterministic tests.
  */
@@ -50,6 +64,8 @@ export interface DemoRepositoryContext {
   tenantId?: string;
   userId?: string;
   now?: () => Date;
+  /** Pre-built dataset; `createDemoRepository` builds one when absent. */
+  dataset?: DemoDataset;
 }
 
 /** Minimal structural view used for merge planning. */
@@ -75,20 +91,24 @@ const QUERY_FIELDS = [
 export class DemoRepository implements NexusRepository {
   private readonly store = new Map<EntityType, Map<string, NexusEntity>>();
   private readonly redirects = new Map<string, string>();
+  private readonly signalStatusOverrides = new Map<string, SignalStatus>();
   private readonly tenantId: string;
   private readonly userId: string;
   private readonly now: () => Date;
 
   constructor(context: DemoRepositoryContext = {}) {
-    this.tenantId = context.tenantId ?? "demo-tenant";
-    this.userId = context.userId ?? "demo-user";
+    this.tenantId = context.tenantId ?? DEMO_TENANT_ID;
+    this.userId = context.userId ?? "user_demo_owner";
     this.now = context.now ?? (() => new Date());
+    if (context.dataset) {
+      this.loadDataset(context.dataset);
+    }
   }
 
   /**
    * Per-type bucket. The cast is safe because all writes go through
-   * createEntity/updateEntity, which only place an entity into its own
-   * type's bucket.
+   * createEntity/updateEntity/loadDataset, which only place an entity into
+   * its own type's bucket.
    */
   private bucket<K extends EntityType>(type: K): Map<string, EntityTypeMap[K]> {
     let bucket = this.store.get(type);
@@ -99,9 +119,42 @@ export class DemoRepository implements NexusRepository {
     return bucket as Map<string, EntityTypeMap[K]>;
   }
 
+  /** Load a pre-built dataset into the store, bucket by bucket. */
+  private loadDataset(dataset: DemoDataset): void {
+    for (const type of ENTITY_TYPES) {
+      const records = dataset[type];
+      if (!records) continue;
+      const bucket = this.bucket(type);
+      for (const record of records) {
+        bucket.set(record.id, record);
+      }
+    }
+  }
+
+  /**
+   * Tenant isolation rule: tenant-owned records are visible only to their
+   * tenant; tenant-private records without an explicit tenantId belong to the
+   * demo workspace tenant; canonical records are visible to all.
+   */
+  private isVisible(entity: NexusEntity): boolean {
+    const tenantId = (entity as { tenantId?: unknown }).tenantId;
+    if (typeof tenantId === "string") {
+      return tenantId === this.tenantId;
+    }
+    if (entity.visibility === "tenant_private") {
+      return this.tenantId === DEMO_TENANT_ID;
+    }
+    return true;
+  }
+
   /** Non-archived entities of one type. */
   private all<K extends EntityType>(type: K): Array<EntityTypeMap[K]> {
     return [...this.bucket(type).values()].filter((entity) => entity.archivedAt === undefined);
+  }
+
+  /** Non-archived entities of one type visible to the active tenant. */
+  private visibleAll<K extends EntityType>(type: K): Array<EntityTypeMap[K]> {
+    return this.all(type).filter((entity) => this.isVisible(entity));
   }
 
   /** Follow a merge redirect, when one exists. */
@@ -115,13 +168,13 @@ export class DemoRepository implements NexusRepository {
 
   async list<K extends EntityType>(type: K, params?: Partial<ListParams>): Promise<Paged<EntityTypeMap[K]>> {
     const resolved = { ...DEFAULT_LIST_PARAMS, ...params };
-    let items = [...this.bucket(type).values()];
+    let items = [...this.bucket(type).values()].filter((entity) => this.isVisible(entity));
 
     if (!resolved.includeArchived) {
       items = items.filter((entity) => entity.archivedAt === undefined);
     }
-    const query = resolved.query?.trim().toLowerCase();
-    if (query) {
+    if (resolved.query?.trim()) {
+      const query = resolved.query.trim().toLowerCase();
       items = items.filter((entity) => matchesQuery(entity, query));
     }
     if (resolved.filters) {
@@ -133,21 +186,13 @@ export class DemoRepository implements NexusRepository {
       items = sortItems(items, resolved.sort);
     }
 
-    const total = items.length;
-    const totalPages = Math.max(1, Math.ceil(total / resolved.pageSize));
-    const page = Math.min(Math.max(1, resolved.page), totalPages);
-    const start = (page - 1) * resolved.pageSize;
-    return {
-      items: items.slice(start, start + resolved.pageSize),
-      page,
-      pageSize: resolved.pageSize,
-      total,
-      totalPages,
-    };
+    return paginate(items, resolved);
   }
 
   async getById<K extends EntityType>(type: K, id: string): Promise<EntityTypeMap[K] | null> {
-    return this.bucket(type).get(id) ?? null;
+    const entity = this.bucket(type).get(id);
+    if (!entity || !this.isVisible(entity)) return null;
+    return entity;
   }
 
   async search(query: string, options: SearchOptions = {}): Promise<SearchResult[]> {
@@ -197,35 +242,38 @@ export class DemoRepository implements NexusRepository {
     };
 
     const aliasesByOrg = new Map<string, string[]>();
-    for (const alias of this.all("organization_alias")) {
+    for (const alias of this.visibleAll("organization_alias")) {
       const list = aliasesByOrg.get(alias.organizationId) ?? [];
       list.push(alias.alias);
       aliasesByOrg.set(alias.organizationId, list);
     }
 
-    for (const org of this.all("organization")) {
+    for (const org of this.visibleAll("organization")) {
       push(org, "organization", {
         name: org.name,
         aliases: aliasesByOrg.get(org.id) ?? [],
         identifiers: org.identifiers,
       }, `${org.types.join(", ")} · ${org.country}`);
     }
-    for (const site of this.all("site")) {
+    for (const site of this.visibleAll("site")) {
       push(site, "site", { name: site.name }, site.siteType);
     }
-    for (const person of this.all("person")) {
+    for (const lab of this.visibleAll("laboratory")) {
+      push(lab, "laboratory", { name: lab.name }, lab.labType);
+    }
+    for (const person of this.visibleAll("person")) {
       push(person, "person", { name: person.fullName }, person.title);
     }
-    for (const brand of this.all("brand")) {
+    for (const brand of this.visibleAll("brand")) {
       push(brand, "brand", { name: brand.name });
     }
-    for (const family of this.all("product_family")) {
+    for (const family of this.visibleAll("product_family")) {
       push(family, "product_family", { name: family.name }, family.category);
     }
-    for (const product of this.all("product")) {
+    for (const product of this.visibleAll("product")) {
       push(product, "product", { name: product.name }, product.category);
     }
-    for (const sku of this.all("sku")) {
+    for (const sku of this.visibleAll("sku")) {
       push(sku, "sku", {
         name: sku.name,
         aliases: sku.alternateNames,
@@ -233,26 +281,59 @@ export class DemoRepository implements NexusRepository {
         identifiers: sku.gtin ? [{ scheme: "gtin", value: sku.gtin }] : [],
       }, sku.catalogueNumber);
     }
-    for (const standard of this.all("standard")) {
+    for (const application of this.visibleAll("application")) {
+      push(application, "application", { name: application.name });
+    }
+    for (const method of this.visibleAll("method")) {
+      push(method, "method", { name: method.name });
+    }
+    for (const standard of this.visibleAll("standard")) {
       push(standard, "standard", {
         name: `${standard.body} ${standard.code}`,
         aliases: [standard.code],
       }, standard.title);
     }
-    for (const organism of this.all("organism")) {
+    for (const organism of this.visibleAll("organism")) {
       push(organism, "organism", {
         name: `${organism.genus} ${organism.species}`,
         aliases: organism.strainCode ? [organism.strainCode] : [],
       }, organism.strainCode);
     }
-    for (const model of this.all("asset_model")) {
-      push(model, "asset_model", { name: model.model }, model.category);
+    for (const profile of this.visibleAll("supplier_profile")) {
+      const org = this.bucket("organization").get(profile.organizationId);
+      push(
+        profile,
+        "supplier_profile",
+        { name: org?.name ?? profile.organizationId },
+        `${profile.relationshipType} · ${profile.countries.join(", ")}`,
+      );
     }
-    for (const tender of this.all("tender")) {
+    for (const tender of this.visibleAll("tender")) {
       push(tender, "tender", {
         name: `${tender.code} ${tender.title}`,
         aliases: [tender.code],
       }, `${tender.country} · ${tender.status}`);
+    }
+    for (const model of this.visibleAll("asset_model")) {
+      push(model, "asset_model", { name: model.model }, model.category);
+    }
+    for (const asset of this.visibleAll("installed_asset")) {
+      const model = this.bucket("asset_model").get(asset.assetModelId);
+      push(
+        asset,
+        "installed_asset",
+        {
+          name: model?.model ?? asset.id,
+          aliases: asset.serialNumber ? [asset.serialNumber] : [],
+        },
+        asset.status,
+      );
+    }
+    for (const source of this.visibleAll("source")) {
+      push(source, "source", { name: source.title }, source.publisher ?? source.type);
+    }
+    for (const project of this.visibleAll("research_project")) {
+      push(project, "research_project", { name: project.title }, project.status);
     }
     return out;
   }
@@ -264,20 +345,20 @@ export class DemoRepository implements NexusRepository {
   async getOrganizationDetail(id: string): Promise<OrganizationDetail | null> {
     const organization = await this.getById("organization", id);
     if (!organization) return null;
-    const sites = this.all("site").filter((site) => site.organizationId === id);
+    const sites = this.visibleAll("site").filter((site) => site.organizationId === id);
     const siteIds = new Set(sites.map((site) => site.id));
-    const contacts = this.all("organization_contact").filter((contact) => contact.organizationId === id);
+    const contacts = this.visibleAll("organization_contact").filter((contact) => contact.organizationId === id);
     return {
       organization,
-      aliases: this.all("organization_alias").filter((alias) => alias.organizationId === id),
+      aliases: this.visibleAll("organization_alias").filter((alias) => alias.organizationId === id),
       sites,
-      laboratories: this.all("laboratory").filter((lab) => siteIds.has(lab.siteId)),
-      supplierProfile: this.all("supplier_profile").find((profile) => profile.organizationId === id) ?? null,
+      laboratories: this.visibleAll("laboratory").filter((lab) => siteIds.has(lab.siteId)),
+      supplierProfile: this.visibleAll("supplier_profile").find((profile) => profile.organizationId === id) ?? null,
       contacts: contacts.map((contact) => ({
         ...contact,
         person: this.bucket("person").get(contact.personId) ?? null,
       })),
-      relationships: this.all("organization_relationship").filter(
+      relationships: this.visibleAll("organization_relationship").filter(
         (relationship) => relationship.fromOrgId === id || relationship.toOrgId === id,
       ),
     };
@@ -294,9 +375,9 @@ export class DemoRepository implements NexusRepository {
       family,
       brand,
       manufacturer,
-      skus: this.all("sku").filter((sku) => sku.productId === id),
-      edges: this.all("product_edge").filter((edge) => edge.productId === id),
-      documents: this.all("product_document").filter((doc) => doc.productId === id),
+      skus: this.visibleAll("sku").filter((sku) => sku.productId === id),
+      edges: this.visibleAll("product_edge").filter((edge) => edge.productId === id),
+      documents: this.visibleAll("product_document").filter((doc) => doc.productId === id),
     };
   }
 
@@ -314,44 +395,85 @@ export class DemoRepository implements NexusRepository {
       brand,
       manufacturer,
       format: sku.formatId ? await this.getById("product_format", sku.formatId) : null,
-      packConfigurations: this.all("pack_configuration").filter((pack) => pack.skuId === id),
-      edges: this.all("product_edge").filter((edge) => edge.productId === sku.productId),
-      listings: this.all("supplier_listing").filter((listing) => listing.skuId === id),
-      prices: this.all("price_observation")
+      packConfigurations: this.visibleAll("pack_configuration").filter((pack) => pack.skuId === id),
+      edges: this.visibleAll("product_edge")
+        .filter((edge) => edge.productId === sku.productId)
+        .map((edge) => ({ ...edge, targetName: this.edgeTargetName(edge) })),
+      listings: this.visibleAll("supplier_listing")
+        .filter((listing) => listing.skuId === id)
+        .map((listing) => ({
+          ...listing,
+          supplierName: this.bucket("organization").get(listing.supplierOrgId)?.name ?? null,
+        })),
+      prices: this.visibleAll("price_observation")
         .filter((price) => price.skuId === id)
         .sort((a, b) => b.observationDate.localeCompare(a.observationDate)),
-      documents: this.all("product_document").filter((doc) => doc.skuId === id),
+      documents: this.visibleAll("product_document").filter((doc) => doc.skuId === id),
     };
+  }
+
+  /** Resolve the display name of a product-edge target for detail views. */
+  private edgeTargetName(edge: ProductEdge): string | null {
+    switch (edge.targetType) {
+      case "application":
+        return this.bucket("application").get(edge.targetId)?.name ?? null;
+      case "method":
+        return this.bucket("method").get(edge.targetId)?.name ?? null;
+      case "standard": {
+        const standard = this.bucket("standard").get(edge.targetId);
+        return standard ? `${standard.body} ${standard.code}` : null;
+      }
+      case "organism": {
+        const organism = this.bucket("organism").get(edge.targetId);
+        return organism
+          ? [organism.genus, organism.species, organism.strainCode].filter(Boolean).join(" ")
+          : null;
+      }
+      case "sample_type":
+        return this.bucket("sample_type").get(edge.targetId)?.name ?? null;
+      case "industry":
+        return this.bucket("industry").get(edge.targetId)?.name ?? null;
+      case "technology":
+        return this.bucket("technology").get(edge.targetId)?.name ?? null;
+      case "test_type":
+        return this.bucket("test_type").get(edge.targetId)?.name ?? null;
+      case "incubation_condition": {
+        const condition = this.bucket("incubation_condition").get(edge.targetId);
+        return condition?.description ?? null;
+      }
+      case "preparation_method":
+        return this.bucket("preparation_method").get(edge.targetId)?.name ?? null;
+    }
   }
 
   async getTenderDetail(id: string): Promise<TenderDetail | null> {
     const tender = await this.getById("tender", id);
     if (!tender) return null;
-    const lots = this.all("tender_lot").filter((lot) => lot.tenderId === id);
+    const lots = this.visibleAll("tender_lot").filter((lot) => lot.tenderId === id);
     const lotIds = new Set(lots.map((lot) => lot.id));
-    const items = this.all("tender_item").filter((item) => lotIds.has(item.lotId));
+    const items = this.visibleAll("tender_item").filter((item) => lotIds.has(item.lotId));
     const itemIds = new Set(items.map((item) => item.id));
     return {
       tender,
       buyer: await this.getById("organization", tender.buyerOrganizationId),
       lots,
       items,
-      bidders: this.all("tender_bidder").filter(
+      bidders: this.visibleAll("tender_bidder").filter(
         (bidder) => bidder.tenderId === id || (bidder.lotId !== undefined && lotIds.has(bidder.lotId)),
       ),
-      awards: this.all("tender_award").filter(
+      awards: this.visibleAll("tender_award").filter(
         (award) =>
           (award.lotId !== undefined && lotIds.has(award.lotId)) ||
           (award.tenderItemId !== undefined && itemIds.has(award.tenderItemId)),
       ),
-      events: this.all("tender_event").filter((event) => event.tenderId === id),
+      events: this.visibleAll("tender_event").filter((event) => event.tenderId === id),
     };
   }
 
   async getAssetDetail(id: string): Promise<AssetDetail | null> {
     const asset = await this.getById("installed_asset", id);
     if (!asset) return null;
-    const compatibilities = this.all("consumable_compatibility").filter(
+    const compatibilities = this.visibleAll("consumable_compatibility").filter(
       (compatibility) => compatibility.assetModelId === asset.assetModelId,
     );
     return {
@@ -359,9 +481,9 @@ export class DemoRepository implements NexusRepository {
       model: await this.getById("asset_model", asset.assetModelId),
       site: await this.getById("site", asset.siteId),
       laboratory: asset.laboratoryId ? await this.getById("laboratory", asset.laboratoryId) : null,
-      lifecycleEvents: this.all("asset_lifecycle_event").filter((event) => event.installedAssetId === id),
-      maintenanceEvents: this.all("maintenance_event").filter((event) => event.installedAssetId === id),
-      qualificationEvents: this.all("qualification_event").filter((event) => event.installedAssetId === id),
+      lifecycleEvents: this.visibleAll("asset_lifecycle_event").filter((event) => event.installedAssetId === id),
+      maintenanceEvents: this.visibleAll("maintenance_event").filter((event) => event.installedAssetId === id),
+      qualificationEvents: this.visibleAll("qualification_event").filter((event) => event.installedAssetId === id),
       compatibleConsumables: compatibilities.map((compatibility) => ({
         ...compatibility,
         sku: this.bucket("sku").get(compatibility.skuId) ?? null,
@@ -374,10 +496,10 @@ export class DemoRepository implements NexusRepository {
     if (!project) return null;
     return {
       project,
-      notes: this.all("research_note").filter((note) => note.projectId === id),
-      findings: this.all("research_finding").filter((finding) => finding.projectId === id),
-      entities: this.all("research_project_entity").filter((link) => link.projectId === id),
-      exports: this.all("research_export").filter((exported) => exported.projectId === id),
+      notes: this.visibleAll("research_note").filter((note) => note.projectId === id),
+      findings: this.visibleAll("research_finding").filter((finding) => finding.projectId === id),
+      entities: this.visibleAll("research_project_entity").filter((link) => link.projectId === id),
+      exports: this.visibleAll("research_export").filter((exported) => exported.projectId === id),
     };
   }
 
@@ -387,25 +509,28 @@ export class DemoRepository implements NexusRepository {
 
   async dashboardSummary(): Promise<DashboardSummary> {
     const now = this.now();
+    const signals = this.computeSignals();
     const counts: Partial<Record<EntityType, number>> = {};
     for (const type of ENTITY_TYPES) {
-      const count = this.all(type).length;
+      const count = this.visibleAll(type).length;
       if (count > 0) counts[type] = count;
     }
-    const activeClaims = this.all("claim");
-    const signals = this.all("opportunity_signal");
+    // Signals are computed, not stored — report the computed count.
+    counts.opportunity_signal = signals.length;
+
+    const activeClaims = this.visibleAll("claim");
     return {
       counts,
       reviewQueueSize: activeClaims.filter((claim) =>
         ["unverified", "source_captured", "structurally_validated"].includes(claim.reviewStatus),
       ).length,
       freshness: {
-        stalePrices: this.all("price_observation").filter(
+        stalePrices: this.visibleAll("price_observation").filter(
           (price) =>
             freshnessBucket(price.observationDate, { agingAfterDays: 90, staleAfterDays: 180 }, now) === "stale",
         ).length,
         reviewDueClaims: activeClaims.filter((claim) => isReviewDue(claim.reviewByDate, now)).length,
-        expiringAgreements: this.all("distribution_agreement").filter((agreement) => {
+        expiringAgreements: this.visibleAll("distribution_agreement").filter((agreement) => {
           if (!agreement.validTo) return false;
           const days = daysUntil(agreement.validTo, now);
           return days >= 0 && days <= 90;
@@ -415,7 +540,7 @@ export class DemoRepository implements NexusRepository {
         .filter((signal) => signal.status === "new" && signal.commercialRelevance === "high")
         .sort((a, b) => b.generatedAt.localeCompare(a.generatedAt))
         .slice(0, 5),
-      possibleDuplicates: this.all("duplicate_candidate").filter((candidate) => candidate.status === "pending")
+      possibleDuplicates: this.visibleAll("duplicate_candidate").filter((candidate) => candidate.status === "pending")
         .length,
     };
   }
@@ -574,24 +699,94 @@ export class DemoRepository implements NexusRepository {
   }
 
   // -------------------------------------------------------------------------
-  // Signals
+  // Signals (computed from the current dataset via the signal engine)
   // -------------------------------------------------------------------------
 
+  /**
+   * Compute the current opportunity signals. Signals are derived intelligence:
+   * they are regenerated from the visible dataset on every call, carry
+   * deterministic ids, and only their acknowledge/dismiss status is stored
+   * (in-memory, keyed by signal id).
+   */
+  private computeSignals(): OpportunitySignal[] {
+    const snapshot: SignalSnapshot = {
+      installedAssets: this.visibleAll("installed_asset"),
+      tenders: this.visibleAll("tender"),
+      priceObservations: this.visibleAll("price_observation"),
+      distributionAgreements: this.visibleAll("distribution_agreement"),
+      products: this.visibleAll("product"),
+      supplierListings: this.visibleAll("supplier_listing"),
+      consumableCompatibilities: this.visibleAll("consumable_compatibility"),
+      vendorApprovals: this.visibleAll("vendor_approval"),
+      productValidations: this.visibleAll("product_validation"),
+      availabilityObservations: this.visibleAll("availability_observation"),
+      now: this.now(),
+    };
+    return generateSignals(snapshot).map((generated) => {
+      const id = `sig-${generated.type}-${generated.triggeringRecordIds.join("-")}`;
+      return {
+        ...generated,
+        id,
+        tenantId: this.tenantId,
+        createdAt: generated.generatedAt,
+        updatedAt: generated.generatedAt,
+        createdBy: "system",
+        updatedBy: "system",
+        visibility: "tenant_private" as const,
+        isDemo: true,
+        status: this.signalStatusOverrides.get(id) ?? generated.status,
+      };
+    });
+  }
+
   async listSignals(params?: Partial<ListParams>): Promise<Paged<OpportunitySignal>> {
-    return this.list("opportunity_signal", params);
+    const resolved = { ...DEFAULT_LIST_PARAMS, ...params };
+    let items = this.computeSignals();
+
+    if (resolved.query?.trim()) {
+      const query = resolved.query.trim().toLowerCase();
+      items = items.filter(
+        (signal) =>
+          signal.reason.toLowerCase().includes(query) ||
+          signal.type.toLowerCase().includes(query) ||
+          signal.recommendedAction.toLowerCase().includes(query),
+      );
+    }
+    if (resolved.filters) {
+      for (const [field, value] of Object.entries(resolved.filters)) {
+        items = items.filter((entity) => matchesFilter(entity, field, value));
+      }
+    }
+    if (resolved.sort) {
+      items = sortItems(items, resolved.sort);
+    } else {
+      items = [...items].sort((a, b) => b.generatedAt.localeCompare(a.generatedAt));
+    }
+
+    return paginate(items, resolved);
   }
 
   async acknowledgeSignal(id: string): Promise<OpportunitySignal> {
-    return this.updateEntity("opportunity_signal", id, { status: "acknowledged" });
+    return this.setSignalStatus(id, "acknowledged");
   }
 
   async dismissSignal(id: string): Promise<OpportunitySignal> {
-    return this.updateEntity("opportunity_signal", id, { status: "dismissed" });
+    return this.setSignalStatus(id, "dismissed");
+  }
+
+  private setSignalStatus(id: string, status: SignalStatus): OpportunitySignal {
+    const signal = this.computeSignals().find((candidate) => candidate.id === id);
+    if (!signal) {
+      throw new Error(`opportunity_signal ${id} not found`);
+    }
+    this.signalStatusOverrides.set(id, status);
+    return { ...signal, status, updatedAt: this.now().toISOString() };
   }
 }
 
 export function createDemoRepository(context: DemoRepositoryContext = {}): DemoRepository {
-  return new DemoRepository(context);
+  const dataset = context.dataset ?? buildDemoDataset(context.now?.() ?? new Date());
+  return new DemoRepository({ ...context, dataset });
 }
 
 // ---------------------------------------------------------------------------
@@ -634,4 +829,18 @@ function sortItems<T extends NexusEntity>(items: T[], sort: ListSort): T[] {
     }
     return String(left).localeCompare(String(right)) * direction;
   });
+}
+
+function paginate<T>(items: T[], resolved: ListParams): Paged<T> {
+  const total = items.length;
+  const totalPages = Math.max(1, Math.ceil(total / resolved.pageSize));
+  const page = Math.min(Math.max(1, resolved.page), totalPages);
+  const start = (page - 1) * resolved.pageSize;
+  return {
+    items: items.slice(start, start + resolved.pageSize),
+    page,
+    pageSize: resolved.pageSize,
+    total,
+    totalPages,
+  };
 }

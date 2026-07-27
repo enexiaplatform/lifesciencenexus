@@ -1,0 +1,311 @@
+import type {
+  CostPerTestScenario,
+  EquivalenceRecord,
+  ResearchExport,
+  ResearchFinding,
+  ResearchNote,
+  ResearchProject,
+  ResearchProjectEntity,
+  SavedView,
+} from "@/lib/domain/types";
+
+import type { SeedContext } from "./context";
+import {
+  CLAIMS,
+  COST_SCENARIOS,
+  DEMO_TENANT_ID,
+  EQUIVALENCES,
+  ORGS,
+  OTHER_TENANT_ID,
+  PRICES,
+  PRODUCTS,
+  RESEARCH,
+  SKUS,
+  TENDER,
+  USERS,
+} from "./ids";
+import type { DemoDatasetSlices } from "./types";
+
+/**
+ * Research workspace fixtures: the "Vietnam ready-prepared media market"
+ * project with notes, findings of every epistemic kind, entity links, a saved
+ * view and an export — plus two cost-per-test scenarios (dehydrated 500 g
+ * bottle vs ready plate pack) and two SKU equivalence records (a ~78
+ * functional_equivalent and a ~60 closest_alternative).
+ */
+export function seedResearch(ctx: SeedContext): DemoDatasetSlices {
+  const researchProjects: ResearchProject[] = [
+    {
+      ...ctx.tenantPrivate(RESEARCH.project, DEMO_TENANT_ID),
+      title: "Vietnam ready-prepared media market (Demo)",
+      question:
+        "How large is the addressable ready-prepared media market for pharma QC labs in Vietnam, and which suppliers cover it?",
+      scope: "Pharma and food QC laboratories, Vietnam, 2025-2026 (Demo).",
+      geographyCodes: ["VN"],
+      industryCodes: ["pharma", "food_beverage"],
+      status: "active",
+    },
+    {
+      // Belongs to tenant_other: must be invisible from the demo tenant.
+      ...ctx.tenantPrivate(RESEARCH.otherProject, OTHER_TENANT_ID),
+      title: "Competitor watch (Other Tenant Demo)",
+      question: "Which demo SKUs compete in the other tenant's patch?",
+      geographyCodes: ["VN"],
+      industryCodes: ["pharma"],
+      status: "active",
+    },
+  ];
+
+  const researchNotes: ResearchNote[] = [
+    {
+      ...ctx.tenantPrivate(RESEARCH.notePlates, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      text: "Distributor conversations suggest small QC labs are shifting from dehydrated media to ready plates (Demo note).",
+      entityType: "product",
+      entityId: PRODUCTS.tsaPlatesAcme,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.noteTender, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      text: "Hospital tenders bundle dehydrated media with QC organisms — see RRH-2025-014 (Demo note).",
+      entityType: "tender",
+      entityId: TENDER.tender,
+    },
+  ];
+
+  const researchFindings: ResearchFinding[] = [
+    {
+      ...ctx.tenantPrivate(RESEARCH.findingFact, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      kind: "verified_fact",
+      text: "TSA ready plates are listed by a demo distributor in Vietnam with a captured quotation (Demo finding).",
+      evidenceClaimIds: [CLAIMS.tpDistributed],
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.findingInterpretation, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      kind: "analyst_interpretation",
+      text: "Ready-prepared formats likely win share in low-throughput labs despite a higher cost per test (Demo interpretation).",
+      evidenceClaimIds: [],
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.findingAssumption, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      kind: "assumption",
+      text: "Assume imported ready plates carry a ~10 % landed-cost uplift over list price (Demo assumption).",
+      evidenceClaimIds: [],
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.findingUnknown, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      kind: "unknown",
+      text: "Actual consumption volumes of ready plates at hospital laboratories are unknown (Demo gap).",
+      evidenceClaimIds: [],
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.findingRecommendation, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      kind: "recommendation",
+      text: "Capture fresh distributor quotations for ready plates before the RRH renewal tender (Demo recommendation).",
+      evidenceClaimIds: [],
+    },
+  ];
+
+  const researchProjectEntities: ResearchProjectEntity[] = [
+    {
+      ...ctx.tenantPrivate(RESEARCH.linkProduct, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      entityType: "product",
+      entityId: PRODUCTS.tsaPlatesAcme,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.linkSku, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      entityType: "sku",
+      entityId: SKUS.tsaPlates20,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.linkOrg, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      entityType: "organization",
+      entityId: ORGS.mekong,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.linkTender, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      entityType: "tender",
+      entityId: TENDER.tender,
+    },
+  ];
+
+  const savedViews: SavedView[] = [
+    {
+      ...ctx.tenantPrivate(RESEARCH.savedView, DEMO_TENANT_ID),
+      name: "Ready media SKUs — VN (Demo)",
+      entityType: "sku",
+      params: {
+        filters: { countryAvailability: "VN" },
+        sort: { field: "name", direction: "asc" },
+        columns: ["name", "catalogueNumber", "status"],
+      },
+      ownerId: USERS.demoAnalyst,
+    },
+  ];
+
+  const researchExports: ResearchExport[] = [
+    {
+      ...ctx.tenantPrivate(RESEARCH.exportPdf, DEMO_TENANT_ID),
+      projectId: RESEARCH.project,
+      format: "pdf",
+      fileName: "ready-media-vn-demo.pdf",
+    },
+  ];
+
+  const costPerTestScenarios: CostPerTestScenario[] = [
+    {
+      ...ctx.tenantPrivate(COST_SCENARIOS.tsaDehydrated, DEMO_TENANT_ID),
+      name: "TSA dehydrated 500 g — cost per plate (Demo)",
+      skuId: SKUS.tsa500,
+      priceObservationId: PRICES.tsaNew,
+      input: {
+        purchasePrice: 2_850_000,
+        currency: "VND",
+        packQuantity: 500,
+        packUnit: "g",
+        yieldPerUnit: 1.25,
+        freight: 120_000,
+        importDutyRate: 0.05,
+        vatRate: 0.1,
+        taxIncluded: false,
+        preparationMaterials: 3_000,
+        water: 500,
+        laborMinutesPerTest: 6,
+        laborRatePerHour: 60_000,
+        equipmentAllocationPerTest: 800,
+        qcGptPerTest: 1_200,
+        sterilizationPerTest: 900,
+        wasteRate: 0.05,
+        failureRepeatRate: 0.02,
+        disposalPerTest: 400,
+        validationCostAmortized: 1_500,
+      },
+      notes: "Full in-house preparation cost stack (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(COST_SCENARIOS.tsaPlates, DEMO_TENANT_ID),
+      name: "TSA ready plates 20/pack — cost per test (Demo)",
+      skuId: SKUS.tsaPlates20,
+      priceObservationId: PRICES.tp,
+      input: {
+        purchasePrice: 1_150_000,
+        currency: "VND",
+        packQuantity: 20,
+        packUnit: "plate",
+        yieldPerUnit: 1,
+        vatRate: 0.1,
+        taxIncluded: true,
+        laborMinutesPerTest: 1,
+        laborRatePerHour: 60_000,
+        wasteRate: 0.02,
+        disposalPerTest: 400,
+      },
+      notes: "Ready-to-use: minimal preparation labor (Demo).",
+    },
+  ];
+
+  const equivalenceRecords: EquivalenceRecord[] = [
+    {
+      ...ctx.canonical(EQUIVALENCES.tsaDeltaVsAcme),
+      sourceSkuId: SKUS.tsaDelta500,
+      candidateSkuId: SKUS.tsa500,
+      classification: "functional_equivalent",
+      overallScore: 78.5,
+      dimensionScores: {
+        formula_composition: { score: 85, weight: 25, note: "Both tryptic soy agar; peptone source differs slightly (Demo)." },
+        intended_use_application: { score: 82, weight: 20, note: "Both positioned for microbial limits and EM (Demo)." },
+        method_standard_compatibility: { score: 78, weight: 15, note: "DeltaBio ISO 11133 conformance is unverified (Demo)." },
+        organism_performance: { score: 75, weight: 15, note: "GPT panel overlaps on 3 of 4 strains (Demo)." },
+        preparation_conditions: { score: 72, weight: 10, note: "Same autoclave cycle; resolubility differs (Demo)." },
+        regulatory_documents: { score: 60, weight: 5, note: "DeltaBio dossier lacks VN registration documents (Demo)." },
+        format_pack: { score: 88, weight: 5, note: "Both 500 g bottles (Demo)." },
+        local_availability: { score: 66, weight: 5, note: "DeltaBio lead time 3-5 weeks vs local stock (Demo)." },
+      },
+      rationale:
+        "Both SKUs are tryptic soy agar dehydrated media in 500 g packs; DeltaBio is a workable substitute pending confirmation of its unverified ISO 11133 conformance (Demo assessment).",
+      differences: [
+        {
+          dimension: "formula_composition",
+          description: "Trace peptone source differs between the two formulations (Demo).",
+          severity: "minor",
+        },
+        {
+          dimension: "regulatory_documents",
+          description: "DeltaBio dossier lacks Vietnam-specific registration documents (Demo).",
+          severity: "moderate",
+        },
+        {
+          dimension: "local_availability",
+          description: "Acme SKU is stocked locally; DeltaBio ships on 3-5 week lead time (Demo).",
+          severity: "moderate",
+        },
+      ],
+      validationConsiderations: [
+        "Run growth-promotion testing with the ATCC panel before substitution (Demo).",
+        "Confirm autoclave cycle compatibility with the customer's validated cycle (Demo).",
+        "Verify customer regulatory acceptance of the alternate dossier (Demo).",
+      ],
+      evidenceClaimIds: [CLAIMS.equivFormula, CLAIMS.tsaConforms],
+      reviewerId: USERS.demoAnalyst,
+      reviewState: "analyst_reviewed",
+      lastReviewedAt: ctx.daysAgo(20),
+    },
+    {
+      ...ctx.canonical(EQUIVALENCES.sdaVsTsaPlates),
+      sourceSkuId: SKUS.sdaPlates20,
+      candidateSkuId: SKUS.tsaPlates20,
+      classification: "closest_alternative",
+      overallScore: 59.5,
+      dimensionScores: {
+        formula_composition: { score: 45, weight: 25, note: "SDA is selective for fungi; TSA is general-purpose (Demo)." },
+        intended_use_application: { score: 60, weight: 20, note: "Overlap limited to environmental monitoring (Demo)." },
+        method_standard_compatibility: { score: 65, weight: 15, note: "Both reference ISO 11133 (Demo)." },
+        organism_performance: { score: 55, weight: 15, note: "Different target organisms (Demo)." },
+        preparation_conditions: { score: 70, weight: 10, note: "Both ready-to-use; storage identical (Demo)." },
+        regulatory_documents: { score: 55, weight: 5, note: "Partial documentation overlap (Demo)." },
+        format_pack: { score: 95, weight: 5, note: "Identical 90 mm plates, 20/pack (Demo)." },
+        local_availability: { score: 75, weight: 5, note: "Both available ex-stock in VN (Demo)." },
+      },
+      rationale:
+        "SDA ready plates are only a closest alternative to TSA ready plates: identical format and storage, but a selective fungal formulation that does not cover the general-purpose use cases (Demo assessment).",
+      differences: [
+        {
+          dimension: "formula_composition",
+          description: "SDA is selective for yeasts and molds; TSA is general-purpose (Demo).",
+          severity: "major",
+        },
+        {
+          dimension: "organism_performance",
+          description: "Growth promotion panels barely overlap (Demo).",
+          severity: "moderate",
+        },
+      ],
+      validationConsiderations: [
+        "Do not substitute for bacterial enumeration without a documented risk assessment (Demo).",
+        "Confirm the monitoring plan's target organisms before switching (Demo).",
+      ],
+      evidenceClaimIds: [CLAIMS.tpShelfLife],
+      reviewState: "source_captured",
+    },
+  ];
+
+  return {
+    research_project: researchProjects,
+    research_note: researchNotes,
+    research_finding: researchFindings,
+    research_project_entity: researchProjectEntities,
+    saved_view: savedViews,
+    research_export: researchExports,
+    cost_per_test_scenario: costPerTestScenarios,
+    equivalence_record: equivalenceRecords,
+  };
+}
