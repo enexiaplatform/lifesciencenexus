@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Life Science Nexus">
+  <defs>
+    <linearGradient id="nexus-mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1B2B3A"/>
+      <stop offset="1" stop-color="#1D6FE0"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#nexus-mark)"/>
+  <g stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" fill="none">
+    <path d="M22 44 V20"/>
+    <path d="M22 20 L42 44"/>
+    <path d="M42 44 V20"/>
+  </g>
+  <g fill="#FFFFFF">
+    <circle cx="22" cy="44" r="5"/>
+    <circle cx="22" cy="20" r="5"/>
+    <circle cx="42" cy="20" r="5"/>
+  </g>
+</svg>

@@ -1,39 +1,293 @@
 @import "tailwindcss";
 
+/*
+ * Life Science Nexus — design foundation (see docs/DESIGN_SYSTEM.md)
+ *
+ * Token architecture: light theme ships today; the palette is structured so a
+ * dark theme can later remap the semantic surface/foreground vars without
+ * touching component classes.
+ */
 @theme {
+  /* ------------------------------------------------------------------ */
+  /* Typography                                                          */
+  /* ------------------------------------------------------------------ */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
+    system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", "Cascadia Mono",
+    Menlo, Consolas, monospace;
 
-  /* Navy / slate scientific primary */
-  --color-navy-50: #f3f6f9;
-  --color-navy-100: #e6ecf2;
-  --color-navy-200: #c9d5e0;
-  --color-navy-300: #a3b8c9;
-  --color-navy-400: #7693aa;
-  --color-navy-500: #56758f;
-  --color-navy-600: #435e76;
-  --color-navy-700: #374d61;
-  --color-navy-800: #2a3c4d;
-  --color-navy-900: #1b2b3a;
-  --color-navy-950: #101c27;
+  /* Display scale — Space Grotesk, tight tracking (use font-display) */
+  --text-display-xl: 2.25rem;
+  --text-display-xl--line-height: 2.5rem;
+  --text-display-xl--letter-spacing: -0.025em;
+  --text-display-lg: 1.875rem;
+  --text-display-lg--line-height: 2.375rem;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-md: 1.5rem;
+  --text-display-md--line-height: 2rem;
+  --text-display-md--letter-spacing: -0.015em;
+  --text-display-sm: 1.25rem;
+  --text-display-sm--line-height: 1.75rem;
+  --text-display-sm--letter-spacing: -0.01em;
+  --text-display-xs: 1.125rem;
+  --text-display-xs--line-height: 1.625rem;
+  --text-display-xs--letter-spacing: -0.01em;
 
-  /* Blue accent */
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
+  /* ------------------------------------------------------------------ */
+  /* Nexus navy — dark surfaces, sidebar. Anchored on #1B2B3A (900)      */
+  /* ------------------------------------------------------------------ */
+  --color-nexus-25: #f8fafc;
+  --color-nexus-50: #f3f6f9;
+  --color-nexus-100: #e6ecf2;
+  --color-nexus-200: #c9d5e0;
+  --color-nexus-300: #a3b8c9;
+  --color-nexus-400: #7e9db3;
+  --color-nexus-500: #56758f;
+  --color-nexus-600: #435e76;
+  --color-nexus-700: #374d61;
+  --color-nexus-800: #2a3c4d;
+  --color-nexus-900: #1b2b3a;
+  --color-nexus-925: #16232f;
+  --color-nexus-950: #101c27;
+  --color-nexus-975: #0a131c;
 
-  /* Evidence lifecycle status colors */
-  --color-evidence-unverified: #64748b;
-  --color-evidence-source-captured: #2563eb;
-  --color-evidence-validated: #0d9488;
-  --color-evidence-reviewed: #059669;
+  /* Legacy aliases — kept stable for existing components */
+  --color-navy-50: var(--color-nexus-50);
+  --color-navy-100: var(--color-nexus-100);
+  --color-navy-200: var(--color-nexus-200);
+  --color-navy-300: var(--color-nexus-300);
+  --color-navy-400: var(--color-nexus-400);
+  --color-navy-500: var(--color-nexus-500);
+  --color-navy-600: var(--color-nexus-600);
+  --color-navy-700: var(--color-nexus-700);
+  --color-navy-800: var(--color-nexus-800);
+  --color-navy-900: var(--color-nexus-900);
+  --color-navy-950: var(--color-nexus-950);
+
+  /* ------------------------------------------------------------------ */
+  /* Spectral blue — primary actions, links, focus. Anchored on #1D6FE0  */
+  /* 600 = 4.77:1 on white (AA normal text). Use 700+ for quiet text.    */
+  /* ------------------------------------------------------------------ */
+  --color-spectral-50: #eef5fe;
+  --color-spectral-100: #d9e8fd;
+  --color-spectral-200: #b4d1fb;
+  --color-spectral-300: #84b1f7;
+  --color-spectral-400: #4f8cef;
+  --color-spectral-500: #2b78e6;
+  --color-spectral-600: #1d6fe0;
+  --color-spectral-700: #1759b8;
+  --color-spectral-800: #154a93;
+  --color-spectral-900: #133d73;
+  --color-spectral-950: #0e2a4e;
+
+  /* Legacy aliases */
+  --color-accent: var(--color-spectral-600);
+  --color-accent-hover: var(--color-spectral-700);
+
+  /* ------------------------------------------------------------------ */
+  /* Teal — secondary accent. Anchored on #0E9488 (600, 3.7:1: graphics/ */
+  /* large text only). Text uses must take 700 (5.1:1) or darker.        */
+  /* ------------------------------------------------------------------ */
+  --color-teal-50: #effaf8;
+  --color-teal-100: #d7f1ed;
+  --color-teal-200: #b0e3dc;
+  --color-teal-300: #7fd0c6;
+  --color-teal-400: #4cb8ab;
+  --color-teal-500: #25a296;
+  --color-teal-600: #0e9488;
+  --color-teal-700: #0c7c71;
+  --color-teal-800: #0e665e;
+  --color-teal-900: #105349;
+  --color-teal-950: #04302b;
+
+  /* ------------------------------------------------------------------ */
+  /* Semantic status colors — bg/fg/border triples are AA-verified pairs */
+  /* (see docs/DESIGN_SYSTEM.md for the measured contrast ratios)        */
+  /* ------------------------------------------------------------------ */
+  --color-success: #16a34a;
+  --color-success-bg: #dcfce7;
+  --color-success-fg: #166534;
+  --color-success-border: #bbf7d0;
+  --color-warning: #d97706;
+  --color-warning-bg: #fef3c7;
+  --color-warning-fg: #78350f;
+  --color-warning-border: #fde68a;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fee2e2;
+  --color-danger-fg: #991b1b;
+  --color-danger-border: #fecaca;
+  --color-info: #1d6fe0;
+  --color-info-bg: #d9e8fd;
+  --color-info-fg: #154a93;
+  --color-info-border: #b4d1fb;
+
+  /* ------------------------------------------------------------------ */
+  /* Evidence lifecycle — the eight domain states. The single-color      */
+  /* tokens are text-safe on their own /10 tints (AA). The *-bg/-fg/     */
+  /* *-border triples are the canonical badge pairs.                     */
+  /* ------------------------------------------------------------------ */
+  --color-evidence-unverified: #475569;
+  --color-evidence-unverified-bg: #f1f5f9;
+  --color-evidence-unverified-fg: #334155;
+  --color-evidence-unverified-border: #cbd5e1;
+
+  --color-evidence-source-captured: #1759b8;
+  --color-evidence-source-captured-bg: #d9e8fd;
+  --color-evidence-source-captured-fg: #154a93;
+  --color-evidence-source-captured-border: #b4d1fb;
+
+  --color-evidence-validated: #0e665e;
+  --color-evidence-validated-bg: #d7f1ed;
+  --color-evidence-validated-fg: #0e665e;
+  --color-evidence-validated-border: #b0e3dc;
+
+  --color-evidence-reviewed: #047857;
+  --color-evidence-reviewed-bg: #dcfce7;
+  --color-evidence-reviewed-fg: #166534;
+  --color-evidence-reviewed-border: #bbf7d0;
+
   --color-evidence-expert-reviewed: #7c3aed;
-  --color-evidence-superseded: #9ca3af;
-  --color-evidence-disputed: #dc2626;
-  --color-evidence-expired: #d97706;
+  --color-evidence-expert-reviewed-bg: #ede9fe;
+  --color-evidence-expert-reviewed-fg: #5b21b6;
+  --color-evidence-expert-reviewed-border: #ddd6fe;
+
+  --color-evidence-superseded: #4b5563;
+  --color-evidence-superseded-bg: #f3f4f6;
+  --color-evidence-superseded-fg: #374151;
+  --color-evidence-superseded-border: #d1d5db;
+
+  --color-evidence-disputed: #b91c1c;
+  --color-evidence-disputed-bg: #fee2e2;
+  --color-evidence-disputed-fg: #991b1b;
+  --color-evidence-disputed-border: #fecaca;
+
+  --color-evidence-expired: #92400e;
+  --color-evidence-expired-bg: #fef3c7;
+  --color-evidence-expired-fg: #78350f;
+  --color-evidence-expired-border: #fde68a;
+
+  /* ------------------------------------------------------------------ */
+  /* Visibility & demo — canonical = quiet slate, tenant-private = amber */
+  /* ------------------------------------------------------------------ */
+  --color-visibility-canonical-bg: #f1f5f9;
+  --color-visibility-canonical-fg: #334155;
+  --color-visibility-canonical-border: #cbd5e1;
+  --color-visibility-private: #b45309;
+  --color-visibility-private-bg: #fef3c7;
+  --color-visibility-private-fg: #78350f;
+  --color-visibility-private-border: #fde68a;
+  --color-demo: #7c3aed;
+  --color-demo-bg: #ede9fe;
+  --color-demo-fg: #5b21b6;
+  --color-demo-border: #ddd6fe;
+
+  /* ------------------------------------------------------------------ */
+  /* Chart categorical palette (6) — order matters, use in sequence      */
+  /* ------------------------------------------------------------------ */
+  --color-chart-1: #1d6fe0;
+  --color-chart-2: #0e9488;
+  --color-chart-3: #d97706;
+  --color-chart-4: #7c3aed;
+  --color-chart-5: #e11d48;
+  --color-chart-6: #56758f;
+
+  /* ------------------------------------------------------------------ */
+  /* Radius — 6 / 8 / 12 (controls / cards / overlays)                   */
+  /* ------------------------------------------------------------------ */
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  /* ------------------------------------------------------------------ */
+  /* Elevation — subtle, 1px-border-first: borders do the separating,    */
+  /* shadows only lift interactive/overlaid surfaces                     */
+  /* ------------------------------------------------------------------ */
+  --shadow-xs: 0 1px 2px 0 rgb(16 28 39 / 0.05);
+  --shadow-sm: 0 1px 2px 0 rgb(16 28 39 / 0.05), 0 1px 3px 0 rgb(16 28 39 / 0.06);
+  --shadow-md: 0 2px 4px 0 rgb(16 28 39 / 0.05), 0 4px 10px 0 rgb(16 28 39 / 0.07);
+  --shadow-lg: 0 4px 8px 0 rgb(16 28 39 / 0.06), 0 12px 28px 0 rgb(16 28 39 / 0.1);
+
+  /* Focus ring — 2px spectral, 2px offset */
+  --color-focus: var(--color-spectral-600);
+
+  /* ------------------------------------------------------------------ */
+  /* Motion — 120 / 160 / 240 ms, ease-out; no bouncy curves             */
+  /* ------------------------------------------------------------------ */
+  --motion-fast: 120ms;
+  --motion-normal: 160ms;
+  --motion-slow: 240ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-overlay-in: overlay-in 160ms cubic-bezier(0.2, 0, 0, 1);
+  --animate-overlay-out: overlay-out 120ms ease-in;
+  --animate-dialog-in: dialog-in 160ms cubic-bezier(0.2, 0, 0, 1);
+  --animate-dialog-out: dialog-out 120ms ease-in;
+  --animate-fade-in: fade-in 120ms cubic-bezier(0.2, 0, 0, 1);
+
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes overlay-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 4px)) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  @keyframes dialog-out {
+    from {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 4px)) scale(0.985);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 @layer base {
   body {
     @apply bg-slate-50 text-slate-900 antialiased;
+  }
+
+  /* Numeric tables and stat values should opt into tabular figures */
+  .tnum {
+    font-variant-numeric: tabular-nums;
   }
 }

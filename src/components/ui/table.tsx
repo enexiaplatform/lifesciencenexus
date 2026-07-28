@@ -4,12 +4,19 @@ import { cn } from "@/lib/utils";
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
+  React.HTMLAttributes<HTMLTableElement> & {
+    /** Compact density: px-2 py-1 text-xs rows for data-dense views. */
+    compact?: boolean;
+  }
+>(({ className, compact, ...props }, ref) => (
   <div className="relative w-full overflow-auto">
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm", className)}
+      className={cn(
+        "w-full caption-bottom text-sm",
+        compact && "[&_td]:px-2 [&_td]:py-1 [&_td]:text-xs [&_th]:px-2 [&_th]:py-1",
+        className,
+      )}
       {...props}
     />
   </div>

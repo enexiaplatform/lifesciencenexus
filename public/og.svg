@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="nexus-mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1B2B3A"/>
+      <stop offset="1" stop-color="#1D6FE0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#101C27"/>
+
+  <!-- abstract graph motif, faint -->
+  <g stroke="#2A3C4D" stroke-width="1.5" opacity="0.55">
+    <path d="M880 120 L1010 210 L960 360 L1090 470"/>
+    <path d="M1010 210 L1140 140"/>
+    <path d="M960 360 L840 480 L1090 470"/>
+  </g>
+  <g opacity="0.55">
+    <circle cx="880" cy="120" r="7" fill="#374D61"/>
+    <circle cx="1010" cy="210" r="9" fill="#1D6FE0" opacity="0.7"/>
+    <circle cx="1140" cy="140" r="6" fill="#374D61"/>
+    <circle cx="960" cy="360" r="8" fill="#0E9488" opacity="0.7"/>
+    <circle cx="840" cy="480" r="6" fill="#374D61"/>
+    <circle cx="1090" cy="470" r="9" fill="#56758F"/>
+  </g>
+
+  <!-- mark -->
+  <g transform="translate(96, 210) scale(2.2)">
+    <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#nexus-mark)"/>
+    <g stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" fill="none">
+      <path d="M22 44 V20"/>
+      <path d="M22 20 L42 44"/>
+      <path d="M42 44 V20"/>
+    </g>
+    <g fill="#FFFFFF">
+      <circle cx="22" cy="44" r="5"/>
+      <circle cx="22" cy="20" r="5"/>
+      <circle cx="42" cy="20" r="5"/>
+    </g>
+  </g>
+
+  <text x="260" y="300" font-family="'Space Grotesk', Inter, ui-sans-serif, system-ui, sans-serif" font-size="72" font-weight="700" letter-spacing="-2" fill="#FFFFFF">Life Science Nexus</text>
+  <text x="262" y="362" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="30" fill="#A3B8C9">Industry &amp; Product Intelligence Graph for Life Science Markets</text>
+
+  <text x="96" y="556" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="20" letter-spacing="3" fill="#56758F">EVIDENCE-BACKED MARKET INTELLIGENCE</text>
+</svg>
