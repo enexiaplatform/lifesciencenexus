@@ -14,16 +14,21 @@ import type { NexusRepository } from "./repository";
  * code and vice versa. The resolved repository is cached process-wide.
  */
 
-let cachedRepository: NexusRepository | null = null;
-let pendingRepository: Promise<NexusRepository> | null = null;
+// Cached on globalThis so Next.js dev mode's split server bundles (page
+// renders vs server-action executions) share ONE repository instance —
+// otherwise demo-mode mutations succeed but are invisible to later renders.
+const globalCache = globalThis as unknown as {
+  __nexusRepository?: NexusRepository | null;
+  __nexusRepositoryPending?: Promise<NexusRepository> | null;
+};
 
 export async function getRepository(): Promise<NexusRepository> {
-  if (cachedRepository) return cachedRepository;
-  if (!pendingRepository) {
-    pendingRepository = resolveRepository();
+  if (globalCache.__nexusRepository) return globalCache.__nexusRepository;
+  if (!globalCache.__nexusRepositoryPending) {
+    globalCache.__nexusRepositoryPending = resolveRepository();
   }
-  cachedRepository = await pendingRepository;
-  return cachedRepository;
+  globalCache.__nexusRepository = await globalCache.__nexusRepositoryPending;
+  return globalCache.__nexusRepository;
 }
 
 async function resolveRepository(): Promise<NexusRepository> {
@@ -38,8 +43,8 @@ async function resolveRepository(): Promise<NexusRepository> {
 
 /** Clear the cached repository (test isolation). */
 export function resetRepositoryForTests(): void {
-  cachedRepository = null;
-  pendingRepository = null;
+  globalCache.__nexusRepository = null;
+  globalCache.__nexusRepositoryPending = null;
 }
 
 export { DemoRepository } from "./demo-repository";

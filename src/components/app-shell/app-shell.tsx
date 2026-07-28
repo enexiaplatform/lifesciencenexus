@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { FlaskConical, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 
 import { DataModeBadge } from "@/components/data-mode-badge";
+import { QuickSearch } from "@/components/search/quick-search";
 import { cn } from "@/lib/utils";
 import type { DataBackend } from "@/lib/env";
 
@@ -98,6 +99,10 @@ export function AppShell({ children, backend }: AppShellProps) {
               Life Science Nexus
             </span>
             <DataModeBadge mode={backend} />
+          </div>
+
+          <div className="mx-4 hidden min-w-0 max-w-xl flex-1 md:block">
+            <QuickSearch />
           </div>
 
           <div className="ml-auto flex items-center gap-3">
