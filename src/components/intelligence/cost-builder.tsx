@@ -941,10 +941,10 @@ export function CostBuilder({
                   <table className="w-full text-xs">
                     <thead className="bg-slate-50 text-left text-[11px] uppercase tracking-wide text-slate-500">
                       <tr>
-                        <th className="px-3 py-2">Component</th>
-                        <th className="px-3 py-2">Scope</th>
-                        <th className="px-3 py-2 text-right">Amount ({entry.result.currency})</th>
-                        <th className="px-3 py-2">Source field</th>
+                        <th scope="col" className="px-3 py-2">Component</th>
+                        <th scope="col" className="px-3 py-2">Scope</th>
+                        <th scope="col" className="px-3 py-2 text-right">Amount ({entry.result.currency})</th>
+                        <th scope="col" className="px-3 py-2">Source field</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1043,10 +1043,10 @@ export function CostBuilder({
                   <table className="w-full text-xs">
                     <thead className="bg-slate-50 text-left text-[11px] uppercase tracking-wide text-slate-500">
                       <tr>
-                        <th className="px-3 py-2">Change</th>
-                        <th className="px-3 py-2 text-right">Delta</th>
-                        <th className="px-3 py-2 text-right">Cost / test</th>
-                        <th className="px-3 py-2 text-right">vs base</th>
+                        <th scope="col" className="px-3 py-2">Change</th>
+                        <th scope="col" className="px-3 py-2 text-right">Delta</th>
+                        <th scope="col" className="px-3 py-2 text-right">Cost / test</th>
+                        <th scope="col" className="px-3 py-2 text-right">vs base</th>
                       </tr>
                     </thead>
                     <tbody>

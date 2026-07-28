@@ -188,9 +188,9 @@ export function SourcesTable({ rows }: { rows: SourceRow[] }) {
                           <table className="w-full text-xs">
                             <thead>
                               <tr className="text-left text-slate-500">
-                                <th className="pb-1 pr-4 font-medium">Predicate</th>
-                                <th className="pb-1 pr-4 font-medium">Value</th>
-                                <th className="pb-1 font-medium">State</th>
+                                <th scope="col" className="pb-1 pr-4 font-medium">Predicate</th>
+                                <th scope="col" className="pb-1 pr-4 font-medium">Value</th>
+                                <th scope="col" className="pb-1 font-medium">State</th>
                               </tr>
                             </thead>
                             <tbody>

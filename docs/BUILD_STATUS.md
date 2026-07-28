@@ -26,10 +26,26 @@ Updated after each major phase. Legend: ✅ done · 🟡 in progress · ⬜ pend
 - Tests: 224 total — passing. Migrations added: 10. RLS coverage: 118/118 tables.
 - Risks: RLS/DB verification against a live Supabase instance still pending (no credentials in this environment); seed demo users need matching auth.users rows (documented).
 
-## Phase 2–7 — UI waves — 🟡
+## Phase 2–7 — UI waves — ✅
 
-- In progress: four parallel workstreams — Market module (organizations→installed base, workflows D+E); Products + Intelligence (SKU pages, equivalence workspace, matching, compare, cost-per-test, prices, signals; workflows A–C); Search + Research + Dashboard + Evidence review; Data Ops (CSV/XLSX ingestion wizard, entity resolution, data quality) + API v1 + integrations surface (workflow F + contracts).
-- Remaining: integration pass (full build + conflict sweep), hardening, E2E, deployment prep.
+- Completed: four workstreams, all placeholders replaced with working implementations (302 vitest tests green; production build green — 70+ routes):
+  - **Market** (workflows D+E): organizations list/detail (+create), sites, laboratories, people (tenant-private notices), manufacturers, suppliers (evidence-gated "authorized" display), availability, tenders + detail (lots/items/bidders/award forms, renewal banner), installed base + detail (maintenance/qualification forms, consumable-gap highlighting).
+  - **Products + Intelligence** (workflows A–C): products/product detail, flagship SKU page (packs, edges, listings, prices, equivalence, Memoire handoff dialog, add-to-research), reference browsers (brands/applications/methods/standards/organisms); equivalence workspace (8-dimension live scoring, configurable weights, exact-equivalent unknown-guard, review workflow, disclaimer); guided matching; spec comparison matrix (unknown ≠ not met, CSV/print); cost-per-test builder (17 components, FX snapshot discipline, breakdown, sensitivity, save/export); price intelligence (history charts, outliers, freshness, record dialog); signals (acknowledge/dismiss, handoff).
+  - **Search + Research + Evidence**: federated /search (facets, match reasons, recent/saved searches, full keyboard), topbar quick-search, live dashboard (dashboardSummary), research workspace (entities/notes/findings 5 kinds/confidence summary/data gaps/export JSON+CSV+XLSX+print report), sources, evidence claims browser, review queue with reviewer actions.
+  - **Data Ops + API + Integrations** (workflow F): 9-step import wizard (CSV/XLSX/paste, auto-mapping incl. Vietnamese synonyms, zod validation, duplicate review, visibility choice, import report), export center (CSV/JSON/XLSX with visibility guard), data-quality dashboard, entity-resolution queue (side-by-side, field-level merge, history), settings, integrations surface; API v1 (26 documented paths, auth/rate-limit/zod/error-envelope helpers, Memoire handoff POST, Atlas read ×6 with vendor-neutrality guard, openapi.json); 66 new tests.
+- Integration pass: repository cache moved to `globalThis` (dev-mode server-action visibility); `npm run typecheck`/`lint`/`test` (302)/`build` all green; committed `91c97d5`.
+
+## Phase 8 — Hardening — ✅
+
+- Playwright E2E: **22/22 passing** — `tests/e2e/workflows.spec.ts` (6 tests, one per mandatory workflow A–F), `tests/e2e/a11y.spec.ts` (15 tests: skip link, keyboard nav, 5 dialog focus-trap/Escape, form accessible names, table `scope`), `smoke.spec.ts`. Rerun-safe against mutated demo state.
+- A11y fixes landed: `scope="col"` on `TableHead` + two module tables.
+- Security posture: headers in `next.config.ts`, deny-by-default RLS authored, API rate limiting + zod + error envelope, visibility guards in exports/handoffs/Atlas API, secrets only via env.
+
+## Phase 9 — Documentation & release — ✅
+
+- Docs complete: 23 files under `docs/` (incl. ARCHITECTURE, DATA_MODEL+ERD, EVIDENCE_MODEL+lifecycle, SECURITY_MODEL+visibility matrix, SEARCH_ARCHITECTURE, MEMOIRE_HANDOFF, ATLAS_API, IMPORT_GUIDE, DEPLOYMENT, OPERATIONS_RUNBOOK, KNOWN_LIMITATIONS — 11 items, ROADMAP) + README index; CHANGELOG 0.1.0 dated.
+- Final gates (all run 2026-07-27): `npm run verify:production-readiness` → **exit 0** (typecheck + lint + 302 vitest + migrations verification + build); `verify:integrations` → PASS; `verify:demo-separation` → PASS (118/118 tables carry `is_demo`); Playwright 22/22.
+- Repository: pushed to `github.com/enexiaplatform/lifesciencenexus` (branch `main`).
 
 ## Credential-blocked items (tracked honestly)
 
