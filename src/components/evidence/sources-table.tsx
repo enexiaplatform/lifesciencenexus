@@ -5,12 +5,8 @@ import { ChevronDown, ChevronRight, ExternalLink, FileText } from "lucide-react"
 
 import type { EvidenceState, SourceType, Visibility } from "@/lib/domain/types";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Table,
   TableBody,
@@ -64,21 +60,17 @@ export function SourcesTable({ rows }: { rows: SourceRow[] }) {
 
   if (rows.length === 0) {
     return (
-      <Card className="border-dashed">
-        <CardHeader>
-          <CardTitle className="text-base">No sources captured yet</CardTitle>
-          <CardDescription>
-            Add a catalogue, quotation, tender document or field note to start backing claims
-            with evidence.
-          </CardDescription>
-        </CardHeader>
-      </Card>
+      <EmptyState
+        icon={FileText}
+        title="No sources captured yet"
+        description="Add a catalogue, quotation, tender document or field note to start backing claims with evidence."
+      />
     );
   }
 
   return (
     <Card>
-      <Table>
+      <Table compact>
         <TableHeader>
           <TableRow>
             <TableHead className="w-8" aria-label="Expand" />
@@ -131,7 +123,7 @@ export function SourcesTable({ rows }: { rows: SourceRow[] }) {
                   <TableCell className="whitespace-nowrap text-xs text-slate-600">
                     {row.publisher ?? "—"}
                     {row.publishedAt && (
-                      <span className="block text-slate-400">{formatDate(row.publishedAt)}</span>
+                      <span className="block tabular-nums text-slate-400">{formatDate(row.publishedAt)}</span>
                     )}
                   </TableCell>
                   <TableCell>

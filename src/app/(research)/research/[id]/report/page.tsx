@@ -77,7 +77,7 @@ export default async function ResearchReportPage({
     <div className="report-print mx-auto max-w-3xl space-y-6">
       <style>{`
         @media print {
-          aside, header { display: none !important; }
+          /* App chrome (sidebar/topbar) self-hides via print:hidden in the shell. */
           main { padding: 0 !important; }
           .report-print a { color: inherit; text-decoration: none; }
           .report-print section { break-inside: avoid; }

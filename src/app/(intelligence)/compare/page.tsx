@@ -1,5 +1,6 @@
 import { CompareMatrix, type CompareSku } from "@/components/intelligence/compare-matrix";
 import { ComparePicker } from "@/components/intelligence/compare-picker";
+import { EmptyState } from "@/components/products/empty-state";
 import { PageHeader } from "@/components/products/page-header";
 import { one, type SearchParams } from "@/components/products/search-params";
 import { Card, CardContent } from "@/components/ui/card";
@@ -94,7 +95,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Sear
       </Card>
 
       {missingIds.length > 0 ? (
-        <p role="alert" className="rounded-md border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
+        <p role="alert" className="rounded-md border border-warning-border bg-warning-bg p-3 text-xs text-warning-fg">
           These SKU ids could not be loaded and were skipped: {missingIds.join(", ")}
         </p>
       ) : null}
@@ -102,13 +103,10 @@ export default async function ComparePage({ searchParams }: { searchParams: Sear
       {compareSkus.length >= 2 ? (
         <CompareMatrix skus={compareSkus} />
       ) : (
-        <Card>
-          <CardContent className="p-6 text-sm text-slate-500">
-            Select at least two SKUs to build the comparison matrix. Set rows cover standards,
-            organisms and applications from evidence edges ({SET_ROW_TARGETS.join(", ")}); spec rows
-            come from the SKU records.
-          </CardContent>
-        </Card>
+        <EmptyState
+          title="Select at least two SKUs to build the comparison matrix"
+          description={`Set rows cover standards, organisms and applications from evidence edges (${SET_ROW_TARGETS.join(", ")}); spec rows come from the SKU records.`}
+        />
       )}
     </div>
   );

@@ -103,7 +103,7 @@ export default async function OrganizationsPage({ searchParams }: { searchParams
                     <div className="flex flex-wrap items-center gap-1.5">
                       <Link
                         href={`/organizations/${org.id}`}
-                        className="font-medium text-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        className="font-medium text-spectral-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                       >
                         {org.name}
                       </Link>
@@ -127,7 +127,7 @@ export default async function OrganizationsPage({ searchParams }: { searchParams
                   <TableCell>
                     <VisibilityBadge visibility={org.visibility} />
                   </TableCell>
-                  <TableCell className="whitespace-nowrap text-xs text-slate-500">
+                  <TableCell className="whitespace-nowrap tabular-nums text-xs text-slate-500">
                     <time dateTime={org.updatedAt}>{formatDateTime(org.updatedAt)}</time>
                   </TableCell>
                 </TableRow>

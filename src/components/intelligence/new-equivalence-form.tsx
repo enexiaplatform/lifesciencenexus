@@ -73,7 +73,7 @@ export function NewEquivalenceForm({
         {error ? (
           <p
             role="alert"
-            className="rounded-md border border-red-300 bg-red-50 p-3 text-xs text-red-800"
+            className="rounded-md border border-danger-border bg-danger-bg p-3 text-xs text-danger-fg"
           >
             {error}
           </p>

@@ -8,9 +8,10 @@ import { AvailabilityBadge, ProductStatusBadge } from "@/components/products/bad
 import { formatMoney } from "@/components/products/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SectionCard } from "@/components/ui/section-card";
 import {
   matchProducts,
   type MatchCandidate,
@@ -75,7 +76,7 @@ function CheckboxGroup({
               type="checkbox"
               checked={selected.has(option.id)}
               onChange={() => onToggle(option.id)}
-              className="h-3.5 w-3.5 rounded border-slate-300 text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="h-3.5 w-3.5 rounded border-slate-300 text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
             />
             {option.label}
           </label>
@@ -183,15 +184,11 @@ export function MatchingExplorer({
 
   return (
     <div className="space-y-4">
-      <Card>
-        <CardHeader className="p-4 pb-2">
-          <CardTitle className="text-sm">Requirements</CardTitle>
-          <CardDescription className="text-xs">
-            Every selection becomes one scored dimension. Leave everything empty to list all
-            products unfiltered (score 100 by definition).
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3 p-4 pt-0">
+      <SectionCard
+        title="Requirements"
+        description="Every selection becomes one scored dimension. Leave everything empty to list all products unfiltered (score 100 by definition)."
+      >
+        <div className="space-y-3">
           <div className="grid gap-3 lg:grid-cols-2">
             <CheckboxGroup
               legend="Applications"
@@ -232,7 +229,7 @@ export function MatchingExplorer({
                   id="match-industry"
                   value={industry}
                   onChange={(event) => setIndustry(event.target.value)}
-                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                 >
                   <option value="">Any</option>
                   {options.industries.map((option) => (
@@ -250,7 +247,7 @@ export function MatchingExplorer({
                   id="match-format"
                   value={requiredFormat}
                   onChange={(event) => setRequiredFormat(event.target.value)}
-                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                 >
                   <option value="">Any</option>
                   {options.formats.map((option) => (
@@ -268,7 +265,7 @@ export function MatchingExplorer({
                   id="match-country"
                   value={country}
                   onChange={(event) => setCountry(event.target.value)}
-                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                 >
                   <option value="">Any</option>
                   {options.countries.map((option) => (
@@ -286,7 +283,7 @@ export function MatchingExplorer({
                   id="match-storage"
                   value={storage}
                   onChange={(event) => setStorage(event.target.value)}
-                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                 >
                   <option value="">Any</option>
                   {options.storages.map((option) => (
@@ -322,8 +319,8 @@ export function MatchingExplorer({
                 : `${requirementCount} dimension${requirementCount === 1 ? "" : "s"} will be scored per product.`}
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
 
       {results ? (
         <section aria-label="Matching results" className="space-y-3">
@@ -369,10 +366,10 @@ export function MatchingExplorer({
                               className={cn(
                                 "block h-full rounded-full",
                                 result.score >= 75
-                                  ? "bg-teal-500"
+                                  ? "bg-success"
                                   : result.score >= 50
-                                    ? "bg-amber-500"
-                                    : "bg-red-400",
+                                    ? "bg-warning"
+                                    : "bg-danger",
                               )}
                               style={{ width: `${result.score}%` }}
                             />
@@ -391,7 +388,7 @@ export function MatchingExplorer({
                       <Badge
                         key={dimension}
                         variant="outline"
-                        className="border-teal-300 bg-teal-50 font-normal text-teal-800"
+                        className="border-success-border bg-success-bg font-normal text-success-fg"
                       >
                         {prettify(dimension)}
                       </Badge>
@@ -410,7 +407,7 @@ export function MatchingExplorer({
                       <Badge
                         key={conflict}
                         variant="outline"
-                        className="border-red-300 bg-red-50 font-normal text-red-700"
+                        className="border-danger-border bg-danger-bg font-normal text-danger-fg"
                       >
                         conflict: {prettify(conflict)}
                       </Badge>

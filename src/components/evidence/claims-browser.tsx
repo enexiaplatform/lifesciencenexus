@@ -199,7 +199,7 @@ export function ClaimsBrowser({
       </div>
 
       <Card>
-        <Table>
+        <Table compact>
           <TableHeader>
             <TableRow>
               <TableHead className="w-8" aria-label="Expand" />
@@ -282,14 +282,14 @@ export function ClaimsBrowser({
                     <TableCell
                       className={
                         overdue
-                          ? "whitespace-nowrap text-xs font-medium text-red-600"
-                          : "whitespace-nowrap text-xs text-slate-600"
+                          ? "whitespace-nowrap text-xs font-medium tabular-nums text-danger-fg"
+                          : "whitespace-nowrap text-xs tabular-nums text-slate-600"
                       }
                     >
                       {row.reviewByDate ? formatDate(row.reviewByDate) : "—"}
                       {overdue && <span className="block text-[10px]">Overdue</span>}
                     </TableCell>
-                    <TableCell className="whitespace-nowrap text-xs text-slate-600">
+                    <TableCell className="whitespace-nowrap text-xs tabular-nums text-slate-600">
                       {row.effectiveDate ? formatDate(row.effectiveDate) : "—"}
                     </TableCell>
                   </TableRow>

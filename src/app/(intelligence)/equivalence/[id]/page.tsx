@@ -107,7 +107,7 @@ export default async function EquivalenceDetailPage({
 
       <div
         role="note"
-        className="flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900"
+        className="flex items-start gap-2 rounded-md border border-warning-border bg-warning-bg p-3 text-xs text-warning-fg"
       >
         <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
         <div>

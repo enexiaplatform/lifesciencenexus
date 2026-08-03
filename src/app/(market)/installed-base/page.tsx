@@ -107,7 +107,7 @@ export default async function InstalledBasePage({ searchParams }: { searchParams
         />
       ) : (
         <div className="rounded-lg border border-slate-200 bg-white">
-          <Table>
+          <Table compact>
             <TableHeader>
               <TableRow>
                 <TableHead>Model</TableHead>
@@ -135,7 +135,7 @@ export default async function InstalledBasePage({ searchParams }: { searchParams
                   <TableRow key={asset.id}>
                     <TableCell>
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <Link href={`/installed-base/${asset.id}`} className="font-medium text-accent hover:underline">
+                        <Link href={`/installed-base/${asset.id}`} className="font-medium text-spectral-600 hover:underline">
                           {model?.model ?? asset.assetModelId}
                         </Link>
                         <DemoBadge isDemo={asset.isDemo} />
@@ -144,7 +144,7 @@ export default async function InstalledBasePage({ searchParams }: { searchParams
                     </TableCell>
                     <TableCell className="text-xs">
                       {manufacturer ? (
-                        <Link href={`/organizations/${manufacturer.id}`} className="text-accent hover:underline">
+                        <Link href={`/organizations/${manufacturer.id}`} className="text-spectral-600 hover:underline">
                           {manufacturer.name}
                         </Link>
                       ) : (
@@ -156,7 +156,7 @@ export default async function InstalledBasePage({ searchParams }: { searchParams
                     </TableCell>
                     <TableCell className="text-xs">
                       {site ? (
-                        <Link href={`/sites/${site.id}`} className="text-accent hover:underline">
+                        <Link href={`/sites/${site.id}`} className="text-spectral-600 hover:underline">
                           {site.name}
                         </Link>
                       ) : (
@@ -165,7 +165,7 @@ export default async function InstalledBasePage({ searchParams }: { searchParams
                       {lab ? (
                         <>
                           {" / "}
-                          <Link href={`/laboratories/${lab.id}`} className="text-accent hover:underline">
+                          <Link href={`/laboratories/${lab.id}`} className="text-spectral-600 hover:underline">
                             {lab.name}
                           </Link>
                         </>
@@ -197,8 +197,8 @@ export default async function InstalledBasePage({ searchParams }: { searchParams
                         }
                       />
                     </TableCell>
-                    <TableCell className="text-xs text-slate-600">{formatDate(asset.installationDate)}</TableCell>
-                    <TableCell className="whitespace-nowrap text-xs">
+                    <TableCell className="tabular-nums text-xs text-slate-600">{formatDate(asset.installationDate)}</TableCell>
+                    <TableCell className="whitespace-nowrap tabular-nums text-xs">
                       {formatDate(asset.expectedReplacementDate)}{" "}
                       {daysToReplacement !== null && daysToReplacement < 0 ? (
                         <StatusBadge label={`${-daysToReplacement} d overdue`} tone="destructive" />

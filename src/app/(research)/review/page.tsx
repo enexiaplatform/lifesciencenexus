@@ -10,10 +10,9 @@ import { entityDisplayName, humanize } from "@/components/search/entity-routes";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
 import {
   Table,
   TableBody,
@@ -112,17 +111,12 @@ export default async function ReviewPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">
-          Evidence review queue
-        </h1>
-        <p className="mt-1 max-w-2xl text-sm text-slate-600">
-          Claims waiting for structural validation or analyst review, and records past their
-          review-by date.
-        </p>
-      </div>
+      <PageHeader
+        title="Evidence review queue"
+        description="Claims waiting for structural validation or analyst review, and records past their review-by date."
+      />
 
-      <p className="flex items-start gap-2 rounded-md border border-navy-200 bg-navy-50 px-3 py-2 text-xs text-navy-700">
+      <p className="flex items-start gap-2 rounded-md border border-info-border bg-info-bg px-3 py-2 text-xs text-info-fg">
         <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
         Demo mode: you are acting as the tenant owner (user_demo_owner) — all review actions are
         permitted and recorded under that identity.
@@ -148,8 +142,8 @@ export default async function ReviewPage() {
         </Card>
         <Card>
           <CardContent className="p-3">
-            <span className="text-xs font-medium text-red-600">Overdue</span>
-            <p className="mt-1.5 text-xl font-semibold tabular-nums text-red-600">
+            <span className="text-xs font-medium text-danger-fg">Overdue</span>
+            <p className="mt-1.5 text-xl font-semibold tabular-nums text-danger-fg">
               {overdueCount}
             </p>
           </CardContent>
@@ -159,60 +153,56 @@ export default async function ReviewPage() {
       <ReviewQueue rows={queueRows} />
 
       {/* Completed reviews */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm">Completed reviews</CardTitle>
-          <CardDescription className="text-xs">
-            Review audit trail, most recent first.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {completedReviews.length === 0 ? (
-            <p className="text-sm text-slate-500">No reviews recorded yet.</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Claim</TableHead>
-                  <TableHead>Transition</TableHead>
-                  <TableHead>Note</TableHead>
-                  <TableHead>Reviewer</TableHead>
-                  <TableHead>Reviewed at</TableHead>
+      <SectionCard
+        title="Completed reviews"
+        description="Review audit trail, most recent first."
+        flush={completedReviews.length > 0}
+      >
+        {completedReviews.length === 0 ? (
+          <p className="text-sm text-slate-500">No reviews recorded yet.</p>
+        ) : (
+          <Table compact>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Claim</TableHead>
+                <TableHead>Transition</TableHead>
+                <TableHead>Note</TableHead>
+                <TableHead>Reviewer</TableHead>
+                <TableHead>Reviewed at</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {completedReviews.map((review) => (
+                <TableRow key={review.id}>
+                  <TableCell className="max-w-72">
+                    <span className="block truncate text-sm text-slate-800">
+                      {review.claimLabel}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="inline-flex flex-wrap items-center gap-1">
+                      <EvidenceStateBadge state={review.fromState} />
+                      <span aria-hidden="true">→</span>
+                      <EvidenceStateBadge state={review.toState} />
+                    </span>
+                  </TableCell>
+                  <TableCell className="max-w-64">
+                    <span className="block truncate text-xs text-slate-600">
+                      {review.comment ?? "—"}
+                    </span>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap text-xs text-slate-600">
+                    {review.reviewerId}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap text-xs tabular-nums text-slate-600">
+                    {formatDateTime(review.reviewedAt)}
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {completedReviews.map((review) => (
-                  <TableRow key={review.id}>
-                    <TableCell className="max-w-72">
-                      <span className="block truncate text-sm text-slate-800">
-                        {review.claimLabel}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="inline-flex flex-wrap items-center gap-1">
-                        <EvidenceStateBadge state={review.fromState} />
-                        <span aria-hidden="true">→</span>
-                        <EvidenceStateBadge state={review.toState} />
-                      </span>
-                    </TableCell>
-                    <TableCell className="max-w-64">
-                      <span className="block truncate text-xs text-slate-600">
-                        {review.comment ?? "—"}
-                      </span>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap text-xs text-slate-600">
-                      {review.reviewerId}
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap text-xs text-slate-600">
-                      {formatDateTime(review.reviewedAt)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </SectionCard>
       <p className="text-xs text-slate-400">
         Snapshot generated {formatDateTime(new Date().toISOString())}.
       </p>

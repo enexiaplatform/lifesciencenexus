@@ -46,7 +46,7 @@ export default async function OrganismsPage({ searchParams }: { searchParams: Se
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <PageHeader
         title="Organisms"
         description="Reference organisms and QC strains linked to media and reference materials."
@@ -60,7 +60,7 @@ export default async function OrganismsPage({ searchParams }: { searchParams: Se
       ) : (
         <Card>
           <CardContent className="p-0">
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Organism</TableHead>

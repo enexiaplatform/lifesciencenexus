@@ -64,7 +64,7 @@ export function ComparePicker({
                 type="button"
                 aria-label={`Remove ${option.label}`}
                 onClick={() => remove(option.value)}
-                className="rounded-full p-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="rounded-full p-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
               >
                 <X className="h-3 w-3" aria-hidden="true" />
               </button>

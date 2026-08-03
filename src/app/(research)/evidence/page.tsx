@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { getRepository } from "@/lib/data";
+import { PageHeader } from "@/components/ui/page-header";
 import { claimValueText } from "@/components/evidence/format";
 import { entityDisplayName } from "@/components/search/entity-routes";
 import { ClaimsBrowser, type ClaimRow } from "@/components/evidence/claims-browser";
@@ -68,17 +69,10 @@ export default async function EvidencePage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-900">
-            Evidence claims
-          </h1>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">
-            Every fact Nexus presents traces to an atomic, source-backed claim with dimensional
-            confidence and a review state.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Evidence claims"
+        description="Every fact Nexus presents traces to an atomic, source-backed claim with dimensional confidence and a review state."
+      />
       <ClaimsBrowser rows={rows} claimLabels={Object.fromEntries(claimLabelById)} />
     </div>
   );

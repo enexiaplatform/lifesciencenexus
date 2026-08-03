@@ -244,7 +244,7 @@ export function EquivalenceWorkspace({
               "rounded-md border px-3 py-2 text-xs",
               weightsValid
                 ? "border-slate-200 bg-slate-50 text-slate-600"
-                : "border-red-300 bg-red-50 text-red-800",
+                : "border-danger-border bg-danger-bg text-danger-fg",
             )}
             role={weightsValid ? undefined : "alert"}
           >
@@ -319,7 +319,7 @@ export function EquivalenceWorkspace({
                       onChange={(event) =>
                         setDimension(dimension, { score: event.target.checked ? null : 50 })
                       }
-                      className="h-4 w-4 rounded border-slate-300 text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      className="h-4 w-4 rounded border-slate-300 text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                     />
                     <Label htmlFor={unknownId} className="text-xs font-normal text-slate-600">
                       Unknown
@@ -417,7 +417,7 @@ export function EquivalenceWorkspace({
                     onChange={(event) =>
                       setClassification(event.target.value as EquivalenceClassification)
                     }
-                    className="mt-1 flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="mt-1 flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                   >
                     {EQUIVALENCE_CLASSIFICATIONS.map((option) => (
                       <option
@@ -480,7 +480,7 @@ export function EquivalenceWorkspace({
                       ),
                     )
                   }
-                  className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                 >
                   {EQUIVALENCE_DIMENSIONS.map((dimension) => (
                     <option key={dimension} value={dimension}>
@@ -505,7 +505,7 @@ export function EquivalenceWorkspace({
                       ),
                     )
                   }
-                  className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                 >
                   <option value="">severity</option>
                   <option value="minor">minor</option>
@@ -580,8 +580,8 @@ export function EquivalenceWorkspace({
           className={cn(
             "rounded-md border p-3 text-xs",
             message.kind === "error"
-              ? "border-red-300 bg-red-50 text-red-800"
-              : "border-teal-300 bg-teal-50 text-teal-800",
+              ? "border-danger-border bg-danger-bg text-danger-fg"
+              : "border-success-border bg-success-bg text-success-fg",
           )}
         >
           {message.text}

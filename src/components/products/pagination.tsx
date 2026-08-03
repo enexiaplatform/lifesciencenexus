@@ -41,9 +41,9 @@ export function Pagination({
       aria-label="Pagination"
     >
       <p className="text-xs text-slate-500">
-        Showing <span className="font-medium text-slate-700">{from}</span>–
-        <span className="font-medium text-slate-700">{to}</span> of{" "}
-        <span className="font-medium text-slate-700">{total}</span>
+        Showing <span className="font-medium tabular-nums text-slate-700">{from}</span>–
+        <span className="font-medium tabular-nums text-slate-700">{to}</span> of{" "}
+        <span className="font-medium tabular-nums text-slate-700">{total}</span>
       </p>
       <div className="flex items-center gap-2">
         {page > 1 ? (

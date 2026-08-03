@@ -35,7 +35,7 @@ export default async function ApplicationsPage({ searchParams }: { searchParams:
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <PageHeader
         title="Applications"
         description="Intended-use applications linked to products through evidence-carrying edges."
@@ -49,7 +49,7 @@ export default async function ApplicationsPage({ searchParams }: { searchParams:
       ) : (
         <Card>
           <CardContent className="p-0">
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Application</TableHead>

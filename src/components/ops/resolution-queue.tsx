@@ -21,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Table,
   TableBody,
@@ -93,24 +94,23 @@ export function ResolutionQueue({ pairs }: { pairs: CandidatePair[] }) {
 
   if (pairs.length === 0) {
     return (
-      <Card>
-        <CardContent className="pt-6">
-          <p className="text-sm text-slate-500">The duplicate queue is empty — nothing to triage.</p>
-        </CardContent>
-      </Card>
+      <EmptyState
+        icon={GitMerge}
+        title="The duplicate queue is empty — nothing to triage."
+      />
     );
   }
 
   return (
     <div className="space-y-4">
       {error ? (
-        <div role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+        <div role="alert" className="rounded-md border border-danger-border bg-danger-bg p-3 text-sm text-danger-fg">
           {error}
         </div>
       ) : null}
 
       {result ? (
-        <div role="status" className="rounded-md border border-teal-200 bg-teal-50 p-4 text-sm text-teal-900">
+        <div role="status" className="rounded-md border border-success-border bg-success-bg p-4 text-sm text-success-fg">
           <p className="font-medium">Merge completed</p>
           <ul className="mt-1 space-y-0.5 text-xs">
             <li>Merge event: <code className="font-mono">{result.event.id}</code></li>
@@ -204,7 +204,7 @@ function CandidateCard({
       {left && right ? (
         <CardContent>
           <div className="max-h-72 overflow-auto rounded-md border border-slate-200">
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-44">Field</TableHead>
@@ -216,7 +216,7 @@ function CandidateCard({
                 {comparableKeys.map((key) => {
                   const differs = diffs.includes(key);
                   return (
-                    <TableRow key={key} className={differs ? "bg-amber-50/60" : undefined}>
+                    <TableRow key={key} className={differs ? "bg-warning-bg/60" : undefined}>
                       <TableCell className="font-mono text-xs text-slate-500">{key}</TableCell>
                       <TableCell className={`text-xs ${differs ? "font-medium text-slate-900" : "text-slate-600"}`}>
                         {displayValue(left[key])}
@@ -234,7 +234,7 @@ function CandidateCard({
         </CardContent>
       ) : (
         <CardContent>
-          <p className="text-sm text-red-600">One side of this pair no longer exists — dismiss the candidate.</p>
+          <p className="text-sm text-danger-fg">One side of this pair no longer exists — dismiss the candidate.</p>
         </CardContent>
       )}
     </Card>
@@ -315,7 +315,7 @@ function MergeDialog({
               Conflicting fields — pick which value survives
             </p>
             <div className="rounded-md border border-slate-200">
-              <Table>
+              <Table compact>
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-36">Field</TableHead>

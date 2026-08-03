@@ -5,7 +5,7 @@ export function ListSkeleton({ rows = 8 }: { rows?: number }) {
   return (
     <div className="space-y-6" aria-busy="true" aria-label="Loading">
       <div className="space-y-2">
-        <Skeleton className="h-6 w-56" />
+        <Skeleton className="h-8 w-56" />
         <Skeleton className="h-4 w-96 max-w-full" />
       </div>
       <div className="flex gap-3">
@@ -30,7 +30,7 @@ export function DetailSkeleton() {
     <div className="space-y-6" aria-busy="true" aria-label="Loading">
       <Skeleton className="h-3 w-72" />
       <div className="space-y-2">
-        <Skeleton className="h-6 w-80 max-w-full" />
+        <Skeleton className="h-8 w-80 max-w-full" />
         <Skeleton className="h-4 w-96 max-w-full" />
       </div>
       <div className="rounded-lg border border-slate-200 p-5">

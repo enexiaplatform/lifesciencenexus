@@ -36,7 +36,7 @@ export function FormMessage({ state }: { state: ActionState }) {
   return (
     <div
       aria-live="polite"
-      className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+      className="rounded-md border border-danger-border bg-danger-bg px-3 py-2 text-xs text-danger-fg"
     >
       {state.error}
     </div>
@@ -63,7 +63,7 @@ export function FieldError({ state, name }: { state: ActionState; name: string }
   const message = fieldError(state, name);
   if (!message) return null;
   return (
-    <p id={`${name}-error`} className="text-xs text-red-600">
+    <p id={`${name}-error`} className="text-xs text-danger-fg">
       {message}
     </p>
   );
@@ -100,7 +100,7 @@ export function FormField({
       <Label htmlFor={name} className="text-xs">
         {label}
         {required ? (
-          <span aria-hidden="true" className="ml-0.5 text-red-600">
+          <span aria-hidden="true" className="ml-0.5 text-danger">
             *
           </span>
         ) : null}
@@ -162,7 +162,7 @@ export function NativeSelect({
       aria-invalid={ariaInvalid}
       aria-describedby={ariaDescribedBy}
       className={cn(
-        "h-9 w-full rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-50",
+        "h-9 w-full rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
     >

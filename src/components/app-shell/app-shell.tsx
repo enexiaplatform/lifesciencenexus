@@ -3,8 +3,9 @@
 import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FlaskConical, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 
+import { Wordmark } from "@/components/brand/wordmark";
 import { DataModeBadge } from "@/components/data-mode-badge";
 import { QuickSearch } from "@/components/search/quick-search";
 import { cn } from "@/lib/utils";
@@ -44,7 +45,7 @@ export function AppShell({ children, backend }: AppShellProps) {
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          "sticky top-0 hidden h-screen shrink-0 flex-col bg-navy-900 text-navy-100 transition-[width] duration-200 lg:flex",
+          "sticky top-0 hidden h-screen shrink-0 flex-col bg-nexus-900 text-nexus-100 transition-[width] duration-200 lg:flex print:hidden",
           collapsed ? "lg:w-16" : "lg:w-64",
         )}
       >
@@ -55,11 +56,11 @@ export function AppShell({ children, backend }: AppShellProps) {
       {mobileOpen ? (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div
-            className="absolute inset-0 bg-navy-950/60"
+            className="absolute inset-0 bg-nexus-975/60"
             aria-hidden="true"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="absolute inset-y-0 left-0 flex w-72 flex-col bg-navy-900 text-navy-100 shadow-xl">
+          <aside className="absolute inset-y-0 left-0 flex w-72 flex-col bg-nexus-900 text-nexus-100 shadow-lg">
             <SidebarNav
               pathname={pathname}
               collapsed={false}
@@ -70,10 +71,10 @@ export function AppShell({ children, backend }: AppShellProps) {
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-slate-200 bg-white px-4">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-slate-200 bg-white px-4 print:hidden">
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2 lg:hidden"
             aria-label="Open navigation"
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(true)}
@@ -82,7 +83,7 @@ export function AppShell({ children, backend }: AppShellProps) {
           </button>
           <button
             type="button"
-            className="hidden h-9 w-9 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2 lg:inline-flex"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             aria-expanded={!collapsed}
             onClick={() => setCollapsed((value) => !value)}
@@ -95,7 +96,7 @@ export function AppShell({ children, backend }: AppShellProps) {
           </button>
 
           <div className="ml-1 flex items-center gap-3">
-            <span className="text-sm font-semibold tracking-tight text-slate-900">
+            <span className="font-display text-sm font-semibold tracking-tight text-slate-900 lg:hidden">
               Life Science Nexus
             </span>
             <DataModeBadge mode={backend} />
@@ -110,7 +111,7 @@ export function AppShell({ children, backend }: AppShellProps) {
               Industrial Microbiology · Vietnam
             </span>
             <span
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-100 text-xs font-semibold text-navy-700"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-nexus-100 text-xs font-semibold text-nexus-700"
               aria-label="Demo analyst account"
               title="Demo analyst"
             >
@@ -138,20 +139,17 @@ function SidebarNav({
 }) {
   return (
     <>
-      <div className="flex h-14 shrink-0 items-center gap-2 border-b border-navy-800 px-4">
-        <FlaskConical
-          className="h-5 w-5 shrink-0 text-teal-400"
-          aria-hidden="true"
+      <div className="flex h-14 shrink-0 items-center gap-2 border-b border-nexus-800 px-4">
+        <Wordmark
+          href="/dashboard"
+          size={24}
+          showText={!collapsed}
+          className="min-w-0 truncate text-nexus-50 focus-visible:ring-spectral-400"
         />
-        {!collapsed ? (
-          <span className="truncate text-sm font-semibold tracking-wide">
-            Nexus
-          </span>
-        ) : null}
         {onClose ? (
           <button
             type="button"
-            className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-md text-navy-200 hover:bg-navy-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+            className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-md text-nexus-200 hover:bg-nexus-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-400"
             aria-label="Close navigation"
             onClick={onClose}
           >
@@ -168,11 +166,11 @@ function SidebarNav({
           <div key={section.title} className="mb-4">
             {collapsed ? (
               <div
-                className="mx-2 mb-1 border-t border-navy-800"
+                className="mx-2 mb-1 border-t border-nexus-800"
                 aria-hidden="true"
               />
             ) : (
-              <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-navy-400">
+              <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-nexus-400">
                 {section.title}
               </p>
             )}
@@ -188,13 +186,16 @@ function SidebarNav({
                       aria-current={isActive ? "page" : undefined}
                       title={collapsed ? item.title : undefined}
                       className={cn(
-                        "flex items-center gap-2 rounded-md px-2 py-1.5 text-[13px] font-medium text-navy-200 transition-colors hover:bg-navy-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400",
-                        isActive && "bg-navy-800 text-white",
+                        "flex items-center gap-2 rounded-md px-2 py-1.5 text-[13px] font-medium text-nexus-200 transition-colors hover:bg-nexus-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-400",
+                        isActive && "bg-nexus-800 text-white",
                         collapsed && "justify-center px-0",
                       )}
                     >
                       <item.icon
-                        className="h-4 w-4 shrink-0"
+                        className={cn(
+                          "h-4 w-4 shrink-0",
+                          isActive && "text-spectral-300",
+                        )}
                         aria-hidden="true"
                       />
                       {!collapsed ? item.title : null}

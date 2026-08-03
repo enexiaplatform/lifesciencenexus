@@ -110,7 +110,7 @@ function AddToProjectDialog({
           {done ? (
             <p
               role="status"
-              className="rounded-md border border-teal-300 bg-teal-50 p-3 text-sm text-teal-800"
+              className="rounded-md border border-success-border bg-success-bg p-3 text-sm text-success-fg"
             >
               SKU linked to the project. Open the Research module to see it in the entity list.
             </p>
@@ -123,7 +123,7 @@ function AddToProjectDialog({
                   value={projectId}
                   onChange={(event) => setProjectId(event.target.value)}
                   aria-invalid={error ? true : undefined}
-                  className="mt-1 flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="mt-1 flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-1"
                 >
                   <option value="">Select a project…</option>
                   {projects.map((project) => (
@@ -136,7 +136,7 @@ function AddToProjectDialog({
               {error ? (
                 <p
                   role="alert"
-                  className="rounded-md border border-red-300 bg-red-50 p-3 text-xs text-red-800"
+                  className="rounded-md border border-danger-border bg-danger-bg p-3 text-xs text-danger-fg"
                 >
                   {error}
                 </p>

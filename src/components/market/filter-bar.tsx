@@ -87,7 +87,7 @@ export function FilterSelect({
         id={id}
         name={name}
         defaultValue={value}
-        className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
       >
         <option value="">{allLabel}</option>
         {options.map((option) => (

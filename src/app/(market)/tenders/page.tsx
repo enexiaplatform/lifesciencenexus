@@ -79,7 +79,7 @@ export default async function TendersPage({ searchParams }: { searchParams: Prom
         />
       ) : (
         <div className="rounded-lg border border-slate-200 bg-white">
-          <Table>
+          <Table compact>
             <TableHeader>
               <TableRow>
                 <TableHead>Code</TableHead>
@@ -103,7 +103,7 @@ export default async function TendersPage({ searchParams }: { searchParams: Prom
                       <div className="flex flex-wrap items-center gap-1.5">
                         <Link
                           href={`/tenders/${tender.id}`}
-                          className="font-mono text-xs font-medium text-accent hover:underline"
+                          className="font-mono text-xs font-medium text-spectral-600 hover:underline"
                         >
                           {tender.code}
                         </Link>
@@ -117,7 +117,7 @@ export default async function TendersPage({ searchParams }: { searchParams: Prom
                     </TableCell>
                     <TableCell className="text-xs">
                       {buyer ? (
-                        <Link href={`/organizations/${buyer.id}`} className="text-accent hover:underline">
+                        <Link href={`/organizations/${buyer.id}`} className="text-spectral-600 hover:underline">
                           {buyer.name}
                         </Link>
                       ) : (
@@ -128,9 +128,9 @@ export default async function TendersPage({ searchParams }: { searchParams: Prom
                     <TableCell>
                       <StatusBadge label={TENDER_STATUS_LABELS[tender.status]} tone={statusTones[tender.status]} />
                     </TableCell>
-                    <TableCell className="text-xs text-slate-600">{formatDate(tender.publicationDate)}</TableCell>
-                    <TableCell className="text-xs text-slate-600">{formatDate(tender.submissionDeadline)}</TableCell>
-                    <TableCell className="text-xs text-slate-600">{formatDate(tender.awardDate)}</TableCell>
+                    <TableCell className="tabular-nums text-xs text-slate-600">{formatDate(tender.publicationDate)}</TableCell>
+                    <TableCell className="tabular-nums text-xs text-slate-600">{formatDate(tender.submissionDeadline)}</TableCell>
+                    <TableCell className="tabular-nums text-xs text-slate-600">{formatDate(tender.awardDate)}</TableCell>
                     <TableCell className="text-right">
                       {tender.status === "published" && daysLeft !== null ? (
                         daysLeft < 0 ? (

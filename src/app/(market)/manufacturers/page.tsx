@@ -84,7 +84,7 @@ export default async function ManufacturersPage({ searchParams }: { searchParams
                 <CardHeader className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
                     <CardTitle className="text-base">
-                      <Link href={`/organizations/${org.id}`} className="text-accent hover:underline">
+                      <Link href={`/organizations/${org.id}`} className="text-spectral-600 hover:underline">
                         {org.name}
                       </Link>
                     </CardTitle>
@@ -121,10 +121,10 @@ export default async function ManufacturersPage({ searchParams }: { searchParams
                   </div>
                   <div className="flex items-baseline gap-4 text-xs text-slate-600">
                     <span>
-                      <span className="text-base font-semibold text-slate-900">{orgProducts.length}</span> products
+                      <span className="text-base font-semibold tabular-nums text-slate-900">{orgProducts.length}</span> products
                     </span>
                     <span>
-                      <span className="text-base font-semibold text-teal-700">{activeProducts}</span> active
+                      <span className="text-base font-semibold tabular-nums text-teal-700">{activeProducts}</span> active
                     </span>
                   </div>
                   {categories.length > 0 ? (

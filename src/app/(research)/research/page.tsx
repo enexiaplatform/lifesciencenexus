@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FlaskConical } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { PageHeader } from "@/components/ui/page-header";
 import {
   Table,
   TableBody,
@@ -27,8 +24,8 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = { title: "Research Projects" };
 
 const STATUS_STYLES: Record<ResearchProjectStatus, string> = {
-  active: "border-teal-200 bg-teal-50 text-teal-700",
-  completed: "border-accent/30 bg-accent/10 text-accent",
+  active: "border-success-border bg-success-bg text-success-fg",
+  completed: "border-info-border bg-info-bg text-info-fg",
   archived: "border-slate-300 bg-slate-100 text-slate-500",
 };
 
@@ -56,31 +53,19 @@ export default async function ResearchPage({
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-900">
-            Research projects
-          </h1>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">
-            Analyst workspaces that organize a question, the entities in scope, notes and
-            evidence-linked findings.
-          </p>
-        </div>
-        <CreateProjectDialog defaultOpen={dialogParam === "create"} />
-      </div>
+      <PageHeader
+        title="Research projects"
+        description="Analyst workspaces that organize a question, the entities in scope, notes and evidence-linked findings."
+        actions={<CreateProjectDialog defaultOpen={dialogParam === "create"} />}
+      />
 
       {rows.length === 0 ? (
-        <Card className="border-dashed">
-          <CardHeader>
-            <CardTitle className="text-base">No research projects yet</CardTitle>
-            <CardDescription>
-              Start a workspace to answer a market or product question with linked evidence.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <CreateProjectDialog defaultOpen={false} />
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={FlaskConical}
+          title="No research projects yet"
+          description="Start a workspace to answer a market or product question with linked evidence."
+          action={<CreateProjectDialog defaultOpen={false} />}
+        />
       ) : (
         <Card>
           <Table>
@@ -132,7 +117,7 @@ export default async function ResearchPage({
                   </TableCell>
                   <TableCell className="text-right tabular-nums">{entityCount}</TableCell>
                   <TableCell className="text-right tabular-nums">{findingCount}</TableCell>
-                  <TableCell className="whitespace-nowrap text-xs text-slate-500">
+                  <TableCell className="whitespace-nowrap text-xs tabular-nums text-slate-500">
                     {formatDate(project.updatedAt)}
                   </TableCell>
                 </TableRow>

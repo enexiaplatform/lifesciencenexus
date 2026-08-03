@@ -7,20 +7,9 @@ import { EVIDENCE_STATE_LABELS, VISIBILITY_LABELS } from "./labels";
 
 /**
  * Market-module badge kit: evidence state, visibility, demo marker, freshness
- * and small status badges. Every data row in the module composes these so
- * evidence governance stays visible everywhere.
+ * and small status badges. Every badge is a thin wrapper over the canonical
+ * `ui/badge` variants — this file owns labels and enum→variant mapping only.
  */
-
-const evidenceStateStyles: Record<EvidenceState, string> = {
-  unverified: "border-evidence-unverified/30 bg-evidence-unverified/10 text-evidence-unverified",
-  source_captured: "border-evidence-source-captured/30 bg-evidence-source-captured/10 text-evidence-source-captured",
-  structurally_validated: "border-evidence-validated/30 bg-evidence-validated/10 text-evidence-validated",
-  analyst_reviewed: "border-evidence-reviewed/30 bg-evidence-reviewed/10 text-evidence-reviewed",
-  domain_expert_reviewed: "border-evidence-expert-reviewed/30 bg-evidence-expert-reviewed/10 text-evidence-expert-reviewed",
-  superseded: "border-evidence-superseded/30 bg-evidence-superseded/10 text-evidence-superseded",
-  disputed: "border-evidence-disputed/30 bg-evidence-disputed/10 text-evidence-disputed",
-  expired: "border-evidence-expired/30 bg-evidence-expired/10 text-evidence-expired",
-};
 
 /** Evidence-state badge keyed by the domain enum (snake_case). */
 export function EvidenceStateBadge({
@@ -31,7 +20,11 @@ export function EvidenceStateBadge({
   className?: string;
 }) {
   return (
-    <Badge variant="outline" className={cn("whitespace-nowrap", evidenceStateStyles[state], className)}>
+    <Badge
+      variant="evidence"
+      state={state}
+      className={cn("whitespace-nowrap", className)}
+    >
       {EVIDENCE_STATE_LABELS[state]}
     </Badge>
   );
@@ -39,16 +32,13 @@ export function EvidenceStateBadge({
 
 /** Canonical vs tenant-private visibility marker. */
 export function VisibilityBadge({ visibility, className }: { visibility: Visibility; className?: string }) {
-  if (visibility === "tenant_private") {
-    return (
-      <Badge variant="warning" className={cn("whitespace-nowrap", className)}>
-        {VISIBILITY_LABELS.tenant_private}
-      </Badge>
-    );
-  }
   return (
-    <Badge variant="secondary" className={cn("whitespace-nowrap", className)}>
-      {VISIBILITY_LABELS.canonical}
+    <Badge
+      variant="visibility"
+      visibility={visibility}
+      className={cn("whitespace-nowrap", className)}
+    >
+      {VISIBILITY_LABELS[visibility]}
     </Badge>
   );
 }
@@ -57,16 +47,16 @@ export function VisibilityBadge({ visibility, className }: { visibility: Visibil
 export function DemoBadge({ isDemo, className }: { isDemo: boolean; className?: string }) {
   if (!isDemo) return null;
   return (
-    <Badge variant="outline" className={cn("whitespace-nowrap border-amber-300 bg-amber-50 text-amber-800", className)}>
+    <Badge variant="demo" className={cn("whitespace-nowrap", className)}>
       Demo
     </Badge>
   );
 }
 
-const freshnessStyles: Record<FreshnessBucket, string> = {
-  fresh: "border-teal-200 bg-teal-50 text-teal-700",
-  aging: "border-amber-200 bg-amber-50 text-amber-800",
-  stale: "border-red-200 bg-red-50 text-red-700",
+const freshnessVariants: Record<FreshnessBucket, "success" | "warning" | "destructive"> = {
+  fresh: "success",
+  aging: "warning",
+  stale: "destructive",
 };
 
 const freshnessLabels: Record<FreshnessBucket, string> = {
@@ -83,7 +73,7 @@ export function FreshnessBadge({ date, className }: { date: string; className?: 
       ? `In ${-info.daysSince} d`
       : `${freshnessLabels[info.bucket]} · ${info.daysSince} d ago`;
   return (
-    <Badge variant="outline" className={cn("whitespace-nowrap", freshnessStyles[info.bucket], className)}>
+    <Badge variant={freshnessVariants[info.bucket]} className={cn("whitespace-nowrap", className)}>
       {label}
     </Badge>
   );

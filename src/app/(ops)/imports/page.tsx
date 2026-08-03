@@ -1,13 +1,8 @@
 import { getRepository } from "@/lib/data";
 import { ImportWizard } from "@/components/ops/import-wizard";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
 import {
   Table,
   TableBody,
@@ -48,74 +43,64 @@ export default async function ImportsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Imports</h1>
-        <p className="mt-1 max-w-2xl text-sm text-slate-600">
-          Bulk-load spreadsheets into the graph: pick a template, upload CSV or
-          XLSX (or paste a table), map columns, validate, review duplicates,
-          choose a visibility layer, and commit. Re-importing the same file
-          with the same mapping is safe — exact duplicates are skipped.
-        </p>
-      </div>
+      <PageHeader
+        title="Imports"
+        description="Bulk-load spreadsheets into the graph: pick a template, upload CSV or XLSX (or paste a table), map columns, validate, review duplicates, choose a visibility layer, and commit. Re-importing the same file with the same mapping is safe — exact duplicates are skipped."
+      />
 
       <ImportWizard />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Recent import batches</CardTitle>
-          <CardDescription>
-            Each completed import writes a batch record (source + audit entry)
-            with row-level outcomes.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {batches.items.length === 0 ? (
-            <p className="text-sm text-slate-500">
-              No import batches yet — run the wizard above to create the first one.
-            </p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>File</TableHead>
-                  <TableHead>Template</TableHead>
-                  <TableHead>Visibility</TableHead>
-                  <TableHead className="text-right">Created</TableHead>
-                  <TableHead className="text-right">Skipped</TableHead>
-                  <TableHead className="text-right">Errors</TableHead>
-                  <TableHead>Finished</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {batches.items.map((batch) => {
-                  const metadata = (batch.metadata ?? {}) as BatchMetadata;
-                  const kind = metadata.kind as ImportKind | undefined;
-                  const template = kind ? IMPORT_TEMPLATES[kind] : undefined;
-                  return (
-                    <TableRow key={batch.id}>
-                      <TableCell className="font-medium text-slate-900">
-                        {metadata.fileName ?? "(unnamed file)"}
-                      </TableCell>
-                      <TableCell>{template?.label ?? metadata.kind ?? "—"}</TableCell>
-                      <TableCell>
-                        <Badge variant={metadata.visibility === "canonical" ? "secondary" : "warning"}>
-                          {metadata.visibility ?? "tenant_private"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right text-teal-700">{metadata.created ?? 0}</TableCell>
-                      <TableCell className="text-right text-slate-600">{metadata.skipped ?? 0}</TableCell>
-                      <TableCell className="text-right text-red-600">{metadata.failed ?? 0}</TableCell>
-                      <TableCell className="text-slate-500">
-                        {new Date(batch.createdAt).toLocaleString()}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+      <SectionCard
+        title="Recent import batches"
+        description="Each completed import writes a batch record (source + audit entry) with row-level outcomes."
+        flush={batches.items.length > 0}
+      >
+        {batches.items.length === 0 ? (
+          <p className="text-sm text-slate-500">
+            No import batches yet — run the wizard above to create the first one.
+          </p>
+        ) : (
+          <Table compact>
+            <TableHeader>
+              <TableRow>
+                <TableHead>File</TableHead>
+                <TableHead>Template</TableHead>
+                <TableHead>Visibility</TableHead>
+                <TableHead className="text-right">Created</TableHead>
+                <TableHead className="text-right">Skipped</TableHead>
+                <TableHead className="text-right">Errors</TableHead>
+                <TableHead>Finished</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {batches.items.map((batch) => {
+                const metadata = (batch.metadata ?? {}) as BatchMetadata;
+                const kind = metadata.kind as ImportKind | undefined;
+                const template = kind ? IMPORT_TEMPLATES[kind] : undefined;
+                return (
+                  <TableRow key={batch.id}>
+                    <TableCell className="font-medium text-slate-900">
+                      {metadata.fileName ?? "(unnamed file)"}
+                    </TableCell>
+                    <TableCell>{template?.label ?? metadata.kind ?? "—"}</TableCell>
+                    <TableCell>
+                      <Badge variant={metadata.visibility === "canonical" ? "secondary" : "warning"}>
+                        {metadata.visibility ?? "tenant_private"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right tabular-nums text-success-fg">{metadata.created ?? 0}</TableCell>
+                    <TableCell className="text-right tabular-nums text-slate-600">{metadata.skipped ?? 0}</TableCell>
+                    <TableCell className="text-right tabular-nums text-danger-fg">{metadata.failed ?? 0}</TableCell>
+                    <TableCell className="tabular-nums text-slate-500">
+                      {new Date(batch.createdAt).toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        )}
+      </SectionCard>
     </div>
   );
 }

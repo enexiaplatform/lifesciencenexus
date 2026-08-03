@@ -89,7 +89,7 @@ export function ConfidenceValue({ value, className }: { value: number; className
         <span
           className={cn(
             "block h-full rounded-full",
-            percent >= 75 ? "bg-teal-500" : percent >= 50 ? "bg-amber-500" : "bg-red-400",
+            percent >= 75 ? "bg-teal-500" : percent >= 50 ? "bg-warning" : "bg-danger",
           )}
           style={{ width: `${percent}%` }}
         />
@@ -118,7 +118,7 @@ export function ScoreBar({
         <span
           className={cn(
             "block h-full rounded-full",
-            score >= 75 ? "bg-teal-500" : score >= 55 ? "bg-amber-500" : "bg-red-400",
+            score >= 75 ? "bg-teal-500" : score >= 55 ? "bg-warning" : "bg-danger",
             barClassName,
           )}
           style={{ width: `${Math.min(100, Math.max(0, score))}%` }}

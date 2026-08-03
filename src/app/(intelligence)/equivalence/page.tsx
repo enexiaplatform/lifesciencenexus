@@ -50,7 +50,7 @@ export default async function EquivalencePage() {
         }
       />
 
-      <p className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+      <p className="rounded-md border border-warning-border bg-warning-bg px-3 py-2 text-xs text-warning-fg">
         {EQUIVALENCE_DISCLAIMER}
       </p>
 
@@ -67,14 +67,14 @@ export default async function EquivalencePage() {
       ) : (
         <Card>
           <CardContent className="p-0">
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Source SKU</TableHead>
                   <TableHead />
                   <TableHead>Candidate SKU</TableHead>
                   <TableHead>Classification</TableHead>
-                  <TableHead>Overall score</TableHead>
+                  <TableHead className="text-right">Overall score</TableHead>
                   <TableHead>Review state</TableHead>
                   <TableHead>Last reviewed</TableHead>
                   <TableHead>Data</TableHead>
@@ -109,7 +109,7 @@ export default async function EquivalencePage() {
                       <TableCell>
                         <ClassificationBadge classification={record.classification} />
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-right">
                         <ScoreBar score={record.overallScore} />
                       </TableCell>
                       <TableCell>

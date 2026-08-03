@@ -1,11 +1,7 @@
 import { demoTenantId } from "@/lib/env";
 import { ExportCenter } from "@/components/ops/export-center";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
 
 export const metadata = { title: "Exports" };
 
@@ -17,22 +13,15 @@ export const metadata = { title: "Exports" };
 export default function ExportsPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Exports</h1>
-        <p className="mt-1 max-w-2xl text-sm text-slate-600">
-          Download entity families for analysis or handoff. Canonical reference
-          data is always exportable; tenant-private intelligence requires an
-          explicit authorization and is written to the audit log.
-        </p>
-      </div>
+      <PageHeader
+        title="Exports"
+        description="Download entity families for analysis or handoff. Canonical reference data is always exportable; tenant-private intelligence requires an explicit authorization and is written to the audit log."
+      />
 
       <ExportCenter demoTenantId={demoTenantId} />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Authorization &amp; audit</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm text-slate-600">
+      <SectionCard title="Authorization & audit">
+        <div className="space-y-2 text-sm text-slate-600">
           <p>
             <span className="font-medium text-slate-800">Authorization.</span>{" "}
             Exporting tenant-private rows asserts you are the demo workspace
@@ -45,8 +34,8 @@ export default function ExportsPage() {
             download records an <code className="font-mono text-xs">export.download</code>{" "}
             audit entry with family, format, visibility scope and row count.
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
     </div>
   );
 }

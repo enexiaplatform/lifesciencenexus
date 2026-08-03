@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { getRepository } from "@/lib/data";
+import { PageHeader } from "@/components/ui/page-header";
 import { claimValueText } from "@/components/evidence/format";
 import { SourcesTable, type SourceRow } from "@/components/evidence/sources-table";
 import { AddSourceDialog } from "@/components/evidence/add-source-dialog";
@@ -66,16 +67,11 @@ export default async function SourcesPage({
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-900">Sources</h1>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">
-            Every claim in the graph traces back to one of these evidence sources. Expand a
-            row to see the claims it backs.
-          </p>
-        </div>
-        <AddSourceDialog defaultOpen={dialogParam === "add"} />
-      </div>
+      <PageHeader
+        title="Sources"
+        description="Every claim in the graph traces back to one of these evidence sources. Expand a row to see the claims it backs."
+        actions={<AddSourceDialog defaultOpen={dialogParam === "add"} />}
+      />
       <SourcesTable rows={rows} />
     </div>
   );

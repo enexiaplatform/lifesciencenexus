@@ -1,19 +1,25 @@
-import { EvidenceBadge, type EvidenceState as BadgeState } from "@/components/evidence-badge";
+import { Badge } from "@/components/ui/badge";
 import type { EvidenceState } from "@/lib/domain/types";
 
-/** Domain evidence states (snake_case) -> EvidenceBadge states (dash-case). */
-const STATE_MAP: Record<EvidenceState, BadgeState> = {
-  unverified: "unverified",
-  source_captured: "source-captured",
-  structurally_validated: "validated",
-  analyst_reviewed: "reviewed",
-  domain_expert_reviewed: "expert-reviewed",
-  superseded: "superseded",
-  disputed: "disputed",
-  expired: "expired",
+/**
+ * Evidence-state badge that accepts the domain's snake_case states. Thin
+ * wrapper over the canonical `ui/badge` evidence variant; owns labels only.
+ */
+const STATE_LABELS: Record<EvidenceState, string> = {
+  unverified: "Unverified",
+  source_captured: "Source captured",
+  structurally_validated: "Validated",
+  analyst_reviewed: "Reviewed",
+  domain_expert_reviewed: "Expert reviewed",
+  superseded: "Superseded",
+  disputed: "Disputed",
+  expired: "Expired",
 };
 
-/** EvidenceBadge that accepts the domain's snake_case evidence states. */
 export function DomainEvidenceBadge({ state, className }: { state: EvidenceState; className?: string }) {
-  return <EvidenceBadge state={STATE_MAP[state]} className={className} />;
+  return (
+    <Badge variant="evidence" state={state} className={className}>
+      {STATE_LABELS[state]}
+    </Badge>
+  );
 }

@@ -20,6 +20,7 @@ import { TenantPrivateNotice } from "@/components/market/tenant-private-notice";
 import { Timeline } from "@/components/market/timeline";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionCard } from "@/components/ui/section-card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getRepository } from "@/lib/data";
 import { daysUntil } from "@/lib/domain/freshness";
@@ -122,13 +123,13 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
           </div>
           <CardDescription>
             {siteOrg ? (
-              <Link href={`/organizations/${siteOrg.id}`} className="text-accent hover:underline">
+              <Link href={`/organizations/${siteOrg.id}`} className="text-spectral-600 hover:underline">
                 {siteOrg.name}
               </Link>
             ) : null}
             {siteOrg && site ? " · " : ""}
             {site ? (
-              <Link href={`/sites/${site.id}`} className="text-accent hover:underline">
+              <Link href={`/sites/${site.id}`} className="text-spectral-600 hover:underline">
                 {site.name}
               </Link>
             ) : (
@@ -137,7 +138,7 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
             {laboratory ? (
               <>
                 {" · "}
-                <Link href={`/laboratories/${laboratory.id}`} className="text-accent hover:underline">
+                <Link href={`/laboratories/${laboratory.id}`} className="text-spectral-600 hover:underline">
                   {laboratory.name}
                 </Link>
               </>
@@ -148,7 +149,7 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
           <DetailGrid>
             <DetailItem label="Manufacturer">
               {manufacturer ? (
-                <Link href={`/organizations/${manufacturer.id}`} className="text-accent hover:underline">
+                <Link href={`/organizations/${manufacturer.id}`} className="text-spectral-600 hover:underline">
                   {manufacturer.name}
                 </Link>
               ) : (
@@ -183,7 +184,7 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
             </DetailItem>
             <DetailItem label="Service provider">
               {serviceProvider ? (
-                <Link href={`/organizations/${serviceProvider.id}`} className="text-accent hover:underline">
+                <Link href={`/organizations/${serviceProvider.id}`} className="text-spectral-600 hover:underline">
                   {serviceProvider.name}
                 </Link>
               ) : (
@@ -194,14 +195,10 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Compatible consumables ({compatibleConsumables.length})</CardTitle>
-          <CardDescription>
-            SKUs evidenced as compatible with this asset model — the pull-through opportunity.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      <SectionCard
+        title={`Compatible consumables (${compatibleConsumables.length})`}
+        description="SKUs evidenced as compatible with this asset model — the pull-through opportunity."
+      >
           {compatibleConsumables.length === 0 ? (
             <EmptyState
               icon={Boxes}
@@ -227,7 +224,7 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
                     <TableRow key={compatibility.id}>
                       <TableCell>
                         {sku ? (
-                          <Link href={`/skus/${sku.id}`} className="font-medium text-accent hover:underline">
+                          <Link href={`/skus/${sku.id}`} className="font-medium text-spectral-600 hover:underline">
                             {sku.name}
                           </Link>
                         ) : (
@@ -256,16 +253,13 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
               </TableBody>
             </Table>
           )}
-        </CardContent>
-      </Card>
+      </SectionCard>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Consumption model</CardTitle>
-            <CardDescription>Estimated recurring consumable usage for this asset or its model.</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <SectionCard
+          title="Consumption model"
+          description="Estimated recurring consumable usage for this asset or its model."
+        >
             {assetConsumption.length === 0 ? (
               <p className="text-xs text-slate-500">
                 No consumption model recorded — annual pull-through cannot be forecast for this asset.
@@ -287,7 +281,7 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
                       <TableRow key={consumption.id}>
                         <TableCell className="text-xs">
                           {sku ? (
-                            <Link href={`/skus/${sku.id}`} className="text-accent hover:underline">
+                            <Link href={`/skus/${sku.id}`} className="text-spectral-600 hover:underline">
                               {sku.name}
                             </Link>
                           ) : (
@@ -308,17 +302,12 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
                 </TableBody>
               </Table>
             )}
-          </CardContent>
-        </Card>
+        </SectionCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Replacement assumptions</CardTitle>
-            <CardDescription>
-              Rules of thumb behind replacement forecasts for this category (tenant-private).
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <SectionCard
+          title="Replacement assumptions"
+          description="Rules of thumb behind replacement forecasts for this category (tenant-private)."
+        >
             {categoryAssumptions.length === 0 ? (
               <p className="text-xs text-slate-500">No replacement assumption recorded for this asset category.</p>
             ) : (
@@ -335,16 +324,11 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
                 ))}
               </ul>
             )}
-          </CardContent>
-        </Card>
+        </SectionCard>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Lifecycle events</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <SectionCard title="Lifecycle events">
             {sortedLifecycle.length === 0 ? (
               <p className="text-xs text-slate-500">No lifecycle events recorded.</p>
             ) : (
@@ -357,17 +341,17 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
                 }))}
               />
             )}
-          </CardContent>
-        </Card>
+        </SectionCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
+        <SectionCard
+          title={
+            <span className="flex items-center gap-2">
               <Wrench className="h-4 w-4 text-slate-400" aria-hidden="true" />
               Maintenance events
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </span>
+          }
+        >
+          <div className="space-y-4">
             {sortedMaintenance.length === 0 ? (
               <p className="text-xs text-slate-500">No maintenance events recorded.</p>
             ) : (
@@ -388,14 +372,11 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
               </p>
               <RecordMaintenanceForm action={recordMaintenanceEvent.bind(null, asset.id)} providers={providerOptions} />
             </section>
-          </CardContent>
-        </Card>
+          </div>
+        </SectionCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Qualification events</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <SectionCard title="Qualification events">
+          <div className="space-y-4">
             {sortedQualification.length === 0 ? (
               <p className="text-xs text-slate-500">No qualification events recorded.</p>
             ) : (
@@ -422,19 +403,13 @@ export default async function InstalledAssetDetailPage({ params }: { params: Pro
                 current={asset.qualificationStatus}
               />
             </section>
-          </CardContent>
-        </Card>
+          </div>
+        </SectionCard>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Related signals</CardTitle>
-          <CardDescription>Derived opportunities referencing this asset or its model.</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <SectionCard title="Related signals" description="Derived opportunities referencing this asset or its model.">
           <SignalList signals={relatedSignals} />
-        </CardContent>
-      </Card>
+      </SectionCard>
     </div>
   );
 }

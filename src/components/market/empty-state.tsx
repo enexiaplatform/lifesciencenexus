@@ -1,14 +1,15 @@
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
+import { Inbox, type LucideIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { EmptyState as UiEmptyState } from "@/components/ui/empty-state";
 
 /**
- * Empty state with a clear next action. Every list/table in the module falls
- * back to this when the repository returns zero rows.
+ * Market-module empty state — thin wrapper over the canonical
+ * `ui/empty-state`; keeps the `{ label, href }` action shorthand used across
+ * the module's list pages.
  */
 export function EmptyState({
-  icon: Icon,
+  icon,
   title,
   description,
   action,
@@ -21,23 +22,21 @@ export function EmptyState({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center",
-        className,
-      )}
-    >
-      {Icon ? <Icon className="h-6 w-6 text-slate-400" aria-hidden="true" /> : null}
-      <p className="text-sm font-medium text-slate-700">{title}</p>
-      {description ? <p className="max-w-md text-xs text-slate-500">{description}</p> : null}
-      {action ? (
-        <Link
-          href={action.href}
-          className="mt-1 text-xs font-medium text-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          {action.label}
-        </Link>
-      ) : null}
-    </div>
+    <UiEmptyState
+      icon={icon ?? Inbox}
+      title={title}
+      description={description}
+      className={className}
+      action={
+        action ? (
+          <Link
+            href={action.href}
+            className="text-sm font-medium text-spectral-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2"
+          >
+            {action.label}
+          </Link>
+        ) : undefined
+      }
+    />
   );
 }

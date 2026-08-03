@@ -5,13 +5,8 @@ import { AlertTriangle, Printer } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
 import { EvidenceStateBadge } from "@/components/evidence/state-badge";
 import { IsDemoBadge, VisibilityBadge } from "@/components/evidence/meta-badges";
 import { entityDisplayName, humanize } from "@/components/search/entity-routes";
@@ -116,44 +111,42 @@ export default async function ResearchWorkspacePage({
   return (
     <div className="space-y-5">
       {/* Header */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <CardTitle className="text-lg">{project.title}</CardTitle>
-                <VisibilityBadge visibility={project.visibility} />
-                <IsDemoBadge isDemo={project.isDemo} />
-              </div>
-              <CardDescription className="mt-1.5 max-w-3xl">{project.question}</CardDescription>
-            </div>
-            <div className="flex items-center gap-2">
-              <ProjectStatusSelect projectId={project.id} status={project.status} />
-              <Button asChild variant="outline" size="sm">
-                <Link href={`/research/${project.id}/report`}>
-                  <Printer className="h-4 w-4" aria-hidden="true" />
-                  Report
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {project.scope && <p className="text-sm text-slate-600">{project.scope}</p>}
-          <div className="flex flex-wrap items-center gap-1.5">
-            {project.geographyCodes.map((code) => (
-              <Badge key={code} variant="secondary" className="text-[10px]">
-                {code}
-              </Badge>
-            ))}
-            {project.industryCodes.map((code) => (
-              <Badge key={code} variant="outline" className="text-[10px]">
-                {humanize(code)}
-              </Badge>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <PageHeader
+        title={
+          <span className="flex flex-wrap items-center gap-2">
+            {project.title}
+            <VisibilityBadge visibility={project.visibility} />
+            <IsDemoBadge isDemo={project.isDemo} />
+          </span>
+        }
+        description={project.question}
+        actions={
+          <>
+            <ProjectStatusSelect projectId={project.id} status={project.status} />
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/research/${project.id}/report`}>
+                <Printer className="h-4 w-4" aria-hidden="true" />
+                Report
+              </Link>
+            </Button>
+          </>
+        }
+      />
+      <div className="-mt-3 space-y-2">
+        {project.scope && <p className="text-sm text-slate-600">{project.scope}</p>}
+        <div className="flex flex-wrap items-center gap-1.5">
+          {project.geographyCodes.map((code) => (
+            <Badge key={code} variant="secondary" className="text-[10px]">
+              {code}
+            </Badge>
+          ))}
+          {project.industryCodes.map((code) => (
+            <Badge key={code} variant="outline" className="text-[10px]">
+              {humanize(code)}
+            </Badge>
+          ))}
+        </div>
+      </div>
 
       <div className="grid gap-4 xl:grid-cols-3">
         <div className="space-y-4 xl:col-span-1">
@@ -171,82 +164,74 @@ export default async function ResearchWorkspacePage({
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Confidence summary */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm">Confidence summary</CardTitle>
-            <CardDescription className="text-xs">
-              Aggregate confidence of claims linked to findings in this project.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {linkedClaims.length === 0 ? (
-              <p className="text-sm text-slate-500">
-                No evidence claims linked yet — link claims to findings to build confidence.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-semibold tabular-nums text-slate-900">
-                    {averageConfidence}
-                  </span>
-                  <span className="text-xs text-slate-500">
-                    / 100 average across {linkedClaims.length} linked claim
-                    {linkedClaims.length === 1 ? "" : "s"}
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {stateCounts.map(({ state, count }) => (
-                    <span key={state} className="inline-flex items-center gap-1.5">
-                      <EvidenceStateBadge state={state} />
-                      <span className="text-sm font-semibold tabular-nums text-slate-900">
-                        {count}
-                      </span>
-                    </span>
-                  ))}
-                </div>
+        <SectionCard
+          title="Confidence summary"
+          description="Aggregate confidence of claims linked to findings in this project."
+        >
+          {linkedClaims.length === 0 ? (
+            <p className="text-sm text-slate-500">
+              No evidence claims linked yet — link claims to findings to build confidence.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-semibold tabular-nums text-slate-900">
+                  {averageConfidence}
+                </span>
+                <span className="text-xs text-slate-500">
+                  / 100 average across {linkedClaims.length} linked claim
+                  {linkedClaims.length === 1 ? "" : "s"}
+                </span>
               </div>
-            )}
-          </CardContent>
-        </Card>
+              <div className="flex flex-wrap gap-2">
+                {stateCounts.map(({ state, count }) => (
+                  <span key={state} className="inline-flex items-center gap-1.5">
+                    <EvidenceStateBadge state={state} />
+                    <span className="text-sm font-semibold tabular-nums text-slate-900">
+                      {count}
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </SectionCard>
 
         {/* Data gaps */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <AlertTriangle className="h-4 w-4 text-amber-600" aria-hidden="true" />
+        <SectionCard
+          title={
+            <span className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-warning" aria-hidden="true" />
               Data gaps
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Explicit unknowns and findings that still need evidence.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {unknownFindings.length === 0 && unsupportedFacts.length === 0 ? (
-              <p className="text-sm text-slate-500">
-                No known gaps — every verified fact is backed by at least one claim.
-              </p>
-            ) : (
-              <ul className="space-y-2">
-                {unknownFindings.map((finding) => (
-                  <li key={finding.id} className="flex items-start gap-2 text-sm">
-                    <Badge variant="warning" className="mt-0.5 shrink-0">
-                      Unknown
-                    </Badge>
-                    <span className="text-slate-700">{finding.text}</span>
-                  </li>
-                ))}
-                {unsupportedFacts.map((finding) => (
-                  <li key={finding.id} className="flex items-start gap-2 text-sm">
-                    <Badge variant="destructive" className="mt-0.5 shrink-0">
-                      Missing evidence
-                    </Badge>
-                    <span className="text-slate-700">{finding.text}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+            </span>
+          }
+          description="Explicit unknowns and findings that still need evidence."
+        >
+          {unknownFindings.length === 0 && unsupportedFacts.length === 0 ? (
+            <p className="text-sm text-slate-500">
+              No known gaps — every verified fact is backed by at least one claim.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {unknownFindings.map((finding) => (
+                <li key={finding.id} className="flex items-start gap-2 text-sm">
+                  <Badge variant="warning" className="mt-0.5 shrink-0">
+                    Unknown
+                  </Badge>
+                  <span className="text-slate-700">{finding.text}</span>
+                </li>
+              ))}
+              {unsupportedFacts.map((finding) => (
+                <li key={finding.id} className="flex items-start gap-2 text-sm">
+                  <Badge variant="destructive" className="mt-0.5 shrink-0">
+                    Missing evidence
+                  </Badge>
+                  <span className="text-slate-700">{finding.text}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </SectionCard>
       </div>
 
       <ExportCenter

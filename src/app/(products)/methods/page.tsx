@@ -37,7 +37,7 @@ export default async function MethodsPage({ searchParams }: { searchParams: Sear
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <PageHeader
         title="Methods"
         description="Laboratory methods and the standards that define them."
@@ -51,7 +51,7 @@ export default async function MethodsPage({ searchParams }: { searchParams: Sear
       ) : (
         <Card>
           <CardContent className="p-0">
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Method</TableHead>

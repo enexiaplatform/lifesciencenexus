@@ -17,7 +17,8 @@ import {
 import { SourceChip } from "@/components/market/source-chip";
 import { TenantPrivateNotice } from "@/components/market/tenant-private-notice";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionCard } from "@/components/ui/section-card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getRepository } from "@/lib/data";
 
@@ -88,7 +89,7 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
           <DetailGrid>
             <DetailItem label="Organization">
               {organization ? (
-                <Link href={`/organizations/${organization.id}`} className="text-accent hover:underline">
+                <Link href={`/organizations/${organization.id}`} className="text-spectral-600 hover:underline">
                   {organization.name}
                 </Link>
               ) : (
@@ -97,7 +98,7 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
             </DetailItem>
             <DetailItem label="Site">
               {site ? (
-                <Link href={`/sites/${site.id}`} className="text-accent hover:underline">
+                <Link href={`/sites/${site.id}`} className="text-spectral-600 hover:underline">
                   {site.name}
                 </Link>
               ) : (
@@ -112,14 +113,14 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
+      <SectionCard
+        title={
+          <span className="flex items-center gap-2">
             <Boxes className="h-4 w-4 text-slate-400" aria-hidden="true" />
             Installed assets in this laboratory ({assets.items.length})
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </span>
+        }
+      >
           {assets.items.length === 0 ? (
             <EmptyState
               icon={Boxes}
@@ -144,7 +145,7 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
                   return (
                     <TableRow key={asset.id}>
                       <TableCell>
-                        <Link href={`/installed-base/${asset.id}`} className="font-medium text-accent hover:underline">
+                        <Link href={`/installed-base/${asset.id}`} className="font-medium text-spectral-600 hover:underline">
                           {model?.model ?? asset.assetModelId}
                         </Link>
                       </TableCell>
@@ -188,18 +189,13 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
               </TableBody>
             </Table>
           )}
-        </CardContent>
-      </Card>
+      </SectionCard>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Products used</CardTitle>
-          <CardDescription>
-            Consumables compatible with this lab&apos;s instruments, and products the organization is recorded as
-            using.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <SectionCard
+        title="Products used"
+        description="Consumables compatible with this lab's instruments, and products the organization is recorded as using."
+      >
+        <div className="space-y-4">
           {labCompatibilities.length === 0 && currentUseClaims.length === 0 ? (
             <EmptyState
               icon={FlaskConical}
@@ -225,7 +221,7 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
                     <TableRow key={compatibility.id}>
                       <TableCell>
                         {sku ? (
-                          <Link href={`/skus/${sku.id}`} className="text-accent hover:underline">
+                          <Link href={`/skus/${sku.id}`} className="text-spectral-600 hover:underline">
                             {sku.name}
                           </Link>
                         ) : (
@@ -253,7 +249,7 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
                     <TableRow key={claim.id}>
                       <TableCell>
                         {sku ? (
-                          <Link href={`/skus/${sku.id}`} className="text-accent hover:underline">
+                          <Link href={`/skus/${sku.id}`} className="text-spectral-600 hover:underline">
                             {sku.name}
                           </Link>
                         ) : (
@@ -274,18 +270,19 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
               </TableBody>
             </Table>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
+      <SectionCard
+        title={
+          <span className="flex items-center gap-2">
             <Users className="h-4 w-4 text-slate-400" aria-hidden="true" />
             People with decision roles ({contacts.items.length})
-          </CardTitle>
-          <CardDescription>Contacts mapped to this site with purchasing influence.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
+          </span>
+        }
+        description="Contacts mapped to this site with purchasing influence."
+      >
+        <div className="space-y-3">
           {contacts.items.length > 0 ? (
             <TenantPrivateNotice message="People and decision roles are tenant-private records." />
           ) : null}
@@ -312,7 +309,7 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
                     <TableRow key={contact.id}>
                       <TableCell>
                         {person ? (
-                          <Link href={`/people/${person.id}`} className="font-medium text-accent hover:underline">
+                          <Link href={`/people/${person.id}`} className="font-medium text-spectral-600 hover:underline">
                             {person.fullName}
                           </Link>
                         ) : (
@@ -338,8 +335,8 @@ export default async function LaboratoryDetailPage({ params }: { params: Promise
               </TableBody>
             </Table>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
     </div>
   );
 }

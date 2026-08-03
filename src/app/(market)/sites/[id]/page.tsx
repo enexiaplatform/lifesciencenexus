@@ -17,7 +17,8 @@ import {
 } from "@/components/market/labels";
 import { TenantPrivateNotice } from "@/components/market/tenant-private-notice";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionCard } from "@/components/ui/section-card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getRepository } from "@/lib/data";
 
@@ -71,7 +72,7 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
           <DetailGrid>
             <DetailItem label="Organization">
               {organization ? (
-                <Link href={`/organizations/${organization.id}`} className="text-accent hover:underline">
+                <Link href={`/organizations/${organization.id}`} className="text-spectral-600 hover:underline">
                   {organization.name}
                 </Link>
               ) : (
@@ -93,14 +94,14 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
+      <SectionCard
+        title={
+          <span className="flex items-center gap-2">
             <FlaskConical className="h-4 w-4 text-slate-400" aria-hidden="true" />
             Laboratories ({laboratories.items.length})
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </span>
+        }
+      >
           {laboratories.items.length === 0 ? (
             <p className="text-xs text-slate-500">No laboratories recorded at this site.</p>
           ) : (
@@ -109,7 +110,7 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
                 <Link
                   key={lab.id}
                   href={`/laboratories/${lab.id}`}
-                  className="rounded-md border border-slate-200 p-3 transition-colors hover:border-navy-300 hover:bg-navy-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="rounded-md border border-slate-200 p-3 transition-colors hover:border-nexus-300 hover:bg-nexus-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                 >
                   <p className="text-sm font-medium text-slate-800">{lab.name}</p>
                   <p className="mt-0.5 text-xs text-slate-500">{LABORATORY_TYPE_LABELS[lab.labType]}</p>
@@ -117,18 +118,18 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+      </SectionCard>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
+      <SectionCard
+        title={
+          <span className="flex items-center gap-2">
             <Boxes className="h-4 w-4 text-slate-400" aria-hidden="true" />
             Installed assets ({assets.items.length})
-          </CardTitle>
-          <CardDescription>Instruments observed at this site (tenant-private installed base).</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
+          </span>
+        }
+        description="Instruments observed at this site (tenant-private installed base)."
+      >
+        <div className="space-y-3">
           {assets.items.length > 0 ? (
             <TenantPrivateNotice message="Installed-base records are tenant-private field observations." />
           ) : null}
@@ -159,7 +160,7 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
                   return (
                     <TableRow key={asset.id}>
                       <TableCell>
-                        <Link href={`/installed-base/${asset.id}`} className="font-medium text-accent hover:underline">
+                        <Link href={`/installed-base/${asset.id}`} className="font-medium text-spectral-600 hover:underline">
                           {model?.model ?? asset.assetModelId}
                         </Link>
                       </TableCell>
@@ -217,18 +218,18 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
               </TableBody>
             </Table>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
+        <SectionCard
+          title={
+            <span className="flex items-center gap-2">
               <Factory className="h-4 w-4 text-slate-400" aria-hidden="true" />
               Production lines ({productionLines.items.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </span>
+          }
+        >
             {productionLines.items.length === 0 ? (
               <p className="text-xs text-slate-500">No production lines recorded at this site.</p>
             ) : (
@@ -243,14 +244,9 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
                 ))}
               </ul>
             )}
-          </CardContent>
-        </Card>
+        </SectionCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Facility units ({facilityUnits.items.length})</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <SectionCard title={`Facility units (${facilityUnits.items.length})`}>
             {facilityUnits.items.length === 0 ? (
               <p className="text-xs text-slate-500">No facility units recorded at this site.</p>
             ) : (
@@ -263,8 +259,7 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
                 ))}
               </ul>
             )}
-          </CardContent>
-        </Card>
+        </SectionCard>
       </div>
     </div>
   );

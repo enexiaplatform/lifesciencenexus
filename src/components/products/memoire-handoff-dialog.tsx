@@ -85,7 +85,7 @@ export function MemoireHandoffDialog({
 
           <div
             role="alert"
-            className="flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900"
+            className="flex items-start gap-2 rounded-md border border-warning-border bg-warning-bg p-3 text-xs text-warning-fg"
           >
             <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             <div>
@@ -99,7 +99,7 @@ export function MemoireHandoffDialog({
           </div>
 
           {buildError ? (
-            <p role="alert" className="rounded-md border border-red-300 bg-red-50 p-3 text-xs text-red-800">
+            <p role="alert" className="rounded-md border border-danger-border bg-danger-bg p-3 text-xs text-danger-fg">
               The payload could not be built: {buildError}
             </p>
           ) : (

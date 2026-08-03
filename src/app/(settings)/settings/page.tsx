@@ -1,13 +1,8 @@
 import { getRepository } from "@/lib/data";
 import { demoTenantId, featureFlags, getDataBackend, getSupabaseEnv } from "@/lib/env";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
 import {
   Table,
   TableBody,
@@ -46,20 +41,17 @@ export default async function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Settings</h1>
-        <p className="mt-1 max-w-2xl text-sm text-slate-600">
-          Workspace, data mode and feature flags for this Nexus deployment.
-        </p>
-      </div>
+      <PageHeader
+        title="Settings"
+        description="Workspace, data mode and feature flags for this Nexus deployment."
+      />
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Workspace</CardTitle>
-            <CardDescription>The demo tenant this deployment serves.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <SectionCard
+          title="Workspace"
+          description="The demo tenant this deployment serves."
+        >
+          <div className="space-y-4">
             <dl className="grid grid-cols-[7rem_1fr] gap-y-1.5 text-sm">
               <dt className="text-slate-500">Name</dt>
               <dd className="font-medium text-slate-900">{tenant?.name ?? "Nexus Demo Workspace"}</dd>
@@ -73,7 +65,7 @@ export default async function SettingsPage() {
               <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
                 Members ({memberships.items.length})
               </p>
-              <Table>
+              <Table compact>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Member</TableHead>
@@ -99,16 +91,15 @@ export default async function SettingsPage() {
                 </TableBody>
               </Table>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </SectionCard>
 
         <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Data mode</CardTitle>
-              <CardDescription>Which backend the repository seam resolves to.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
+          <SectionCard
+            title="Data mode"
+            description="Which backend the repository seam resolves to."
+          >
+            <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-slate-600">Active backend</span>
                 <Badge variant={backend === "demo" ? "warning" : "success"}>{backend}</Badge>
@@ -124,14 +115,11 @@ export default async function SettingsPage() {
                 persists across restarts). Set Supabase env vars or NEXUS_DATA_BACKEND=supabase
                 to switch backends — the UI talks to the same repository contract either way.
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </SectionCard>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Feature flags</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
+          <SectionCard title="Feature flags">
+            <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-slate-600">AI extraction</span>
                 <Badge variant={featureFlags.aiExtraction ? "warning" : "destructive"}>
@@ -146,8 +134,8 @@ export default async function SettingsPage() {
                 every claim, and (5) a non-AI fallback so every workflow also works with manual
                 capture only.
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </SectionCard>
         </div>
       </div>
     </div>

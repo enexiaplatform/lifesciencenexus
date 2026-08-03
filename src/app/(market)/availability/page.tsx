@@ -91,7 +91,7 @@ export default async function AvailabilityPage({ searchParams }: { searchParams:
         />
       ) : (
         <div className="rounded-lg border border-slate-200 bg-white">
-          <Table>
+          <Table compact>
             <TableHeader>
               <TableRow>
                 <TableHead>SKU</TableHead>
@@ -112,7 +112,7 @@ export default async function AvailabilityPage({ searchParams }: { searchParams:
                     <TableCell>
                       <div className="flex flex-wrap items-center gap-1.5">
                         {sku ? (
-                          <Link href={`/skus/${sku.id}`} className="font-medium text-accent hover:underline">
+                          <Link href={`/skus/${sku.id}`} className="font-medium text-spectral-600 hover:underline">
                             {sku.name}
                           </Link>
                         ) : (
@@ -126,7 +126,7 @@ export default async function AvailabilityPage({ searchParams }: { searchParams:
                     </TableCell>
                     <TableCell>
                       {supplier ? (
-                        <Link href={`/organizations/${supplier.id}`} className="text-accent hover:underline">
+                        <Link href={`/organizations/${supplier.id}`} className="text-spectral-600 hover:underline">
                           {supplier.name}
                         </Link>
                       ) : (
@@ -143,7 +143,7 @@ export default async function AvailabilityPage({ searchParams }: { searchParams:
                     <TableCell className="text-right tabular-nums">
                       {observation.leadTimeDays !== undefined ? `${observation.leadTimeDays} d` : "—"}
                     </TableCell>
-                    <TableCell className="whitespace-nowrap text-xs text-slate-600">
+                    <TableCell className="whitespace-nowrap tabular-nums text-xs text-slate-600">
                       <time dateTime={observation.observedAt}>{formatDate(observation.observedAt)}</time>
                     </TableCell>
                     <TableCell>

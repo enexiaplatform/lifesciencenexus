@@ -42,7 +42,7 @@ export default async function BrandsPage({ searchParams }: { searchParams: Searc
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <PageHeader
         title="Brands"
         description="Manufacturer-owned brands in the catalog, with the families and products they cover."
@@ -56,7 +56,7 @@ export default async function BrandsPage({ searchParams }: { searchParams: Searc
       ) : (
         <Card>
           <CardContent className="p-0">
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Brand</TableHead>

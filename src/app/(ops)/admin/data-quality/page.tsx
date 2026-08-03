@@ -8,13 +8,9 @@ import { DomainEvidenceBadge } from "@/components/ops/domain-evidence-badge";
 import { EvidenceStateChart } from "@/components/ops/evidence-state-chart";
 import { entityHref } from "@/components/ops/links";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
+import { StatCard } from "@/components/ui/stat-card";
 import {
   Table,
   TableBody,
@@ -119,13 +115,10 @@ export default async function DataQualityPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Data Quality</h1>
-        <p className="mt-1 max-w-2xl text-sm text-slate-600">
-          Evidence coverage, freshness and open issues across the graph. {summary.reviewQueueSize} claims
-          sit in the review queue; {summary.possibleDuplicates} duplicate pairs await triage.
-        </p>
-      </div>
+      <PageHeader
+        title="Data Quality"
+        description={`Evidence coverage, freshness and open issues across the graph. ${summary.reviewQueueSize} claims sit in the review queue; ${summary.possibleDuplicates} duplicate pairs await triage.`}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="Claims with sources" value={`${claimsWithSourcesPct}%`} detail={`${claimsWithSources}/${claims.length} claims cite a source`} />
@@ -135,63 +128,58 @@ export default async function DataQualityPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-base">Records by evidence state</CardTitle>
-            <CardDescription>Claims (review status) and price observations (evidence state) combined.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <EvidenceStateChart data={chartData} />
-          </CardContent>
-        </Card>
+        <SectionCard
+          className="lg:col-span-2"
+          title="Records by evidence state"
+          description="Claims (review status) and price observations (evidence state) combined."
+        >
+          <EvidenceStateChart data={chartData} />
+        </SectionCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Layer separation</CardTitle>
-            <CardDescription>Demo vs real records per visibility layer — demo data never mixes.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Layer</TableHead>
-                  <TableHead className="text-right">Demo</TableHead>
-                  <TableHead className="text-right">Real</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell><Badge variant="secondary">canonical</Badge></TableCell>
-                  <TableCell className="text-right">{layers.canonical.demo}</TableCell>
-                  <TableCell className="text-right">{layers.canonical.nonDemo}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell><Badge variant="warning">tenant_private</Badge></TableCell>
-                  <TableCell className="text-right">{layers.tenant_private.demo}</TableCell>
-                  <TableCell className="text-right">{layers.tenant_private.nonDemo}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        <SectionCard
+          title="Layer separation"
+          description="Demo vs real records per visibility layer — demo data never mixes."
+          flush
+        >
+          <Table compact>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Layer</TableHead>
+                <TableHead className="text-right">Demo</TableHead>
+                <TableHead className="text-right">Real</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell><Badge variant="secondary">canonical</Badge></TableCell>
+                <TableCell className="text-right tabular-nums">{layers.canonical.demo}</TableCell>
+                <TableCell className="text-right tabular-nums">{layers.canonical.nonDemo}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell><Badge variant="warning">tenant_private</Badge></TableCell>
+                <TableCell className="text-right tabular-nums">{layers.tenant_private.demo}</TableCell>
+                <TableCell className="text-right tabular-nums">{layers.tenant_private.nonDemo}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </SectionCard>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Freshness</CardTitle>
-            <CardDescription>Price staleness and claim review schedule.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <SectionCard
+          title="Freshness"
+          description="Price staleness and claim review schedule."
+        >
+          <div className="space-y-4">
             <div>
               <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-500">Price observations</p>
               <div className="flex h-3 overflow-hidden rounded-full bg-slate-100" role="img"
                 aria-label={`${priceBuckets.fresh} fresh, ${priceBuckets.aging} aging, ${priceBuckets.stale} stale prices`}>
-                <div className="bg-teal-500" style={{ width: pct(priceBuckets.fresh, prices.length) }} />
-                <div className="bg-amber-400" style={{ width: pct(priceBuckets.aging, prices.length) }} />
-                <div className="bg-red-500" style={{ width: pct(priceBuckets.stale, prices.length) }} />
+                <div className="bg-success" style={{ width: pct(priceBuckets.fresh, prices.length) }} />
+                <div className="bg-warning" style={{ width: pct(priceBuckets.aging, prices.length) }} />
+                <div className="bg-danger" style={{ width: pct(priceBuckets.stale, prices.length) }} />
               </div>
-              <p className="mt-1.5 text-xs text-slate-500">
+              <p className="mt-1.5 text-xs tabular-nums text-slate-500">
                 {priceBuckets.fresh} fresh (&le;90d) · {priceBuckets.aging} aging (91–180d) · {priceBuckets.stale} stale (&gt;180d)
               </p>
             </div>
@@ -205,88 +193,83 @@ export default async function DataQualityPage() {
                 <li className="flex justify-between"><span>No review-by date</span><Badge variant="outline">{reviewBuckets.unscheduled}</Badge></li>
               </ul>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </SectionCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Important claims without review</CardTitle>
-            <CardDescription>Pending review with aggregate confidence ≥ 0.6 — highest-value gaps first.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {importantUnreviewed.length === 0 ? (
-              <p className="text-sm text-slate-500">No high-confidence claims awaiting review.</p>
-            ) : (
-              <ul className="space-y-2">
-                {importantUnreviewed.map(({ claim, confidence }) => (
-                  <li key={claim.id} className="flex items-start justify-between gap-3 text-sm">
-                    <div className="min-w-0">
-                      <Link
-                        href={entityHref(claim.subjectEntityType, claim.subjectEntityId)}
-                        className="font-medium text-accent hover:underline"
-                      >
-                        {claim.predicate}
-                      </Link>
-                      <span className="ml-2 text-xs text-slate-400">{claim.subjectEntityType}</span>
-                      <div className="mt-0.5">
-                        <DomainEvidenceBadge state={claim.reviewStatus} />
-                      </div>
+        <SectionCard
+          title="Important claims without review"
+          description="Pending review with aggregate confidence ≥ 0.6 — highest-value gaps first."
+        >
+          {importantUnreviewed.length === 0 ? (
+            <p className="text-sm text-slate-500">No high-confidence claims awaiting review.</p>
+          ) : (
+            <ul className="space-y-2">
+              {importantUnreviewed.map(({ claim, confidence }) => (
+                <li key={claim.id} className="flex items-start justify-between gap-3 text-sm">
+                  <div className="min-w-0">
+                    <Link
+                      href={entityHref(claim.subjectEntityType, claim.subjectEntityId)}
+                      className="font-medium text-accent hover:underline"
+                    >
+                      {claim.predicate}
+                    </Link>
+                    <span className="ml-2 text-xs text-slate-400">{claim.subjectEntityType}</span>
+                    <div className="mt-0.5">
+                      <DomainEvidenceBadge state={claim.reviewStatus} />
                     </div>
-                    <Badge variant="outline">{Math.round(confidence * 100)}%</Badge>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+                  </div>
+                  <Badge variant="outline" className="tabular-nums">{Math.round(confidence * 100)}%</Badge>
+                </li>
+              ))}
+            </ul>
+          )}
+        </SectionCard>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Data quality issues</CardTitle>
-          <CardDescription>{issues.length} recorded issues, newest first.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {issues.length === 0 ? (
-            <p className="text-sm text-slate-500">No data quality issues recorded.</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Severity</TableHead>
-                  <TableHead>Kind</TableHead>
-                  <TableHead>Entity</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
+      <SectionCard
+        title="Data quality issues"
+        description={`${issues.length} recorded issues, newest first.`}
+        flush={issues.length > 0}
+      >
+        {issues.length === 0 ? (
+          <p className="text-sm text-slate-500">No data quality issues recorded.</p>
+        ) : (
+          <Table compact>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Severity</TableHead>
+                <TableHead>Kind</TableHead>
+                <TableHead>Entity</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Created</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {issues.map((issue) => (
+                <TableRow key={issue.id}>
+                  <TableCell>
+                    <Badge variant={SEVERITY_VARIANT[issue.severity]}>{issue.severity}</Badge>
+                  </TableCell>
+                  <TableCell className="text-xs">{issue.kind}</TableCell>
+                  <TableCell>
+                    <Link
+                      href={entityHref(issue.entityType, issue.entityId)}
+                      className="text-accent hover:underline"
+                    >
+                      {issue.entityType}
+                    </Link>
+                    {issue.field ? <span className="text-xs text-slate-400">.{issue.field}</span> : null}
+                  </TableCell>
+                  <TableCell className="max-w-md text-sm text-slate-600">{issue.description}</TableCell>
+                  <TableCell><Badge variant="outline">{issue.status}</Badge></TableCell>
+                  <TableCell className="text-xs tabular-nums text-slate-500">{new Date(issue.createdAt).toLocaleDateString()}</TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {issues.map((issue) => (
-                  <TableRow key={issue.id}>
-                    <TableCell>
-                      <Badge variant={SEVERITY_VARIANT[issue.severity]}>{issue.severity}</Badge>
-                    </TableCell>
-                    <TableCell className="text-xs">{issue.kind}</TableCell>
-                    <TableCell>
-                      <Link
-                        href={entityHref(issue.entityType, issue.entityId)}
-                        className="text-accent hover:underline"
-                      >
-                        {issue.entityType}
-                      </Link>
-                      {issue.field ? <span className="text-xs text-slate-400">.{issue.field}</span> : null}
-                    </TableCell>
-                    <TableCell className="max-w-md text-sm text-slate-600">{issue.description}</TableCell>
-                    <TableCell><Badge variant="outline">{issue.status}</Badge></TableCell>
-                    <TableCell className="text-xs text-slate-500">{new Date(issue.createdAt).toLocaleDateString()}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </SectionCard>
     </div>
   );
 }
@@ -303,19 +286,17 @@ function MetricCard({
   tone?: "ok" | "warn" | "neutral";
 }) {
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</p>
-        <p
-          className={`mt-1 text-2xl font-semibold ${
-            tone === "warn" ? "text-amber-700" : tone === "ok" ? "text-teal-700" : "text-slate-900"
-          }`}
-        >
-          {value}
-        </p>
-        <p className="mt-0.5 text-xs text-slate-500">{detail}</p>
-      </CardContent>
-    </Card>
+    <StatCard
+      label={label}
+      value={
+        tone === "neutral" ? (
+          value
+        ) : (
+          <span className={tone === "warn" ? "text-warning-fg" : "text-success-fg"}>{value}</span>
+        )
+      }
+      hint={detail}
+    />
   );
 }
 

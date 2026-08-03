@@ -1,5 +1,4 @@
-import { EvidenceBadge } from "@/components/evidence-badge";
-import { Badge } from "@/components/ui/badge";
+import { Badge, type BadgeProps } from "@/components/ui/badge";
 import type {
   AvailabilityStatus,
   ComparisonVerdict,
@@ -17,22 +16,20 @@ import { cn } from "@/lib/utils";
 import { humanize } from "./format";
 
 /**
- * Governance & status badges. Every data surface shows evidence state,
- * visibility and the synthetic-data marker — never present demo data as fact.
+ * Governance & status badges. Every badge is a thin wrapper over the canonical
+ * `ui/badge` variants (evidence / visibility / demo / status triples) — this
+ * file owns labels and enum→variant mapping only, no color classes.
  */
 
-type BadgeEvidenceState = Parameters<typeof EvidenceBadge>[0]["state"];
-
-/** Domain evidence states map onto the visual lifecycle states of EvidenceBadge. */
-const EVIDENCE_STATE_MAP: Record<EvidenceState, BadgeEvidenceState> = {
-  unverified: "unverified",
-  source_captured: "source-captured",
-  structurally_validated: "validated",
-  analyst_reviewed: "reviewed",
-  domain_expert_reviewed: "expert-reviewed",
-  superseded: "superseded",
-  disputed: "disputed",
-  expired: "expired",
+const EVIDENCE_STATE_LABELS: Record<EvidenceState, string> = {
+  unverified: "Unverified",
+  source_captured: "Source captured",
+  structurally_validated: "Validated",
+  analyst_reviewed: "Reviewed",
+  domain_expert_reviewed: "Expert reviewed",
+  superseded: "Superseded",
+  disputed: "Disputed",
+  expired: "Expired",
 };
 
 export function DomainEvidenceBadge({
@@ -42,24 +39,24 @@ export function DomainEvidenceBadge({
   state: EvidenceState;
   className?: string;
 }) {
-  return <EvidenceBadge state={EVIDENCE_STATE_MAP[state]} className={className} />;
+  return (
+    <Badge variant="evidence" state={state} className={className}>
+      {EVIDENCE_STATE_LABELS[state]}
+    </Badge>
+  );
 }
 
 export function VisibilityBadge({ visibility, className }: { visibility: Visibility; className?: string }) {
-  return visibility === "tenant_private" ? (
-    <Badge variant="outline" className={cn("border-violet-300 bg-violet-50 text-violet-700", className)}>
-      Tenant private
-    </Badge>
-  ) : (
-    <Badge variant="outline" className={cn("border-sky-300 bg-sky-50 text-sky-700", className)}>
-      Canonical
+  return (
+    <Badge variant="visibility" visibility={visibility} className={className}>
+      {visibility === "tenant_private" ? "Tenant private" : "Canonical"}
     </Badge>
   );
 }
 
 export function DemoBadge({ className }: { className?: string }) {
   return (
-    <Badge variant="warning" className={className}>
+    <Badge variant="demo" className={className}>
       Demo data
     </Badge>
   );
@@ -68,8 +65,8 @@ export function DemoBadge({ className }: { className?: string }) {
 export function SyntheticBadge({ className }: { className?: string }) {
   return (
     <Badge
-      variant="outline"
-      className={cn("border-fuchsia-300 bg-fuchsia-50 text-fuchsia-700", className)}
+      variant="demo"
+      className={className}
       title="Derived / synthetic observation — never shown as measured fact"
     >
       Synthetic
@@ -98,24 +95,17 @@ export function EntityBadges({
   );
 }
 
+const PRODUCT_STATUS_VARIANTS: Record<ProductStatus, { label: string; variant: BadgeProps["variant"] }> = {
+  active: { label: "Active", variant: "success" },
+  discontinued: { label: "Discontinued", variant: "destructive" },
+  unknown: { label: "Status unknown", variant: "secondary" },
+};
+
 export function ProductStatusBadge({ status, className }: { status: ProductStatus; className?: string }) {
-  if (status === "discontinued") {
-    return (
-      <Badge variant="outline" className={cn("border-red-300 bg-red-50 text-red-700", className)}>
-        Discontinued
-      </Badge>
-    );
-  }
-  if (status === "active") {
-    return (
-      <Badge variant="outline" className={cn("border-teal-300 bg-teal-50 text-teal-700", className)}>
-        Active
-      </Badge>
-    );
-  }
+  const config = PRODUCT_STATUS_VARIANTS[status];
   return (
-    <Badge variant="outline" className={cn("border-slate-300 bg-slate-50 text-slate-500", className)}>
-      Status unknown
+    <Badge variant={config.variant} className={className}>
+      {config.label}
     </Badge>
   );
 }
@@ -128,25 +118,25 @@ export function CategoryBadge({ category, className }: { category: ProductCatego
   );
 }
 
-const AVAILABILITY_STYLES: Record<AvailabilityStatus, string> = {
-  in_stock: "border-teal-300 bg-teal-50 text-teal-700",
-  limited: "border-amber-300 bg-amber-50 text-amber-800",
-  out_of_stock: "border-red-300 bg-red-50 text-red-700",
-  unknown: "border-slate-300 bg-slate-50 text-slate-500",
+const AVAILABILITY_VARIANTS: Record<AvailabilityStatus, BadgeProps["variant"]> = {
+  in_stock: "success",
+  limited: "warning",
+  out_of_stock: "destructive",
+  unknown: "secondary",
 };
 
 export function AvailabilityBadge({ status, className }: { status: AvailabilityStatus; className?: string }) {
   return (
-    <Badge variant="outline" className={cn(AVAILABILITY_STYLES[status], className)}>
+    <Badge variant={AVAILABILITY_VARIANTS[status]} className={className}>
       {humanize(status)}
     </Badge>
   );
 }
 
-const FRESHNESS_STYLES: Record<FreshnessBucket, { label: string; className: string }> = {
-  fresh: { label: "Fresh", className: "border-teal-300 bg-teal-50 text-teal-700" },
-  aging: { label: "Aging", className: "border-amber-300 bg-amber-50 text-amber-800" },
-  stale: { label: "Stale", className: "border-red-300 bg-red-50 text-red-700" },
+const FRESHNESS_VARIANTS: Record<FreshnessBucket, { label: string; variant: BadgeProps["variant"] }> = {
+  fresh: { label: "Fresh", variant: "success" },
+  aging: { label: "Aging", variant: "warning" },
+  stale: { label: "Stale", variant: "destructive" },
 };
 
 export function FreshnessBadge({
@@ -158,11 +148,11 @@ export function FreshnessBadge({
   daysSince?: number;
   className?: string;
 }) {
-  const config = FRESHNESS_STYLES[bucket];
+  const config = FRESHNESS_VARIANTS[bucket];
   return (
     <Badge
-      variant="outline"
-      className={cn(config.className, className)}
+      variant={config.variant}
+      className={className}
       title={daysSince !== undefined ? `Observed ${daysSince} days ago` : undefined}
     >
       {config.label}
@@ -171,17 +161,11 @@ export function FreshnessBadge({
   );
 }
 
-const CLASSIFICATION_STYLES: Record<EquivalenceClassification, { label: string; className: string }> = {
-  exact_equivalent: { label: "Exact equivalent", className: "border-teal-400 bg-teal-50 text-teal-800" },
-  functional_equivalent: {
-    label: "Functional equivalent",
-    className: "border-blue-400 bg-blue-50 text-blue-800",
-  },
-  closest_alternative: { label: "Closest alternative", className: "border-amber-400 bg-amber-50 text-amber-800" },
-  not_recommended_substitute: {
-    label: "Not recommended",
-    className: "border-red-400 bg-red-50 text-red-800",
-  },
+const CLASSIFICATION_VARIANTS: Record<EquivalenceClassification, { label: string; variant: BadgeProps["variant"] }> = {
+  exact_equivalent: { label: "Exact equivalent", variant: "success" },
+  functional_equivalent: { label: "Functional equivalent", variant: "info" },
+  closest_alternative: { label: "Closest alternative", variant: "warning" },
+  not_recommended_substitute: { label: "Not recommended", variant: "destructive" },
 };
 
 export function ClassificationBadge({
@@ -191,18 +175,18 @@ export function ClassificationBadge({
   classification: EquivalenceClassification;
   className?: string;
 }) {
-  const config = CLASSIFICATION_STYLES[classification];
+  const config = CLASSIFICATION_VARIANTS[classification];
   return (
-    <Badge variant="outline" className={cn(config.className, className)}>
+    <Badge variant={config.variant} className={className}>
       {config.label}
     </Badge>
   );
 }
 
-const RELEVANCE_STYLES: Record<SignalCommercialRelevance, string> = {
-  high: "border-red-300 bg-red-50 text-red-700",
-  medium: "border-amber-300 bg-amber-50 text-amber-800",
-  low: "border-slate-300 bg-slate-50 text-slate-600",
+const RELEVANCE_VARIANTS: Record<SignalCommercialRelevance, BadgeProps["variant"]> = {
+  high: "destructive",
+  medium: "warning",
+  low: "secondary",
 };
 
 export function RelevanceBadge({
@@ -213,22 +197,22 @@ export function RelevanceBadge({
   className?: string;
 }) {
   return (
-    <Badge variant="outline" className={cn(RELEVANCE_STYLES[relevance], className)}>
+    <Badge variant={RELEVANCE_VARIANTS[relevance]} className={className}>
       {humanize(relevance)} relevance
     </Badge>
   );
 }
 
-const SIGNAL_STATUS_STYLES: Record<SignalStatus, string> = {
-  new: "border-blue-300 bg-blue-50 text-blue-700",
-  acknowledged: "border-amber-300 bg-amber-50 text-amber-800",
-  sent_to_memoire: "border-violet-300 bg-violet-50 text-violet-700",
-  dismissed: "border-slate-300 bg-slate-50 text-slate-500",
+const SIGNAL_STATUS_VARIANTS: Record<SignalStatus, BadgeProps["variant"]> = {
+  new: "info",
+  acknowledged: "warning",
+  sent_to_memoire: "secondary",
+  dismissed: "outline",
 };
 
 export function SignalStatusBadge({ status, className }: { status: SignalStatus; className?: string }) {
   return (
-    <Badge variant="outline" className={cn(SIGNAL_STATUS_STYLES[status], className)}>
+    <Badge variant={SIGNAL_STATUS_VARIANTS[status]} className={className}>
       {humanize(status)}
     </Badge>
   );
@@ -243,20 +227,20 @@ export function SignalTypeBadge({ type, className }: { type: string; className?:
 }
 
 /** Comparison verdict styling — UNKNOWN is deliberately distinct from NOT MET. */
-export const VERDICT_STYLES: Record<ComparisonVerdict, { label: string; className: string }> = {
-  met: { label: "Met", className: "border-teal-400 bg-teal-50 text-teal-800" },
-  partially_met: { label: "Partially met", className: "border-amber-400 bg-amber-50 text-amber-800" },
-  not_met: { label: "Not met", className: "border-red-400 bg-red-50 text-red-800" },
-  unknown: {
-    label: "Unknown",
-    className: "border-dashed border-slate-400 bg-white text-slate-500",
-  },
+export const VERDICT_STYLES: Record<
+  ComparisonVerdict,
+  { label: string; variant: BadgeProps["variant"]; className?: string }
+> = {
+  met: { label: "Met", variant: "success" },
+  partially_met: { label: "Partially met", variant: "warning" },
+  not_met: { label: "Not met", variant: "destructive" },
+  unknown: { label: "Unknown", variant: "outline", className: "border-dashed" },
 };
 
 export function VerdictBadge({ verdict, className }: { verdict: ComparisonVerdict; className?: string }) {
   const config = VERDICT_STYLES[verdict];
   return (
-    <Badge variant="outline" className={cn(config.className, className)}>
+    <Badge variant={config.variant} className={cn(config.className, className)}>
       {config.label}
     </Badge>
   );

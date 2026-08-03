@@ -50,7 +50,7 @@ export function SignalList({ signals }: { signals: OpportunitySignal[] }) {
         </li>
       ))}
       <li className="pt-2">
-        <Link href="/signals" className="text-xs font-medium text-accent hover:underline">
+        <Link href="/signals" className="text-xs font-medium text-spectral-600 hover:underline">
           View all signals
         </Link>
       </li>

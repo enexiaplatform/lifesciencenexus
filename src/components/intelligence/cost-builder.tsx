@@ -7,9 +7,9 @@ import { Combobox } from "@/components/products/combobox";
 import { downloadText } from "@/components/products/download";
 import { formatMoney, formatNumber } from "@/components/products/format";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SectionCard } from "@/components/ui/section-card";
 import {
   calculateCostPerTest,
   runSensitivity,
@@ -545,100 +545,98 @@ export function CostBuilder({
   return (
     <div className="space-y-4">
       {/* Scenario setup */}
-      <Card>
-        <CardHeader className="p-4 pb-2">
-          <CardTitle className="text-sm">Scenario setup</CardTitle>
-          <CardDescription className="text-xs">
-            Add two or more SKUs to compare their fully attributable cost per test. Prices and pack
-            sizes prefill from the latest observations and stay editable.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3 p-4 pt-0">
-          <div className="grid gap-3 md:grid-cols-2">
+      <SectionCard
+        title="Scenario setup"
+        description="Add two or more SKUs to compare their fully attributable cost per test. Prices and pack sizes prefill from the latest observations and stay editable."
+      >
+        <div className="grid gap-3 md:grid-cols-2">
+          <div>
+            <Label htmlFor="scenario-name" className="mb-1 block text-xs">
+              Scenario name
+            </Label>
+            <Input
+              id="scenario-name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="e.g. TSA dehydrated vs ready plates"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Combobox
+              label="Add SKU"
+              options={skuOptions.map((option) => ({
+                value: option.id,
+                label: option.name,
+                hint: option.catalogueNumber ?? undefined,
+              }))}
+              value={pickerValue}
+              onChange={(value) => {
+                addCard(value);
+                setPickerValue(null);
+              }}
+              placeholder="Search SKUs…"
+              clearable={false}
+            />
             <div>
-              <Label htmlFor="scenario-name" className="mb-1 block text-xs">
-                Scenario name
+              <Label htmlFor="load-scenario" className="mb-1 block text-xs">
+                Load saved scenario
               </Label>
-              <Input
-                id="scenario-name"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                placeholder="e.g. TSA dehydrated vs ready plates"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <Combobox
-                label="Add SKU"
-                options={skuOptions.map((option) => ({
-                  value: option.id,
-                  label: option.name,
-                  hint: option.catalogueNumber ?? undefined,
-                }))}
-                value={pickerValue}
-                onChange={(value) => {
-                  addCard(value);
-                  setPickerValue(null);
+              <select
+                id="load-scenario"
+                value=""
+                onChange={(event) => {
+                  if (event.target.value) loadScenario(event.target.value);
                 }}
-                placeholder="Search SKUs…"
-                clearable={false}
-              />
-              <div>
-                <Label htmlFor="load-scenario" className="mb-1 block text-xs">
-                  Load saved scenario
-                </Label>
-                <select
-                  id="load-scenario"
-                  value=""
-                  onChange={(event) => {
-                    if (event.target.value) loadScenario(event.target.value);
-                  }}
-                  className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  <option value="">Select…</option>
-                  {savedScenarios.map((scenario) => (
-                    <option key={scenario.id} value={scenario.id}>
-                      {scenario.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
+              >
+                <option value="">Select…</option>
+                {savedScenarios.map((scenario) => (
+                  <option key={scenario.id} value={scenario.id}>
+                    {scenario.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
 
       {/* Per-SKU input cards */}
       {cards.map((card, index) => {
         const option = optionById.get(card.skuId);
         return (
-          <Card key={card.key}>
-            <CardHeader className="p-4 pb-2">
-              <div className="flex items-center justify-between gap-2">
-                <CardTitle className="text-sm">
-                  SKU {index + 1}: {option?.name ?? "select a SKU"}
-                </CardTitle>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => removeCard(card.key)}
-                  aria-label={`Remove scenario ${index + 1}`}
-                >
-                  <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                  Remove
-                </Button>
-              </div>
-              {option?.normalizedPackLabel ? (
-                <CardDescription className="text-xs">
+          <SectionCard
+            key={card.key}
+            title={
+              <>
+                SKU {index + 1}: {option?.name ?? "select a SKU"}
+              </>
+            }
+            description={
+              option?.normalizedPackLabel ? (
+                <>
                   Pack: {option.packDescription ?? option.normalizedPackLabel} — prefilled
                   normalized content {option.normalizedPackLabel}
                   {option.latestPrice
                     ? ` · latest price ${formatMoney(option.latestPrice.amount, option.latestPrice.currency)} (${option.latestPrice.date})`
                     : " · no price observed"}
-                </CardDescription>
-              ) : null}
-            </CardHeader>
-            <CardContent className="space-y-3 p-4 pt-0">
+                </>
+              ) : undefined
+            }
+            actions={
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => removeCard(card.key)}
+                aria-label={`Remove scenario ${index + 1}`}
+              >
+                <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                Remove
+              </Button>
+            }
+          >
+            <div className="space-y-3">
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
                   <Label className="mb-1 block text-xs" htmlFor={`price-${card.key}`}>
@@ -707,7 +705,7 @@ export function CostBuilder({
                     type="checkbox"
                     checked={card.taxIncluded}
                     onChange={(event) => updateCard(card.key, { taxIncluded: event.target.checked })}
-                    className="h-4 w-4 rounded border-slate-300 text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="h-4 w-4 rounded border-slate-300 text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                   />
                   <Label htmlFor={`taxinc-${card.key}`} className="text-xs font-normal">
                     Price includes VAT
@@ -786,23 +784,25 @@ export function CostBuilder({
                   ))}
                 </div>
               </details>
-            </CardContent>
-          </Card>
+            </div>
+          </SectionCard>
         );
       })}
 
       {/* Exchange-rate snapshot */}
       {fxRequired ? (
-        <Card className="border-amber-300">
-          <CardHeader className="p-4 pb-2">
-            <CardTitle className="text-sm">Exchange-rate snapshot (required)</CardTitle>
-            <CardDescription className="text-xs">
+        <SectionCard
+          className="border-warning-border"
+          title="Exchange-rate snapshot (required)"
+          description={
+            <>
               Currencies differ ({currencies.join(", ")}). One explicit snapshot converts every
               non-target currency — rate, date and source are mandatory; there is no silent
               conversion.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-3 p-4 pt-0 sm:grid-cols-2 lg:grid-cols-5">
+            </>
+          }
+        >
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             <div>
               <Label className="mb-1 block text-xs" htmlFor="fx-from">
                 From currency
@@ -811,7 +811,7 @@ export function CostBuilder({
                 id="fx-from"
                 value={fx.from}
                 onChange={(event) => setFx((current) => ({ ...current, from: event.target.value }))}
-                className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
               >
                 <option value="">Select…</option>
                 {currencies.map((currency) => (
@@ -829,7 +829,7 @@ export function CostBuilder({
                 id="fx-to"
                 value={fx.to}
                 onChange={(event) => setFx((current) => ({ ...current, to: event.target.value }))}
-                className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
               >
                 <option value="">Select…</option>
                 {currencies.map((currency) => (
@@ -874,8 +874,8 @@ export function CostBuilder({
                 onChange={(event) => setFx((current) => ({ ...current, source: event.target.value }))}
               />
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </SectionCard>
       ) : null}
 
       <div className="flex flex-wrap items-center gap-2">
@@ -889,9 +889,9 @@ export function CostBuilder({
       </div>
 
       {errors.length > 0 ? (
-        <div role="alert" className="rounded-md border border-red-300 bg-red-50 p-3">
-          <p className="text-xs font-semibold text-red-800">Cannot compute every scenario:</p>
-          <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs text-red-700">
+        <div role="alert" className="rounded-md border border-danger-border bg-danger-bg p-3">
+          <p className="text-xs font-semibold text-danger-fg">Cannot compute every scenario:</p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs text-danger-fg">
             {errors.map((error) => (
               <li key={error}>{error}</li>
             ))}
@@ -903,40 +903,35 @@ export function CostBuilder({
       {calculated && successful.length > 0 ? (
         <section aria-label="Results" className="space-y-4">
           {comparable ? (
-            <Card>
-              <CardHeader className="p-4 pb-2">
-                <CardTitle className="text-sm">
-                  Effective cost per test ({resultCurrencies[0]})
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 pt-0">
-                <CostBarChart
-                  currency={resultCurrencies[0]}
-                  data={successful.map((entry) => ({
-                    name: entry.skuName.length > 22 ? `${entry.skuName.slice(0, 22)}…` : entry.skuName,
-                    cost: entry.result.effectiveCostPerTest,
-                  }))}
-                />
-              </CardContent>
-            </Card>
+            <SectionCard title={`Effective cost per test (${resultCurrencies[0]})`}>
+              <CostBarChart
+                currency={resultCurrencies[0]}
+                data={successful.map((entry) => ({
+                  name: entry.skuName.length > 22 ? `${entry.skuName.slice(0, 22)}…` : entry.skuName,
+                  cost: entry.result.effectiveCostPerTest,
+                }))}
+              />
+            </SectionCard>
           ) : null}
 
           {successful.map((entry) => (
-            <Card key={entry.key}>
-              <CardHeader className="p-4 pb-2">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <CardTitle className="text-sm">{entry.skuName}</CardTitle>
-                  <p className="text-lg font-semibold tabular-nums text-navy-900">
-                    {formatMoney(entry.result.effectiveCostPerTest, entry.result.currency)}
-                    <span className="ml-1 text-xs font-normal text-slate-500">/ test</span>
-                  </p>
-                </div>
-                <CardDescription className="text-xs">
+            <SectionCard
+              key={entry.key}
+              title={entry.skuName}
+              description={
+                <>
                   {formatNumber(entry.result.usableTests, 2)} usable tests per pack · total
                   attributable {formatMoney(entry.result.totalAttributableCost, entry.result.currency)}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3 p-4 pt-0">
+                </>
+              }
+              actions={
+                <p className="text-lg font-semibold tabular-nums text-nexus-900">
+                  {formatMoney(entry.result.effectiveCostPerTest, entry.result.currency)}
+                  <span className="ml-1 text-xs font-normal text-slate-500">/ test</span>
+                </p>
+              }
+            >
+              <div className="space-y-3">
                 <div className="overflow-auto rounded-md border border-slate-200">
                   <table className="w-full text-xs">
                     <thead className="bg-slate-50 text-left text-[11px] uppercase tracking-wide text-slate-500">
@@ -975,19 +970,16 @@ export function CostBuilder({
                     ))}
                   </ul>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </SectionCard>
           ))}
 
           {/* Sensitivity */}
-          <Card>
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-sm">Sensitivity analysis</CardTitle>
-              <CardDescription className="text-xs">
-                One-at-a-time perturbation of a parameter by ±5 / 10 / 20% of its base value.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3 p-4 pt-0">
+          <SectionCard
+            title="Sensitivity analysis"
+            description="One-at-a-time perturbation of a parameter by ±5 / 10 / 20% of its base value."
+          >
+            <div className="space-y-3">
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
                   <Label className="mb-1 block text-xs" htmlFor="sens-card">
@@ -1002,7 +994,7 @@ export function CostBuilder({
                         parameter: current?.parameter ?? "purchasePrice",
                       }))
                     }
-                    className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                   >
                     <option value="">Select scenario…</option>
                     {successful.map((entry) => (
@@ -1027,7 +1019,7 @@ export function CostBuilder({
                       )
                     }
                     disabled={!sensitivity}
-                    className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+                    className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 disabled:opacity-50"
                   >
                     {SENSITIVITY_PARAMETERS.map((parameter) => (
                       <option key={parameter} value={parameter}>
@@ -1067,7 +1059,7 @@ export function CostBuilder({
                             <td
                               className={cn(
                                 "px-3 py-1.5 text-right tabular-nums",
-                                deltaVsBase > 0 ? "text-red-600" : "text-teal-700",
+                                deltaVsBase > 0 ? "text-danger-fg" : "text-success-fg",
                               )}
                             >
                               {deltaVsBase > 0 ? "+" : ""}
@@ -1086,15 +1078,12 @@ export function CostBuilder({
                   it.
                 </p>
               ) : null}
-            </CardContent>
-          </Card>
+            </div>
+          </SectionCard>
 
           {/* Save + export */}
-          <Card>
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-sm">Save &amp; export</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 p-4 pt-0">
+          <SectionCard title="Save &amp; export">
+            <div className="space-y-3">
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="save-project" className="mb-1 block text-xs">
@@ -1104,7 +1093,7 @@ export function CostBuilder({
                     id="save-project"
                     value={projectId}
                     onChange={(event) => setProjectId(event.target.value)}
-                    className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
                   >
                     <option value="">Do not link to a project</option>
                     {projects.map((project) => (
@@ -1135,15 +1124,15 @@ export function CostBuilder({
                   className={cn(
                     "rounded-md border p-3 text-xs",
                     message.kind === "error"
-                      ? "border-red-300 bg-red-50 text-red-800"
-                      : "border-teal-300 bg-teal-50 text-teal-800",
+                      ? "border-danger-border bg-danger-bg text-danger-fg"
+                      : "border-success-border bg-success-bg text-success-fg",
                   )}
                 >
                   {message.text}
                 </p>
               ) : null}
-            </CardContent>
-          </Card>
+            </div>
+          </SectionCard>
         </section>
       ) : null}
     </div>

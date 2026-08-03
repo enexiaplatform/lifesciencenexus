@@ -130,7 +130,7 @@ export default async function PricesPage({ searchParams }: { searchParams: Searc
       {staleRows.length > 0 ? (
         <div
           role="alert"
-          className="flex items-start gap-2 rounded-md border border-red-300 bg-red-50 p-3 text-xs text-red-900"
+          className="flex items-start gap-2 rounded-md border border-danger-border bg-danger-bg p-3 text-xs text-danger-fg"
         >
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <div>
@@ -221,7 +221,7 @@ export default async function PricesPage({ searchParams }: { searchParams: Searc
       ) : (
         <Card>
           <CardContent className="p-0">
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Date</TableHead>
@@ -300,7 +300,7 @@ export default async function PricesPage({ searchParams }: { searchParams: Searc
                           {isOutlier ? (
                             <Badge
                               variant="outline"
-                              className="border-orange-400 bg-orange-50 text-orange-800"
+                              className="border-warning-border bg-warning-bg text-warning-fg"
                               title="Outside the 1.5×IQR fence within the filtered set (per currency)"
                             >
                               Outlier

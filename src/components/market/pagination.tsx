@@ -42,7 +42,7 @@ export function Pagination({
       "inline-flex h-8 items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 text-xs font-medium text-slate-700 shadow-sm",
       disabled
         ? "pointer-events-none opacity-40"
-        : "hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+        : "hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2",
     );
 
   return (

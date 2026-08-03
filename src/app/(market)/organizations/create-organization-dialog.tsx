@@ -84,7 +84,7 @@ export function CreateOrganizationDialog() {
           <fieldset className="space-y-1">
             <legend className="text-xs font-medium text-slate-700">
               Organization types
-              <span aria-hidden="true" className="ml-0.5 text-red-600">
+              <span aria-hidden="true" className="ml-0.5 text-danger">
                 *
               </span>
             </legend>
@@ -94,7 +94,7 @@ export function CreateOrganizationDialog() {
             >
               {ORGANIZATION_TYPES.map((type) => (
                 <label key={type} className="flex items-center gap-2 text-xs text-slate-700">
-                  <input type="checkbox" name="types" value={type} className="h-3.5 w-3.5 accent-navy-700" />
+                  <input type="checkbox" name="types" value={type} className="h-3.5 w-3.5 accent-nexus-700" />
                   {ORGANIZATION_TYPE_LABELS[type]}
                 </label>
               ))}

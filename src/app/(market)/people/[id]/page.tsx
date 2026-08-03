@@ -9,7 +9,8 @@ import { EmptyState } from "@/components/market/empty-state";
 import { DECISION_ROLE_LABELS, formatDate, formatDateTime } from "@/components/market/labels";
 import { TenantPrivateNotice } from "@/components/market/tenant-private-notice";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionCard } from "@/components/ui/section-card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getRepository } from "@/lib/data";
 
@@ -62,7 +63,7 @@ export default async function PersonDetailPage({ params }: { params: Promise<{ i
             <DetailItem label="Title">{person.title ?? "—"}</DetailItem>
             <DetailItem label="Email">
               {person.email ? (
-                <a href={`mailto:${person.email}`} className="text-accent hover:underline">
+                <a href={`mailto:${person.email}`} className="text-spectral-600 hover:underline">
                   {person.email}
                 </a>
               ) : (
@@ -77,12 +78,10 @@ export default async function PersonDetailPage({ params }: { params: Promise<{ i
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Employment relationships</CardTitle>
-          <CardDescription>Organizations this person is (or was) employed by.</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <SectionCard
+        title="Employment relationships"
+        description="Organizations this person is (or was) employed by."
+      >
           {employments.items.length === 0 ? (
             <EmptyState
               icon={UserRound}
@@ -106,7 +105,7 @@ export default async function PersonDetailPage({ params }: { params: Promise<{ i
                     <TableRow key={employment.id}>
                       <TableCell>
                         {org ? (
-                          <Link href={`/organizations/${org.id}`} className="font-medium text-accent hover:underline">
+                          <Link href={`/organizations/${org.id}`} className="font-medium text-spectral-600 hover:underline">
                             {org.name}
                           </Link>
                         ) : (
@@ -126,15 +125,9 @@ export default async function PersonDetailPage({ params }: { params: Promise<{ i
               </TableBody>
             </Table>
           )}
-        </CardContent>
-      </Card>
+      </SectionCard>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Decision roles</CardTitle>
-          <CardDescription>Purchasing-influence roles mapped at each organization.</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <SectionCard title="Decision roles" description="Purchasing-influence roles mapped at each organization.">
           {contacts.items.length === 0 ? (
             <EmptyState
               icon={UserRound}
@@ -160,7 +153,7 @@ export default async function PersonDetailPage({ params }: { params: Promise<{ i
                     <TableRow key={contact.id}>
                       <TableCell>
                         {org ? (
-                          <Link href={`/organizations/${org.id}`} className="font-medium text-accent hover:underline">
+                          <Link href={`/organizations/${org.id}`} className="font-medium text-spectral-600 hover:underline">
                             {org.name}
                           </Link>
                         ) : (
@@ -199,16 +192,13 @@ export default async function PersonDetailPage({ params }: { params: Promise<{ i
               </TableBody>
             </Table>
           )}
-        </CardContent>
-      </Card>
+      </SectionCard>
 
       {observations.length > 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Contact observations</CardTitle>
-            <CardDescription>Field notes captured about this person (tenant-private).</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <SectionCard
+          title="Contact observations"
+          description="Field notes captured about this person (tenant-private)."
+        >
             <ul className="divide-y divide-slate-100">
               {observations.map((observation) => (
                 <li key={observation.id} className="py-2">
@@ -217,8 +207,7 @@ export default async function PersonDetailPage({ params }: { params: Promise<{ i
                 </li>
               ))}
             </ul>
-          </CardContent>
-        </Card>
+        </SectionCard>
       ) : null}
     </div>
   );

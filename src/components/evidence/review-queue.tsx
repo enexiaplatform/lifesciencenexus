@@ -12,6 +12,7 @@ import type {
 } from "@/lib/domain/types";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Dialog,
   DialogContent,
@@ -77,19 +78,16 @@ export function ReviewQueue({ rows }: { rows: ReviewQueueRow[] }) {
 
   if (rows.length === 0) {
     return (
-      <Card className="border-dashed">
-        <div className="flex flex-col items-center gap-2 px-6 py-10 text-center">
-          <ClipboardCheck className="h-8 w-8 text-teal-500" aria-hidden="true" />
-          <p className="text-sm font-medium text-slate-700">Queue is clear</p>
-          <p className="max-w-md text-xs text-slate-500">
-            No claims are waiting for review and nothing is past its review-by date. Capture new
-            sources to keep evidence flowing.
-          </p>
-          <Button asChild size="sm" variant="outline" className="mt-1">
+      <EmptyState
+        icon={ClipboardCheck}
+        title="Queue is clear"
+        description="No claims are waiting for review and nothing is past its review-by date. Capture new sources to keep evidence flowing."
+        action={
+          <Button asChild size="sm" variant="outline">
             <Link href="/sources?dialog=add">Add source</Link>
           </Button>
-        </div>
-      </Card>
+        }
+      />
     );
   }
 
@@ -102,7 +100,7 @@ export function ReviewQueue({ rows }: { rows: ReviewQueueRow[] }) {
   return (
     <>
       <Card>
-        <Table>
+        <Table compact>
           <TableHeader>
             <TableRow>
               <TableHead>Claim</TableHead>
@@ -117,7 +115,7 @@ export function ReviewQueue({ rows }: { rows: ReviewQueueRow[] }) {
           </TableHeader>
           <TableBody>
             {sorted.map((row) => (
-              <TableRow key={row.id} className={row.overdue ? "bg-red-50/40" : undefined}>
+              <TableRow key={row.id} className={row.overdue ? "bg-danger-bg/40" : undefined}>
                 <TableCell className="max-w-64">
                   <Link
                     href={entityHref(row.subjectEntityType, row.subjectEntityId)}
@@ -146,8 +144,8 @@ export function ReviewQueue({ rows }: { rows: ReviewQueueRow[] }) {
                 <TableCell
                   className={
                     row.overdue
-                      ? "whitespace-nowrap text-xs font-medium text-red-600"
-                      : "whitespace-nowrap text-xs text-slate-600"
+                      ? "whitespace-nowrap text-xs font-medium tabular-nums text-danger-fg"
+                      : "whitespace-nowrap text-xs tabular-nums text-slate-600"
                   }
                 >
                   {row.reviewByDate ? formatDate(row.reviewByDate) : "—"}
@@ -246,7 +244,7 @@ function ReviewActionDialog({
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="review-note">
-                Review note <span className="text-red-600">(required)</span>
+                Review note <span className="text-danger-fg">(required)</span>
               </Label>
               <Textarea
                 id="review-note"
@@ -258,7 +256,7 @@ function ReviewActionDialog({
               />
             </div>
             <div aria-live="polite">
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              {error && <p className="text-sm text-danger-fg">{error}</p>}
             </div>
             <DialogFooter>
               <Button type="submit" disabled={pending || note.trim().length < 3}>

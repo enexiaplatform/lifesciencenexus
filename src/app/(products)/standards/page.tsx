@@ -20,9 +20,9 @@ import { cn } from "@/lib/utils";
 export const metadata = { title: "Standards" };
 
 const VERSION_STATUS_STYLES: Record<string, string> = {
-  current: "border-teal-300 bg-teal-50 text-teal-700",
+  current: "border-success-border bg-success-bg text-success-fg",
   superseded: "border-slate-300 bg-slate-50 text-slate-500",
-  withdrawn: "border-red-300 bg-red-50 text-red-700",
+  withdrawn: "border-danger-border bg-danger-bg text-danger-fg",
   unknown: "border-slate-300 bg-slate-50 text-slate-500",
 };
 
@@ -59,7 +59,7 @@ export default async function StandardsPage({ searchParams }: { searchParams: Se
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <PageHeader
         title="Standards"
         description="Regulatory and quality standards with their known versions and product coverage."
@@ -73,7 +73,7 @@ export default async function StandardsPage({ searchParams }: { searchParams: Se
       ) : (
         <Card>
           <CardContent className="p-0">
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Standard</TableHead>

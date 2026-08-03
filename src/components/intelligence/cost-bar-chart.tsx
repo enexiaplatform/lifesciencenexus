@@ -16,20 +16,39 @@ export interface CostBarDatum {
   cost: number;
 }
 
-const BAR_COLORS = ["#435e76", "#0d9488", "#d97706", "#7c3aed"];
+const BAR_COLORS = [
+  "var(--color-chart-1)",
+  "var(--color-chart-2)",
+  "var(--color-chart-3)",
+  "var(--color-chart-4)",
+  "var(--color-chart-5)",
+  "var(--color-chart-6)",
+];
+
+const TICK_STYLE = { fontSize: 12, fill: "currentColor", fontFamily: "var(--font-sans)" } as const;
+const TOOLTIP_STYLE = {
+  fontSize: 12,
+  fontFamily: "var(--font-sans)",
+  border: "1px solid var(--color-slate-200)",
+  borderRadius: 6,
+} as const;
 
 /** Effective-cost-per-test comparison bar chart (single result currency). */
 export function CostBarChart({ data, currency }: { data: CostBarDatum[]; currency: string }) {
   return (
-    <div className="h-56 w-full" role="img" aria-label={`Cost per test comparison in ${currency}`}>
+    <div
+      className="h-56 w-full text-slate-600"
+      role="img"
+      aria-label={`Cost per test comparison in ${currency}`}
+    >
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 8, right: 12, bottom: 4, left: 12 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-          <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} angle={-12} textAnchor="end" height={48} />
-          <YAxis tick={{ fontSize: 11 }} width={90} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-200)" vertical={false} />
+          <XAxis dataKey="name" tick={TICK_STYLE} interval={0} angle={-12} textAnchor="end" height={48} />
+          <YAxis tick={TICK_STYLE} width={90} />
           <Tooltip
             formatter={(value) => [`${Number(value).toLocaleString("en-US", { maximumFractionDigits: 4 })} ${currency}`, "Cost per test"]}
-            contentStyle={{ fontSize: 12 }}
+            contentStyle={TOOLTIP_STYLE}
           />
           <Bar dataKey="cost" radius={[3, 3, 0, 0]}>
             {data.map((datum, index) => (

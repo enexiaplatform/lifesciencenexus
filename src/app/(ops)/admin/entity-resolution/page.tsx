@@ -1,13 +1,8 @@
 import { getRepository } from "@/lib/data";
 import { ResolutionQueue, type CandidatePair } from "@/components/ops/resolution-queue";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
 import {
   Table,
   TableBody,
@@ -55,13 +50,10 @@ export default async function EntityResolutionPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Entity Resolution</h1>
-        <p className="mt-1 max-w-2xl text-sm text-slate-600">
-          Triage duplicate candidates scored by the entity-resolution engine. Merges are never
-          silent: the loser’s names are preserved as aliases and a redirect keeps old links working.
-        </p>
-      </div>
+      <PageHeader
+        title="Entity Resolution"
+        description="Triage duplicate candidates scored by the entity-resolution engine. Merges are never silent: the loser’s names are preserved as aliases and a redirect keeps old links working."
+      />
 
       <section aria-label="Duplicate queue">
         <h2 className="mb-3 text-sm font-medium text-slate-700">
@@ -70,54 +62,52 @@ export default async function EntityResolutionPage() {
         <ResolutionQueue pairs={pairs} />
       </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Merge history</CardTitle>
-          <CardDescription>Completed merges from entity_merge_events (most recent first).</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {mergeEvents.items.length === 0 ? (
-            <p className="text-sm text-slate-500">No merges recorded yet.</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Event</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Survivor</TableHead>
-                  <TableHead>Merged away</TableHead>
-                  <TableHead>Aliases</TableHead>
-                  <TableHead>Redirect</TableHead>
-                  <TableHead>When</TableHead>
+      <SectionCard
+        title="Merge history"
+        description="Completed merges from entity_merge_events (most recent first)."
+        flush={mergeEvents.items.length > 0}
+      >
+        {mergeEvents.items.length === 0 ? (
+          <p className="text-sm text-slate-500">No merges recorded yet.</p>
+        ) : (
+          <Table compact>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Event</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Survivor</TableHead>
+                <TableHead>Merged away</TableHead>
+                <TableHead>Aliases</TableHead>
+                <TableHead>Redirect</TableHead>
+                <TableHead>When</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {mergeEvents.items.map((event) => (
+                <TableRow key={event.id}>
+                  <TableCell className="font-mono text-xs">{event.id.slice(0, 8)}</TableCell>
+                  <TableCell><Badge variant="secondary">{event.entityType}</Badge></TableCell>
+                  <TableCell className="font-mono text-xs">{event.survivorId}</TableCell>
+                  <TableCell className="font-mono text-xs">{event.mergedId}</TableCell>
+                  <TableCell>
+                    <Badge variant={event.aliasPreservation ? "success" : "outline"}>
+                      {event.aliasPreservation ? "preserved" : "none"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={event.redirectCreated ? "success" : "outline"}>
+                      {event.redirectCreated ? "created" : "none"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-xs tabular-nums text-slate-500">
+                    {new Date(event.createdAt).toLocaleString()}
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {mergeEvents.items.map((event) => (
-                  <TableRow key={event.id}>
-                    <TableCell className="font-mono text-xs">{event.id.slice(0, 8)}</TableCell>
-                    <TableCell><Badge variant="secondary">{event.entityType}</Badge></TableCell>
-                    <TableCell className="font-mono text-xs">{event.survivorId}</TableCell>
-                    <TableCell className="font-mono text-xs">{event.mergedId}</TableCell>
-                    <TableCell>
-                      <Badge variant={event.aliasPreservation ? "success" : "outline"}>
-                        {event.aliasPreservation ? "preserved" : "none"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={event.redirectCreated ? "success" : "outline"}>
-                        {event.redirectCreated ? "created" : "none"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-xs text-slate-500">
-                      {new Date(event.createdAt).toLocaleString()}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </SectionCard>
     </div>
   );
 }

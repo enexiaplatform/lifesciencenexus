@@ -63,9 +63,9 @@ interface RowData {
 }
 
 const VERDICT_ICONS: Record<ComparisonVerdict, { icon: typeof CheckCircle2; className: string; label: string }> = {
-  met: { icon: CheckCircle2, className: "text-teal-600", label: "Met" },
-  partially_met: { icon: MinusCircle, className: "text-amber-600", label: "Partially met" },
-  not_met: { icon: XCircle, className: "text-red-600", label: "Not met" },
+  met: { icon: CheckCircle2, className: "text-success-fg", label: "Met" },
+  partially_met: { icon: MinusCircle, className: "text-warning-fg", label: "Partially met" },
+  not_met: { icon: XCircle, className: "text-danger-fg", label: "Not met" },
   unknown: { icon: HelpCircle, className: "text-slate-400", label: "Unknown (no evidence)" },
 };
 
@@ -205,8 +205,8 @@ export function CompareMatrix({ skus }: { skus: CompareSku[] }) {
 
   return (
     <Card>
-      {/* Print support: hide chrome and controls, keep the matrix. */}
-      <style>{`@media print { aside, header, .no-print { display: none !important; } body { background: #fff; } }`}</style>
+      {/* Print support: app chrome self-hides (print:hidden); hide controls, keep the matrix. */}
+      <style>{`@media print { .no-print { display: none !important; } body { background: white; } }`}</style>
       <CardContent className="space-y-3 p-4">
         <div className="no-print flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs text-slate-500">
@@ -238,7 +238,7 @@ export function CompareMatrix({ skus }: { skus: CompareSku[] }) {
                     </Link>
                     <div className="flex flex-wrap items-center gap-1">
                       {index === 0 ? (
-                        <span className="rounded bg-navy-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-navy-700">
+                        <span className="rounded bg-nexus-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-nexus-700">
                           Reference
                         </span>
                       ) : null}
@@ -269,9 +269,9 @@ export function CompareMatrix({ skus }: { skus: CompareSku[] }) {
                       }))
                     }
                     className={cn(
-                      "h-7 rounded-md border px-1.5 text-[11px] shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                      "h-7 rounded-md border px-1.5 text-[11px] shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600",
                       requirementOf(row.key) === "mandatory"
-                        ? "border-navy-300 bg-navy-50 text-navy-800"
+                        ? "border-nexus-300 bg-nexus-50 text-nexus-800"
                         : "border-slate-300 bg-white text-slate-600",
                     )}
                   >
@@ -328,9 +328,9 @@ export function CompareMatrix({ skus }: { skus: CompareSku[] }) {
                       </span>
                     </p>
                     <p className="flex flex-wrap gap-x-2 text-slate-500">
-                      <span className="text-teal-700">met {entry.counts.met}</span>
-                      <span className="text-amber-700">partial {entry.counts.partially_met}</span>
-                      <span className="text-red-700">not met {entry.counts.not_met}</span>
+                      <span className="text-success-fg">met {entry.counts.met}</span>
+                      <span className="text-warning-fg">partial {entry.counts.partially_met}</span>
+                      <span className="text-danger-fg">not met {entry.counts.not_met}</span>
                       <span className="text-slate-400">unknown {entry.counts.unknown}</span>
                     </p>
                   </div>

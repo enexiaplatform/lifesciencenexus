@@ -8,6 +8,7 @@ import {
   ProductStatusBadge,
 } from "@/components/products/badges";
 import { EdgePanels, type EdgeWithName, type SourceInfo } from "@/components/products/edge-panels";
+import { EntityRefLink } from "@/components/products/entity-link";
 import { PageHeader } from "@/components/products/page-header";
 import { SourceChip } from "@/components/products/source-chip";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,7 +90,7 @@ export default async function ProductDetailPage({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Chain breadcrumb: brand → family → product */}
       <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1 text-xs text-slate-500">
         <Link href="/products" className="hover:text-accent hover:underline">
@@ -120,52 +121,58 @@ export default async function ProductDetailPage({
           <CardTitle className="text-sm">Classification &amp; lifecycle</CardTitle>
         </CardHeader>
         <CardContent className="p-4 pt-0">
-          <dl className="grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
-            <div>
-              <dt className="text-xs text-slate-500">Manufacturer</dt>
-              <dd className="font-medium text-slate-800">
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Manufacturer</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">
                 {manufacturer ? (
-                  <Link href={`/organizations/${manufacturer.id}`} className="text-accent hover:underline">
-                    {manufacturer.name}
-                  </Link>
+                  <EntityRefLink
+                    entityRef={{ entityType: "organization", entityId: manufacturer.id }}
+                    label={manufacturer.name}
+                    className="text-accent hover:underline"
+                  />
                 ) : (
                   "—"
                 )}
               </dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Brand</dt>
-              <dd className="font-medium text-slate-800">{brand?.name ?? "—"}</dd>
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Brand</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">{brand?.name ?? "—"}</dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Family</dt>
-              <dd className="font-medium text-slate-800">{family?.name ?? "—"}</dd>
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Family</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">{family?.name ?? "—"}</dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Status</dt>
-              <dd>
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Status</dt>
+              <dd className="mt-0.5 text-sm">
                 <ProductStatusBadge status={product.status} />
               </dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Successor product</dt>
-              <dd className="font-medium text-slate-800">
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Successor product</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">
                 {successor ? (
-                  <Link href={`/products/${successor.id}`} className="text-accent hover:underline">
-                    {successor.name}
-                  </Link>
+                  <EntityRefLink
+                    entityRef={{ entityType: "product", entityId: successor.id }}
+                    label={successor.name}
+                    className="text-accent hover:underline"
+                  />
                 ) : (
                   "—"
                 )}
               </dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Predecessor product</dt>
-              <dd className="font-medium text-slate-800">
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Predecessor product</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">
                 {predecessor ? (
-                  <Link href={`/products/${predecessor.id}`} className="text-accent hover:underline">
-                    {predecessor.name}
-                  </Link>
+                  <EntityRefLink
+                    entityRef={{ entityType: "product", entityId: predecessor.id }}
+                    label={predecessor.name}
+                    className="text-accent hover:underline"
+                  />
                 ) : (
                   "—"
                 )}
@@ -186,7 +193,7 @@ export default async function ProductDetailPage({
           {skus.length === 0 ? (
             <p className="text-sm text-slate-500">No SKUs recorded for this product.</p>
           ) : (
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Catalogue number</TableHead>
@@ -198,14 +205,16 @@ export default async function ProductDetailPage({
               </TableHeader>
               <TableBody>
                 {skus.map((sku) => (
-                  <TableRow key={sku.id} className={sku.status === "discontinued" ? "bg-red-50/50" : ""}>
+                  <TableRow key={sku.id} className={sku.status === "discontinued" ? "bg-danger-bg/50" : ""}>
                     <TableCell className="font-mono text-xs text-slate-600">
                       {sku.catalogueNumber ?? "—"}
                     </TableCell>
                     <TableCell>
-                      <Link href={`/skus/${sku.id}`} className="font-medium text-accent hover:underline">
-                        {sku.name}
-                      </Link>
+                      <EntityRefLink
+                        entityRef={{ entityType: "sku", entityId: sku.id }}
+                        label={sku.name}
+                        className="font-medium text-accent hover:underline"
+                      />
                     </TableCell>
                     <TableCell className="text-slate-600">
                       {firstPackBySku.get(sku.id) ?? "—"}

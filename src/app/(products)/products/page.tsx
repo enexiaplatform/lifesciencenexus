@@ -58,7 +58,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <PageHeader
         title="Products"
         description="Canonical product catalog across manufacturers, brands and categories. Status, taxonomy and evidence state are shown for every record."
@@ -90,7 +90,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
         />
       ) : (
         <div className="rounded-lg border border-slate-200 bg-white">
-          <Table>
+          <Table compact>
             <TableHeader>
               <TableRow>
                 <TableHead>Product</TableHead>
@@ -111,7 +111,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
                 return (
                   <TableRow
                     key={product.id}
-                    className={cn(product.status === "discontinued" && "bg-red-50/50")}
+                    className={cn(product.status === "discontinued" && "bg-danger-bg/50")}
                   >
                     <TableCell>
                       <Link

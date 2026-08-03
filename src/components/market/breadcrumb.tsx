@@ -31,7 +31,7 @@ export function Breadcrumb({ items, className }: { items: BreadcrumbItem[]; clas
                     {item.label}
                   </span>
                 ) : (
-                  <Link href={item.href} className="hover:text-accent hover:underline">
+                  <Link href={item.href} className="hover:text-spectral-600 hover:underline">
                     {item.label}
                   </Link>
                 )}

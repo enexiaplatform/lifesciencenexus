@@ -20,7 +20,7 @@ export default async function NewEquivalencePage() {
         title="New equivalence assessment"
         description="Pick the SKU you need to replace (source) and the SKU you are evaluating as a substitute (candidate). A draft record with default dimension weights is created; you score it in the workspace."
       />
-      <p className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+      <p className="rounded-md border border-warning-border bg-warning-bg px-3 py-2 text-xs text-warning-fg">
         {EQUIVALENCE_DISCLAIMER}
       </p>
       <NewEquivalenceForm

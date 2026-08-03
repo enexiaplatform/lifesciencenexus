@@ -26,7 +26,7 @@ export function Timeline({ entries, className }: { entries: TimelineEntry[]; cla
         <li key={entry.id} className="relative">
           <span
             aria-hidden="true"
-            className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-navy-400 ring-1 ring-slate-300"
+            className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-nexus-400 ring-1 ring-slate-300"
           />
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <p className="text-sm font-medium text-slate-800">{entry.title}</p>

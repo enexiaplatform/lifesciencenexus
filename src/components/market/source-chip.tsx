@@ -29,7 +29,7 @@ export function SourceChip({
       variant="outline"
       title={title}
       aria-label={title}
-      className={cn("max-w-56 truncate whitespace-nowrap border-navy-200 bg-navy-50 text-navy-700", className)}
+      className={cn("max-w-56 truncate whitespace-nowrap border-nexus-200 bg-nexus-50 text-nexus-700", className)}
     >
       {SOURCE_TYPE_LABELS[source.type]}
     </Badge>

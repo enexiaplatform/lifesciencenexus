@@ -24,6 +24,7 @@ import { SourceChip } from "@/components/market/source-chip";
 import { TenantPrivateNotice } from "@/components/market/tenant-private-notice";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionCard } from "@/components/ui/section-card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getRepository } from "@/lib/data";
@@ -131,7 +132,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                   href={organization.website}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-accent hover:underline"
+                  className="text-spectral-600 hover:underline"
                 >
                   {organization.website.replace(/^https?:\/\//, "")}
                 </a>
@@ -170,12 +171,10 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
         </TabsList>
 
         <TabsContent value="overview" className="mt-4 space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Relationships</CardTitle>
-              <CardDescription>Evidence-backed links to other organizations in the graph.</CardDescription>
-            </CardHeader>
-            <CardContent>
+          <SectionCard
+            title="Relationships"
+            description="Evidence-backed links to other organizations in the graph."
+          >
               {relationships.length === 0 ? (
                 <EmptyState
                   icon={Building2}
@@ -207,7 +206,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                           </TableCell>
                           <TableCell>
                             {counterparty ? (
-                              <Link href={`/organizations/${counterparty.id}`} className="text-accent hover:underline">
+                              <Link href={`/organizations/${counterparty.id}`} className="text-spectral-600 hover:underline">
                                 {counterparty.name}
                               </Link>
                             ) : (
@@ -226,18 +225,14 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                   </TableBody>
                 </Table>
               )}
-            </CardContent>
-          </Card>
+          </SectionCard>
 
           {approvals.items.length > 0 ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Approved-vendor list</CardTitle>
-                <CardDescription>
-                  Tenant-private supplier approvals held by this organization.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
+            <SectionCard
+              title="Approved-vendor list"
+              description="Tenant-private supplier approvals held by this organization."
+            >
+              <div className="space-y-3">
                 <TenantPrivateNotice message="Vendor approvals are tenant-private procurement records." />
                 <Table>
                   <TableHeader>
@@ -256,7 +251,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                         <TableRow key={approval.id}>
                           <TableCell>
                             {supplier ? (
-                              <Link href={`/organizations/${supplier.id}`} className="text-accent hover:underline">
+                              <Link href={`/organizations/${supplier.id}`} className="text-spectral-600 hover:underline">
                                 {supplier.name}
                               </Link>
                             ) : (
@@ -287,17 +282,15 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                     })}
                   </TableBody>
                 </Table>
-              </CardContent>
-            </Card>
+              </div>
+            </SectionCard>
           ) : null}
 
           {validations.items.length > 0 ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Product validations</CardTitle>
-                <CardDescription>SKUs this organization has validated (or is validating) for use.</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <SectionCard
+              title="Product validations"
+              description="SKUs this organization has validated (or is validating) for use."
+            >
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -314,7 +307,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                         <TableRow key={validation.id}>
                           <TableCell>
                             {sku ? (
-                              <Link href={`/skus/${sku.id}`} className="text-accent hover:underline">
+                              <Link href={`/skus/${sku.id}`} className="text-spectral-600 hover:underline">
                                 {sku.name}
                               </Link>
                             ) : (
@@ -342,19 +335,15 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                     })}
                   </TableBody>
                 </Table>
-              </CardContent>
-            </Card>
+            </SectionCard>
           ) : null}
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Related signals</CardTitle>
-              <CardDescription>Derived opportunities and gaps that reference this organization.</CardDescription>
-            </CardHeader>
-            <CardContent>
+          <SectionCard
+            title="Related signals"
+            description="Derived opportunities and gaps that reference this organization."
+          >
               <SignalList signals={relatedSignals} />
-            </CardContent>
-          </Card>
+          </SectionCard>
         </TabsContent>
 
         <TabsContent value="sites" className="mt-4">
@@ -376,7 +365,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                     <CardHeader className="space-y-2">
                       <div className="flex flex-wrap items-center gap-2">
                         <CardTitle className="text-base">
-                          <Link href={`/sites/${site.id}`} className="text-accent hover:underline">
+                          <Link href={`/sites/${site.id}`} className="text-spectral-600 hover:underline">
                             {site.name}
                           </Link>
                         </CardTitle>
@@ -402,7 +391,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                           <div className="flex flex-wrap gap-1.5">
                             {siteLabs.map((lab) => (
                               <Link key={lab.id} href={`/laboratories/${lab.id}`}>
-                                <Badge variant="outline" className="hover:border-accent hover:text-accent">
+                                <Badge variant="outline" className="hover:border-spectral-600 hover:text-spectral-600">
                                   {lab.name} · {LABORATORY_TYPE_LABELS[lab.labType]}
                                 </Badge>
                               </Link>
@@ -417,7 +406,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                         <span>
                           <span className="font-medium text-slate-800">{siteLines.length}</span> production lines
                         </span>
-                        <Link href={`/sites/${site.id}`} className="font-medium text-accent hover:underline">
+                        <Link href={`/sites/${site.id}`} className="font-medium text-spectral-600 hover:underline">
                           Open site detail
                         </Link>
                       </div>
@@ -438,14 +427,10 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
             />
           ) : (
             <div className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Supplier profile</CardTitle>
-                  <CardDescription>
-                    Relationship labels follow evidence state — authorization is only stated when analyst-reviewed.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
+              <SectionCard
+                title="Supplier profile"
+                description="Relationship labels follow evidence state — authorization is only stated when analyst-reviewed."
+              >
                   <DetailGrid>
                     <DetailItem label="Relationship">
                       <SupplierRelationshipBadge
@@ -465,7 +450,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                                 {manufacturer ? (
                                   <Link
                                     href={`/organizations/${manufacturer.id}`}
-                                    className="text-accent hover:underline"
+                                    className="text-spectral-600 hover:underline"
                                   >
                                     {manufacturer.name}
                                   </Link>
@@ -488,15 +473,12 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                       </div>
                     </DetailItem>
                   </DetailGrid>
-                </CardContent>
-              </Card>
+              </SectionCard>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Distribution agreements</CardTitle>
-                  <CardDescription>Recorded agreements where this organization is the distributor.</CardDescription>
-                </CardHeader>
-                <CardContent>
+              <SectionCard
+                title="Distribution agreements"
+                description="Recorded agreements where this organization is the distributor."
+              >
                   {agreements.items.filter((agreement) => agreement.distributorOrgId === id).length === 0 ? (
                     <p className="text-xs text-slate-500">No distribution agreements recorded for this supplier.</p>
                   ) : (
@@ -521,7 +503,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                                   {manufacturer ? (
                                     <Link
                                       href={`/organizations/${manufacturer.id}`}
-                                      className="text-accent hover:underline"
+                                      className="text-spectral-600 hover:underline"
                                     >
                                       {manufacturer.name}
                                     </Link>
@@ -552,8 +534,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                       </TableBody>
                     </Table>
                   )}
-                </CardContent>
-              </Card>
+              </SectionCard>
             </div>
           )}
         </TabsContent>
@@ -588,7 +569,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                           <TableCell>
                             <div className="flex flex-wrap items-center gap-1.5">
                               {contact.person ? (
-                                <Link href={`/people/${contact.person.id}`} className="font-medium text-accent hover:underline">
+                                <Link href={`/people/${contact.person.id}`} className="font-medium text-spectral-600 hover:underline">
                                   {contact.person.fullName}
                                 </Link>
                               ) : (
@@ -627,17 +608,15 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
         </TabsContent>
 
         <TabsContent value="evidence" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
+          <SectionCard
+            title={
+              <span className="flex items-center gap-2">
                 <FileCheck2 className="h-4 w-4 text-slate-400" aria-hidden="true" />
                 Claims about this organization
-              </CardTitle>
-              <CardDescription>
-                Atomic, source-backed statements where this organization is the subject.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </span>
+            }
+            description="Atomic, source-backed statements where this organization is the subject."
+          >
               {claims.items.length === 0 ? (
                 <EmptyState
                   icon={FileCheck2}
@@ -665,7 +644,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                           <TableCell className="font-mono text-xs">{humanize(claim.predicate)}</TableCell>
                           <TableCell className="max-w-56">
                             {resolved.href ? (
-                              <Link href={resolved.href} className="text-accent hover:underline">
+                              <Link href={resolved.href} className="text-spectral-600 hover:underline">
                                 {resolved.label}
                               </Link>
                             ) : (
@@ -691,8 +670,7 @@ export default async function OrganizationDetailPage({ params }: { params: Promi
                   </TableBody>
                 </Table>
               )}
-            </CardContent>
-          </Card>
+          </SectionCard>
         </TabsContent>
       </Tabs>
     </div>

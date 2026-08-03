@@ -9,13 +9,8 @@ import {
 } from "@/lib/integrations/memoire";
 import { MemoireHandoffBuilder, type HandoffEntityOption } from "@/components/integrations/memoire-handoff";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
 import {
   Table,
   TableBody,
@@ -63,33 +58,24 @@ export default async function IntegrationsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Integrations</h1>
-        <p className="mt-1 max-w-2xl text-sm text-slate-600">
-          Ecosystem boundaries: Memoire (execution layer) receives handoffs from Nexus; Atlas
-          (product knowledge layer) reads vendor-neutral reference data from Nexus.
-        </p>
-      </div>
+      <PageHeader
+        title="Integrations"
+        description="Ecosystem boundaries: Memoire (execution layer) receives handoffs from Nexus; Atlas (product knowledge layer) reads vendor-neutral reference data from Nexus."
+      />
 
-      <Card>
-        <CardHeader>
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <CardTitle className="text-base">Memoire — outbound handoffs</CardTitle>
-              <CardDescription>
-                Push commercial entities (accounts, SKUs, signals) to the execution layer as
-                contract-valid payloads.
-              </CardDescription>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="warning">
-                {integrations.memoireUrl ? "Configured" : "Not configured — deep-link placeholder mode"}
-              </Badge>
-              <Badge variant="outline" className="font-mono text-xs">{MEMOIRE_HANDOFF_CONTRACT_VERSION}</Badge>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <SectionCard
+        title="Memoire — outbound handoffs"
+        description="Push commercial entities (accounts, SKUs, signals) to the execution layer as contract-valid payloads."
+        actions={
+          <>
+            <Badge variant="warning">
+              {integrations.memoireUrl ? "Configured" : "Not configured — deep-link placeholder mode"}
+            </Badge>
+            <Badge variant="outline" className="font-mono text-xs">{MEMOIRE_HANDOFF_CONTRACT_VERSION}</Badge>
+          </>
+        }
+      >
+        <div className="space-y-6">
           <MemoireHandoffBuilder entities={entityOptions} tenantId={demoTenantId} />
 
           <div>
@@ -102,7 +88,7 @@ export default async function IntegrationsPage() {
                 downloaded statuses are recorded as the integration matures).
               </p>
             ) : (
-              <Table>
+              <Table compact>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Handoff</TableHead>
@@ -134,7 +120,7 @@ export default async function IntegrationsPage() {
                             {record.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-xs text-slate-500">
+                        <TableCell className="text-xs tabular-nums text-slate-500">
                           {new Date(record.createdAt).toLocaleString()}
                         </TableCell>
                       </TableRow>
@@ -144,21 +130,16 @@ export default async function IntegrationsPage() {
               </Table>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between gap-2">
-              <CardTitle className="text-base">Memoire — field observation return path</CardTitle>
-              <Badge variant="outline">draft</Badge>
-            </div>
-            <CardDescription>
-              Future: field reps push observations back into Nexus.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm text-slate-600">
+        <SectionCard
+          title="Memoire — field observation return path"
+          description="Future: field reps push observations back into Nexus."
+          actions={<Badge variant="outline">draft</Badge>}
+        >
+          <div className="space-y-2 text-sm text-slate-600">
             <p>
               Contract <code className="font-mono text-xs">{FIELD_OBSERVATION_CONTRACT_VERSION}</code>{" "}
               is specified and schema-enforced but not yet wired to an endpoint.
@@ -169,21 +150,20 @@ export default async function IntegrationsPage() {
               <span className="font-medium">unverified</span> — they can never enter the graph as
               canonical facts without analyst review.
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </SectionCard>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between gap-2">
-              <CardTitle className="text-base">Atlas — read-only reference API</CardTitle>
-              <div className="flex items-center gap-2">
-                <Badge variant="success">read-only</Badge>
-                <Badge variant="outline" className="font-mono text-xs">{ATLAS_READ_CONTRACT_VERSION}</Badge>
-              </div>
-            </div>
-            <CardDescription>Canonical reference data Nexus serves to Atlas.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm text-slate-600">
+        <SectionCard
+          title="Atlas — read-only reference API"
+          description="Canonical reference data Nexus serves to Atlas."
+          actions={
+            <>
+              <Badge variant="success">read-only</Badge>
+              <Badge variant="outline" className="font-mono text-xs">{ATLAS_READ_CONTRACT_VERSION}</Badge>
+            </>
+          }
+        >
+          <div className="space-y-3 text-sm text-slate-600">
             <p className="text-xs text-slate-500">
               <span className="font-medium text-slate-700">Vendor neutrality:</span> Atlas has{" "}
               <code className="font-mono">selectsVendor = false</code> and{" "}
@@ -210,8 +190,8 @@ export default async function IntegrationsPage() {
                 </a>
               </li>
             </ul>
-          </CardContent>
-        </Card>
+          </div>
+        </SectionCard>
       </div>
     </div>
   );

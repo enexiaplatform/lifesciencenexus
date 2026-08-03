@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PageHeader } from "@/components/ui/page-header";
 import { IsDemoBadge, VisibilityBadge } from "@/components/evidence/meta-badges";
 import {
   entityHref,
@@ -258,12 +259,10 @@ export function SearchClient({
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Search</h1>
-        <p className="mt-1 text-sm text-slate-600">
-          Federated search across the whole intelligence graph — entities, evidence and research.
-        </p>
-      </div>
+      <PageHeader
+        title="Search"
+        description="Federated search across the whole intelligence graph — entities, evidence and research."
+      />
 
       <div className="relative">
         <Search

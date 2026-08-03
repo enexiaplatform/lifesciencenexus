@@ -33,7 +33,7 @@ type RecordPriceAction = (
 ) => Promise<{ ok: true; id: string } | { ok: false; error: string }>;
 
 const selectClass =
-  "flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+  "flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600";
 
 /**
  * "Record price" dialog. Submits to the recordPrice server action; the
@@ -195,7 +195,7 @@ export function RecordPriceDialog({
                 type="checkbox"
                 checked={taxIncluded}
                 onChange={(event) => setTaxIncluded(event.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="h-4 w-4 rounded border-slate-300 text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
               />
               <Label htmlFor="rp-tax" className="text-xs font-normal">Amount includes VAT</Label>
             </div>
@@ -268,7 +268,7 @@ export function RecordPriceDialog({
           </fieldset>
 
           {error ? (
-            <p role="alert" className="rounded-md border border-red-300 bg-red-50 p-3 text-xs text-red-800">
+            <p role="alert" className="rounded-md border border-danger-border bg-danger-bg p-3 text-xs text-danger-fg">
               {error}
             </p>
           ) : null}

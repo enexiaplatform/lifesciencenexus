@@ -20,6 +20,7 @@ import { SourceChip } from "@/components/market/source-chip";
 import { Timeline } from "@/components/market/timeline";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionCard } from "@/components/ui/section-card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getRepository } from "@/lib/data";
@@ -127,7 +128,7 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
           <DetailGrid>
             <DetailItem label="Buyer">
               {buyer ? (
-                <Link href={`/organizations/${buyer.id}`} className="text-accent hover:underline">
+                <Link href={`/organizations/${buyer.id}`} className="text-spectral-600 hover:underline">
                   {buyer.name}
                 </Link>
               ) : (
@@ -136,7 +137,7 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
             </DetailItem>
             <DetailItem label="Site">
               {site ? (
-                <Link href={`/sites/${site.id}`} className="text-accent hover:underline">
+                <Link href={`/sites/${site.id}`} className="text-spectral-600 hover:underline">
                   {site.name}
                 </Link>
               ) : (
@@ -163,7 +164,7 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
             </DetailItem>
           </DetailGrid>
           {renewalWindow ? (
-            <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            <p className="rounded-md border border-warning-border bg-warning-bg px-3 py-2 text-xs text-warning-fg">
               The awarded contract ends within the 120-day renewal window — a renewal signal is active.{" "}
               <Link href="/signals" className="font-medium underline">
                 Review it in Signals
@@ -175,12 +176,11 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
       </Card>
 
       <div className="grid gap-4 xl:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Lots &amp; items ({lots.length})</CardTitle>
-            <CardDescription>Tender structure with product/SKU mappings.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <SectionCard
+          title={<>Lots &amp; items ({lots.length})</>}
+          description="Tender structure with product/SKU mappings."
+        >
+          <div className="space-y-4">
             {lots.length === 0 ? (
               <EmptyState
                 icon={FileText}
@@ -225,12 +225,12 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                                   {product || sku ? (
                                     <span className="flex flex-col gap-0.5">
                                       {product ? (
-                                        <Link href={`/products/${product.id}`} className="text-accent hover:underline">
+                                        <Link href={`/products/${product.id}`} className="text-spectral-600 hover:underline">
                                           {product.name}
                                         </Link>
                                       ) : null}
                                       {sku ? (
-                                        <Link href={`/skus/${sku.id}`} className="text-accent hover:underline">
+                                        <Link href={`/skus/${sku.id}`} className="text-spectral-600 hover:underline">
                                           {sku.name}
                                         </Link>
                                       ) : null}
@@ -266,18 +266,19 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                 <p className="text-xs text-slate-500">Add a lot before capturing items.</p>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </SectionCard>
 
         <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
+          <SectionCard
+            title={
+              <span className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-slate-400" aria-hidden="true" />
                 Bidders ({bidders.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+              </span>
+            }
+          >
+            <div className="space-y-4">
               {bidders.length === 0 ? (
                 <p className="text-xs text-slate-500">No bidders recorded yet.</p>
               ) : (
@@ -299,7 +300,7 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                           </TableCell>
                           <TableCell>
                             {org ? (
-                              <Link href={`/organizations/${org.id}`} className="text-accent hover:underline">
+                              <Link href={`/organizations/${org.id}`} className="text-spectral-600 hover:underline">
                                 {org.name}
                               </Link>
                             ) : (
@@ -324,21 +325,19 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                   organizations={organizationOptions}
                 />
               </section>
-            </CardContent>
-          </Card>
+            </div>
+          </SectionCard>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
+          <SectionCard
+            title={
+              <span className="flex items-center gap-2">
                 <Gavel className="h-4 w-4 text-slate-400" aria-hidden="true" />
                 Awards ({awards.length})
-              </CardTitle>
-              <CardDescription>
-                Award amounts are shown exactly as stated in the award notice — no currency conversion or
-                normalization is applied.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+              </span>
+            }
+            description="Award amounts are shown exactly as stated in the award notice — no currency conversion or normalization is applied."
+          >
+            <div className="space-y-4">
               {awards.length === 0 ? (
                 <p className="text-xs text-slate-500">No award recorded yet.</p>
               ) : (
@@ -370,7 +369,7 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                           </TableCell>
                           <TableCell className="text-xs">
                             {supplier ? (
-                              <Link href={`/organizations/${supplier.id}`} className="text-accent hover:underline">
+                              <Link href={`/organizations/${supplier.id}`} className="text-spectral-600 hover:underline">
                                 {supplier.name}
                               </Link>
                             ) : (
@@ -379,7 +378,7 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                           </TableCell>
                           <TableCell className="text-xs">
                             {manufacturer ? (
-                              <Link href={`/organizations/${manufacturer.id}`} className="text-accent hover:underline">
+                              <Link href={`/organizations/${manufacturer.id}`} className="text-spectral-600 hover:underline">
                                 {manufacturer.name}
                               </Link>
                             ) : (
@@ -388,7 +387,7 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                             {product ? (
                               <>
                                 {" / "}
-                                <Link href={`/products/${product.id}`} className="text-accent hover:underline">
+                                <Link href={`/products/${product.id}`} className="text-spectral-600 hover:underline">
                                   {product.name}
                                 </Link>
                               </>
@@ -431,18 +430,13 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
               ) : (
                 <p className="text-xs text-slate-500">Add a lot or item before recording an award.</p>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </SectionCard>
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Documents</CardTitle>
-            <CardDescription>Files attached to the tender&apos;s evidence source.</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <SectionCard title="Documents" description="Files attached to the tender's evidence source.">
             {sourceDocuments.items.length === 0 ? (
               <p className="text-xs text-slate-500">No documents attached to the source record.</p>
             ) : (
@@ -461,15 +455,9 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                 ))}
               </ul>
             )}
-          </CardContent>
-        </Card>
+        </SectionCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Events timeline</CardTitle>
-            <CardDescription>Newest first.</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <SectionCard title="Events timeline" description="Newest first.">
             {sortedEvents.length === 0 ? (
               <p className="text-xs text-slate-500">No tender events recorded.</p>
             ) : (
@@ -482,19 +470,12 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ i
                 }))}
               />
             )}
-          </CardContent>
-        </Card>
+        </SectionCard>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Related signals</CardTitle>
-          <CardDescription>Derived opportunities referencing this tender.</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <SectionCard title="Related signals" description="Derived opportunities referencing this tender.">
           <SignalList signals={relatedSignals} />
-        </CardContent>
-      </Card>
+      </SectionCard>
 
       <p className="text-[11px] text-slate-400">
         Record created {formatDateTime(tender.createdAt)} · last updated {formatDateTime(tender.updatedAt)}

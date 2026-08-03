@@ -1,26 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  Activity,
   ArrowRight,
-  Boxes,
   Building2,
-  ClipboardCheck,
+  Calculator,
+  Columns2,
   Database,
+  Download,
   FileText,
+  FolderKanban,
   Package,
-  ShieldCheck,
+  Plus,
+  Warehouse,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionCard } from "@/components/ui/section-card";
+import { StatCard } from "@/components/ui/stat-card";
 import { EvidenceStateBadge } from "@/components/evidence/state-badge";
 import { IsDemoBadge } from "@/components/evidence/meta-badges";
 import { formatDate, formatMoney, relativeDays } from "@/components/evidence/format";
@@ -42,17 +40,17 @@ const PENDING_STATES: EvidenceState[] = [
   "structurally_validated",
 ];
 
-const QUICK_ACTIONS: Array<{ label: string; href: string }> = [
-  { label: "Add source", href: "/sources?dialog=add" },
-  { label: "Create organization", href: "/organizations?dialog=add" },
-  { label: "Create product", href: "/products?dialog=add" },
-  { label: "Record price", href: "/prices?dialog=add" },
-  { label: "Add tender", href: "/tenders?dialog=add" },
-  { label: "Record installed asset", href: "/installed-base?dialog=add" },
-  { label: "Start comparison", href: "/compare" },
-  { label: "Start cost model", href: "/cost-per-test" },
-  { label: "Create research project", href: "/research?dialog=create" },
-  { label: "Import data", href: "/imports" },
+const QUICK_ACTIONS: Array<{ label: string; href: string; icon: typeof Plus }> = [
+  { label: "Add source", href: "/sources?dialog=add", icon: Database },
+  { label: "Create organization", href: "/organizations?dialog=add", icon: Building2 },
+  { label: "Create product", href: "/products?dialog=add", icon: Package },
+  { label: "Record price", href: "/prices?dialog=add", icon: Plus },
+  { label: "Add tender", href: "/tenders?dialog=add", icon: FileText },
+  { label: "Record installed asset", href: "/installed-base?dialog=add", icon: Warehouse },
+  { label: "Start comparison", href: "/compare", icon: Columns2 },
+  { label: "Start cost model", href: "/cost-per-test", icon: Calculator },
+  { label: "Create research project", href: "/research?dialog=create", icon: FolderKanban },
+  { label: "Import data", href: "/imports", icon: Download },
 ];
 
 const RECENT_TYPES: EntityType[] = [
@@ -217,67 +215,64 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-900">Dashboard</h1>
-          <p className="mt-1 text-sm text-slate-600">
-            Industrial microbiology · Vietnam — workspace pulse across market, product and
-            evidence data.
-          </p>
-        </div>
-      </div>
-
-      {/* Quick actions */}
-      <div className="flex flex-wrap gap-2" aria-label="Quick actions">
-        {QUICK_ACTIONS.map((action) => (
-          <Button key={action.href} asChild variant="outline" size="sm">
-            <Link href={action.href}>{action.label}</Link>
-          </Button>
-        ))}
-      </div>
+      <PageHeader
+        title="Dashboard"
+        description="Industrial microbiology · Vietnam — workspace pulse across market, product and evidence data."
+      />
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-        <StatCard
-          icon={<Building2 className="h-4 w-4" aria-hidden="true" />}
-          label="Organizations"
-          value={counts.organization ?? 0}
-          href="/organizations"
-        />
-        <StatCard
-          icon={<Package className="h-4 w-4" aria-hidden="true" />}
-          label="Products"
-          value={counts.product ?? 0}
-          href="/products"
-        />
-        <StatCard
-          icon={<Boxes className="h-4 w-4" aria-hidden="true" />}
-          label="SKUs"
-          value={counts.sku ?? 0}
-          href="/skus"
-        />
-        <StatCard
-          icon={<Database className="h-4 w-4" aria-hidden="true" />}
-          label="Sources"
-          value={counts.source ?? 0}
-          href="/sources"
-          footnote={`${sourceCoverage}% with claims`}
-        />
-        <StatCard
-          icon={<ClipboardCheck className="h-4 w-4" aria-hidden="true" />}
-          label="Review queue"
-          value={summary.reviewQueueSize}
-          href="/review"
-          footnote="claims awaiting review"
-        />
+        <StatLink href="/organizations" label="Organizations">
+          <StatCard label="Organizations" value={counts.organization ?? 0} />
+        </StatLink>
+        <StatLink href="/products" label="Products">
+          <StatCard label="Products" value={counts.product ?? 0} />
+        </StatLink>
+        <StatLink href="/skus" label="SKUs">
+          <StatCard label="SKUs" value={counts.sku ?? 0} />
+        </StatLink>
+        <StatLink href="/sources" label="Sources">
+          <StatCard
+            label="Sources"
+            value={counts.source ?? 0}
+            hint={`${sourceCoverage}% with claims`}
+          />
+        </StatLink>
+        <StatLink href="/review" label="Review queue">
+          <StatCard
+            label="Review queue"
+            value={summary.reviewQueueSize}
+            hint="claims awaiting review"
+          />
+        </StatLink>
+      </div>
+
+      {/* Quick actions */}
+      <div
+        className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
+        aria-label="Quick actions"
+      >
+        {QUICK_ACTIONS.map((action) => (
+          <Link
+            key={action.href}
+            href={action.href}
+            className="group flex items-center gap-2.5 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-xs transition-colors hover:border-spectral-300 hover:bg-spectral-50 hover:text-spectral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2"
+          >
+            <action.icon
+              className="h-4 w-4 shrink-0 text-slate-400 transition-colors group-hover:text-spectral-600"
+              aria-hidden="true"
+            />
+            <span className="truncate">{action.label}</span>
+          </Link>
+        ))}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Data requiring review */}
         <SectionCard
           title="Data requiring review"
-          href="/review"
           description="Claims waiting on analyst action, by evidence state."
+          actions={<ViewAll href="/review" />}
         >
           <div className="mb-3 flex flex-wrap gap-2">
             {pendingByState.map(({ state, count }) => (
@@ -307,8 +302,8 @@ export default async function DashboardPage() {
         {/* Evidence freshness */}
         <SectionCard
           title="Evidence freshness"
-          href="/evidence"
           description="Stale prices, review-due claims and expiring agreements."
+          actions={<ViewAll href="/evidence" />}
         >
           <dl className="mb-3 grid grid-cols-3 gap-2 text-center">
             <FreshnessStat label="Stale prices" value={summary.freshness.stalePrices} />
@@ -355,8 +350,8 @@ export default async function DashboardPage() {
         {/* Recent research projects */}
         <SectionCard
           title="Recent research projects"
-          href="/research"
           description="Latest analyst workspaces."
+          actions={<ViewAll href="/research" />}
         >
           {projectsPage.items.length === 0 ? (
             <EmptyNextAction
@@ -382,8 +377,8 @@ export default async function DashboardPage() {
         {/* Recently updated entities */}
         <SectionCard
           title="Recently updated"
-          href="/search"
           description="Latest changes across the graph."
+          actions={<ViewAll href="/search" />}
         >
           <ul className="space-y-1.5">
             {recentEntities.map(({ type, entity }) => (
@@ -401,9 +396,8 @@ export default async function DashboardPage() {
         {/* High-value opportunity signals */}
         <SectionCard
           title="High-value opportunity signals"
-          href="/signals"
           description="Top new signals by commercial relevance."
-          icon={<Activity className="h-4 w-4 text-slate-400" aria-hidden="true" />}
+          actions={<ViewAll href="/signals" />}
         >
           {summary.highValueSignals.length === 0 ? (
             <p className="text-sm text-slate-500">No new high-relevance signals.</p>
@@ -425,9 +419,8 @@ export default async function DashboardPage() {
         {/* Tender deadlines */}
         <SectionCard
           title="Tender deadlines"
-          href="/tenders"
           description="Upcoming submissions and expected renewals."
-          icon={<FileText className="h-4 w-4 text-slate-400" aria-hidden="true" />}
+          actions={<ViewAll href="/tenders" />}
         >
           {upcomingSubmissions.length === 0 && upcomingRenewals.length === 0 ? (
             <p className="text-sm text-slate-500">No upcoming tender deadlines.</p>
@@ -458,9 +451,8 @@ export default async function DashboardPage() {
         {/* Installed assets nearing replacement */}
         <SectionCard
           title="Installed assets nearing replacement"
-          href="/installed-base"
           description="Replacement expected within 180 days (or overdue)."
-          icon={<Boxes className="h-4 w-4 text-slate-400" aria-hidden="true" />}
+          actions={<ViewAll href="/installed-base" />}
         >
           {nearingReplacement.length === 0 ? (
             <p className="text-sm text-slate-500">No assets nearing replacement.</p>
@@ -484,160 +476,86 @@ export default async function DashboardPage() {
 
         {/* Small stat trio */}
         <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-          <MiniCard
-            icon={<ShieldCheck className="h-4 w-4" aria-hidden="true" />}
-            title="Possible duplicates"
-            value={summary.possibleDuplicates}
-            href="/admin/entity-resolution"
-            linkLabel="Open entity resolution"
-          />
-          <MiniCard
-            title="New price observations (7d)"
-            value={newPrices7d.length}
-            href="/prices"
-            linkLabel="Open prices"
-          />
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm">Product-equivalence coverage</CardTitle>
-              <CardDescription className="text-xs">
-                {equivalenceCoverage.covered} of {equivalenceCoverage.total} SKUs have equivalence
-                records
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+          <StatLink href="/admin/entity-resolution" label="Possible duplicates">
+            <StatCard label="Possible duplicates" value={summary.possibleDuplicates} />
+          </StatLink>
+          <StatLink href="/prices" label="New price observations (7d)">
+            <StatCard label="New prices (7d)" value={newPrices7d.length} />
+          </StatLink>
+          <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Equivalence coverage
+            </p>
+            <p className="mt-1.5 font-display text-display-md font-semibold tabular-nums text-slate-900">
+              {equivalenceCoverage.total === 0
+                ? "0%"
+                : `${Math.round((equivalenceCoverage.covered / equivalenceCoverage.total) * 100)}%`}
+            </p>
+            <p className="mt-1 text-xs text-slate-500">
+              {equivalenceCoverage.covered} of {equivalenceCoverage.total} SKUs have equivalence
+              records
+            </p>
+            <div
+              className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200"
+              role="progressbar"
+              aria-valuenow={equivalenceCoverage.covered}
+              aria-valuemin={0}
+              aria-valuemax={equivalenceCoverage.total}
+              aria-label="SKU equivalence coverage"
+            >
               <div
-                className="h-2 overflow-hidden rounded-full bg-slate-200"
-                role="progressbar"
-                aria-valuenow={equivalenceCoverage.covered}
-                aria-valuemin={0}
-                aria-valuemax={equivalenceCoverage.total}
-                aria-label="SKU equivalence coverage"
-              >
-                <div
-                  className="h-full rounded-full bg-teal-500"
-                  style={{
-                    width: `${
-                      equivalenceCoverage.total === 0
-                        ? 0
-                        : Math.round(
-                            (equivalenceCoverage.covered / equivalenceCoverage.total) * 100,
-                          )
-                    }%`,
-                  }}
-                />
-              </div>
-              <Button asChild variant="link" size="sm" className="mt-2 h-auto px-0">
-                <Link href="/equivalence">
-                  Open equivalence <ArrowRight className="h-3 w-3" aria-hidden="true" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+                className="h-full rounded-full bg-teal-600"
+                style={{
+                  width: `${
+                    equivalenceCoverage.total === 0
+                      ? 0
+                      : Math.round(
+                          (equivalenceCoverage.covered / equivalenceCoverage.total) * 100,
+                        )
+                  }%`,
+                }}
+              />
+            </div>
+            <Button asChild variant="link" size="sm" className="mt-2 h-auto px-0">
+              <Link href="/equivalence">
+                Open equivalence <ArrowRight className="h-3 w-3" aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function StatCard({
-  icon,
+/** Whole-card link wrapper for dashboard stats (accessible name = label). */
+function StatLink({
+  href,
   label,
-  value,
-  href,
-  footnote,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: number;
-  href: string;
-  footnote?: string;
-}) {
-  return (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between text-slate-500">
-          <span className="text-xs font-medium uppercase tracking-wide">{label}</span>
-          {icon}
-        </div>
-        <p className="mt-1 text-2xl font-semibold tabular-nums text-slate-900">{value}</p>
-        <div className="mt-1 flex items-center justify-between gap-2">
-          <span className="text-xs text-slate-500">{footnote ?? " "}</span>
-          <Button asChild variant="link" size="sm" className="h-auto px-0 text-xs">
-            <Link href={href}>
-              Open <ArrowRight className="h-3 w-3" aria-hidden="true" />
-            </Link>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function SectionCard({
-  title,
-  description,
-  href,
-  icon,
   children,
 }: {
-  title: string;
-  description?: string;
   href: string;
-  icon?: React.ReactNode;
+  label: string;
   children: React.ReactNode;
 }) {
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between gap-2">
-          <CardTitle className="flex items-center gap-2 text-sm">
-            {icon}
-            {title}
-          </CardTitle>
-          <Button asChild variant="ghost" size="sm" className="h-7 text-xs">
-            <Link href={href}>
-              View all <ArrowRight className="h-3 w-3" aria-hidden="true" />
-            </Link>
-          </Button>
-        </div>
-        {description && <CardDescription className="text-xs">{description}</CardDescription>}
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
+    <Link
+      href={href}
+      aria-label={`Open ${label}`}
+      className="block rounded-lg transition-shadow hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2"
+    >
+      {children}
+    </Link>
   );
 }
 
-function MiniCard({
-  icon,
-  title,
-  value,
-  href,
-  linkLabel,
-}: {
-  icon?: React.ReactNode;
-  title: string;
-  value: number;
-  href: string;
-  linkLabel: string;
-}) {
+function ViewAll({ href }: { href: string }) {
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-sm">
-          {icon}
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-2xl font-semibold tabular-nums text-slate-900">{value}</p>
-        <Button asChild variant="link" size="sm" className="mt-1 h-auto px-0">
-          <Link href={href}>
-            {linkLabel} <ArrowRight className="h-3 w-3" aria-hidden="true" />
-          </Link>
-        </Button>
-      </CardContent>
-    </Card>
+    <Button asChild variant="ghost" size="sm" className="h-7 text-xs">
+      <Link href={href}>
+        View all <ArrowRight className="h-3 w-3" aria-hidden="true" />
+      </Link>
+    </Button>
   );
 }
 
@@ -658,7 +576,7 @@ function RowItem({
     <li>
       <Link
         href={href}
-        className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600"
       >
         <span className="min-w-0 flex-1">
           <span className="block truncate font-medium text-slate-800">{title}</span>
@@ -666,9 +584,9 @@ function RowItem({
             <span
               className={
                 metaTone === "danger"
-                  ? "block truncate text-xs text-red-600"
+                  ? "block truncate text-xs text-danger-fg"
                   : metaTone === "warning"
-                    ? "block truncate text-xs text-amber-700"
+                    ? "block truncate text-xs text-warning-fg"
                     : "block truncate text-xs text-slate-500"
               }
             >
@@ -685,7 +603,7 @@ function RowItem({
 function FreshnessStat({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-md border border-slate-200 px-2 py-1.5">
-      <dd className="text-lg font-semibold tabular-nums text-slate-900">{value}</dd>
+      <dd className="font-display text-display-xs font-semibold tabular-nums text-slate-900">{value}</dd>
       <dt className="text-[11px] text-slate-500">{label}</dt>
     </div>
   );

@@ -12,6 +12,7 @@ import {
   SyntheticBadge,
 } from "@/components/products/badges";
 import { EdgePanels, type SourceInfo } from "@/components/products/edge-panels";
+import { EntityRefLink } from "@/components/products/entity-link";
 import { ConfidenceValue, DateText, formatMoney, formatUnitAmount, humanize, Money } from "@/components/products/format";
 import { PageHeader } from "@/components/products/page-header";
 import { SkuActions } from "@/components/products/sku-actions";
@@ -128,7 +129,7 @@ export default async function SkuDetailPage({
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1 text-xs text-slate-500">
         <Link href="/products" className="hover:text-accent hover:underline">
           Products
@@ -148,9 +149,11 @@ export default async function SkuDetailPage({
         {product ? (
           <>
             <ChevronRight className="h-3 w-3" aria-hidden="true" />
-            <Link href={`/products/${product.id}`} className="hover:text-accent hover:underline">
-              {product.name}
-            </Link>
+            <EntityRefLink
+              entityRef={{ entityType: "product", entityId: product.id }}
+              label={product.name}
+              className="hover:text-accent hover:underline"
+            />
           </>
         ) : null}
         <ChevronRight className="h-3 w-3" aria-hidden="true" />
@@ -182,59 +185,63 @@ export default async function SkuDetailPage({
           <CardTitle className="text-sm">Identifiers &amp; lifecycle</CardTitle>
         </CardHeader>
         <CardContent className="p-4 pt-0">
-          <dl className="grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <dt className="text-xs text-slate-500">Catalogue number</dt>
-              <dd className="font-mono text-xs font-medium text-slate-800">{sku.catalogueNumber ?? "—"}</dd>
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Catalogue number</dt>
+              <dd className="mt-0.5 font-mono text-xs font-medium text-slate-800">{sku.catalogueNumber ?? "—"}</dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Manufacturer code</dt>
-              <dd className="font-mono text-xs font-medium text-slate-800">{sku.manufacturerCode ?? "—"}</dd>
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Manufacturer code</dt>
+              <dd className="mt-0.5 font-mono text-xs font-medium text-slate-800">{sku.manufacturerCode ?? "—"}</dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">GTIN</dt>
-              <dd className="font-mono text-xs font-medium text-slate-800">{sku.gtin ?? "—"}</dd>
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">GTIN</dt>
+              <dd className="mt-0.5 font-mono text-xs font-medium text-slate-800">{sku.gtin ?? "—"}</dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Manufacturer</dt>
-              <dd className="font-medium text-slate-800">
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Manufacturer</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">
                 {manufacturer ? (
-                  <Link href={`/organizations/${manufacturer.id}`} className="text-accent hover:underline">
-                    {manufacturer.name}
-                  </Link>
+                  <EntityRefLink
+                    entityRef={{ entityType: "organization", entityId: manufacturer.id }}
+                    label={manufacturer.name}
+                    className="text-accent hover:underline"
+                  />
                 ) : (
                   "—"
                 )}
               </dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Format</dt>
-              <dd className="font-medium text-slate-800">{format?.name ?? "—"}</dd>
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Format</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">{format?.name ?? "—"}</dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Shelf life</dt>
-              <dd className="font-medium text-slate-800">
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Shelf life</dt>
+              <dd className="mt-0.5 text-sm tabular-nums text-slate-800">
                 {sku.shelfLifeMonths !== undefined ? `${sku.shelfLifeMonths} months` : "—"}
               </dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Storage condition</dt>
-              <dd className="font-medium text-slate-800">{sku.storageCondition ?? "—"}</dd>
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Storage condition</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">{sku.storageCondition ?? "—"}</dd>
             </div>
-            <div>
-              <dt className="text-xs text-slate-500">Successor SKU</dt>
-              <dd className="font-medium text-slate-800">
+            <div className="min-w-0">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Successor SKU</dt>
+              <dd className="mt-0.5 text-sm text-slate-800">
                 {successorSku ? (
-                  <Link href={`/skus/${successorSku.id}`} className="text-accent hover:underline">
-                    {successorSku.name}
-                  </Link>
+                  <EntityRefLink
+                    entityRef={{ entityType: "sku", entityId: successorSku.id }}
+                    label={successorSku.name}
+                    className="text-accent hover:underline"
+                  />
                 ) : (
                   "—"
                 )}
               </dd>
             </div>
-            <div className="sm:col-span-2">
-              <dt className="text-xs text-slate-500">Country availability</dt>
+            <div className="min-w-0 sm:col-span-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Country availability</dt>
               <dd className="mt-0.5 flex flex-wrap gap-1">
                 {sku.countryAvailability.length === 0 ? (
                   <span className="text-slate-500">—</span>
@@ -248,9 +255,9 @@ export default async function SkuDetailPage({
               </dd>
             </div>
             {sku.alternateNames.length > 0 ? (
-              <div className="sm:col-span-2">
-                <dt className="text-xs text-slate-500">Also known as</dt>
-                <dd className="text-xs text-slate-600">{sku.alternateNames.join(" · ")}</dd>
+              <div className="min-w-0 sm:col-span-2">
+                <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Also known as</dt>
+                <dd className="mt-0.5 text-xs text-slate-600">{sku.alternateNames.join(" · ")}</dd>
               </div>
             ) : null}
           </dl>
@@ -266,12 +273,12 @@ export default async function SkuDetailPage({
           {packConfigurations.length === 0 ? (
             <p className="text-sm text-slate-500">No pack configuration recorded — per-unit price normalization is not possible.</p>
           ) : (
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Description</TableHead>
-                  <TableHead>Content</TableHead>
-                  <TableHead>Units per pack</TableHead>
+                  <TableHead className="text-right">Content</TableHead>
+                  <TableHead className="text-right">Units per pack</TableHead>
                   <TableHead>Normalized</TableHead>
                 </TableRow>
               </TableHeader>
@@ -285,10 +292,10 @@ export default async function SkuDetailPage({
                   return (
                     <TableRow key={pack.id}>
                       <TableCell className="text-slate-700">{pack.description ?? "—"}</TableCell>
-                      <TableCell className="tabular-nums text-slate-700">
+                      <TableCell className="text-right tabular-nums text-slate-700">
                         {pack.quantity} {pack.unit}
                       </TableCell>
-                      <TableCell className="tabular-nums text-slate-700">
+                      <TableCell className="text-right tabular-nums text-slate-700">
                         {pack.unitsPerPack ?? "—"}
                       </TableCell>
                       <TableCell className="text-slate-600">
@@ -339,12 +346,11 @@ export default async function SkuDetailPage({
                   return (
                     <li key={listing.id} className="py-2">
                       <div className="flex flex-wrap items-center gap-2">
-                        <Link
-                          href={`/organizations/${listing.supplierOrgId}`}
+                        <EntityRefLink
+                          entityRef={{ entityType: "organization", entityId: listing.supplierOrgId }}
+                          label={listing.supplierName ?? listing.supplierOrgId}
                           className="text-sm font-medium text-accent hover:underline"
-                        >
-                          {listing.supplierName ?? listing.supplierOrgId}
-                        </Link>
+                        />
                         <Badge variant="secondary" className="font-normal">
                           {humanize(listing.relationshipType)}
                         </Badge>
@@ -375,7 +381,7 @@ export default async function SkuDetailPage({
             {availability.items.length === 0 ? (
               <p className="text-sm text-slate-500">No availability observation recorded.</p>
             ) : (
-              <Table>
+              <Table compact>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Supplier</TableHead>
@@ -429,7 +435,7 @@ export default async function SkuDetailPage({
               module.
             </p>
           ) : (
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Date</TableHead>
@@ -517,7 +523,7 @@ export default async function SkuDetailPage({
               module.
             </p>
           ) : (
-            <Table>
+            <Table compact>
               <TableHeader>
                 <TableRow>
                   <TableHead>Role</TableHead>
@@ -539,9 +545,11 @@ export default async function SkuDetailPage({
                         {isSource ? "Source" : "Candidate"}
                       </TableCell>
                       <TableCell>
-                        <Link href={`/skus/${otherId}`} className="font-medium text-accent hover:underline">
-                          {other?.name ?? otherId}
-                        </Link>
+                        <EntityRefLink
+                          entityRef={{ entityType: "sku", entityId: otherId }}
+                          label={other?.name ?? otherId}
+                          className="font-medium text-accent hover:underline"
+                        />
                       </TableCell>
                       <TableCell>
                         <ClassificationBadge classification={record.classification} />
