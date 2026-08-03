@@ -1,6 +1,7 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
+import { ScreenshotFrame } from "@/components/landing/screenshot-frame";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -32,121 +33,6 @@ function GraphMotif({ className }: { className?: string }) {
         <circle cx="300" cy="60" r="5" />
       </g>
     </svg>
-  );
-}
-
-/** A decorative pill that mimics the in-app evidence badges. */
-function MockBadge({ className }: { className?: string }) {
-  return (
-    <span
-      className={cn(
-        "inline-block h-4 w-16 rounded-full border",
-        className,
-      )}
-    />
-  );
-}
-
-/**
- * Stylized, pure-CSS dashboard mock: sidebar, stat cards, dense table rows,
- * evidence badges. Entirely decorative — hidden from assistive tech.
- */
-function DashboardMock() {
-  const rows = [
-    {
-      badge: "border-evidence-reviewed-border bg-evidence-reviewed-bg",
-      widths: ["w-24", "w-16", "w-12"],
-    },
-    {
-      badge: "border-evidence-source-captured-border bg-evidence-source-captured-bg",
-      widths: ["w-28", "w-14", "w-12"],
-    },
-    {
-      badge: "border-evidence-validated-border bg-evidence-validated-bg",
-      widths: ["w-20", "w-16", "w-10"],
-    },
-    {
-      badge: "border-evidence-unverified-border bg-evidence-unverified-bg",
-      widths: ["w-24", "w-12", "w-12"],
-    },
-    {
-      badge: "border-evidence-reviewed-border bg-evidence-reviewed-bg",
-      widths: ["w-16", "w-16", "w-10"],
-    },
-  ];
-
-  return (
-    <div
-      aria-hidden="true"
-      className="relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg"
-    >
-      {/* Window chrome */}
-      <div className="flex items-center gap-1.5 border-b border-slate-200 bg-slate-50 px-4 py-2.5">
-        <span className="size-2 rounded-full bg-slate-300" />
-        <span className="size-2 rounded-full bg-slate-300" />
-        <span className="size-2 rounded-full bg-slate-300" />
-        <span className="ml-3 h-3 w-40 rounded bg-slate-200" />
-      </div>
-
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="hidden w-40 shrink-0 flex-col gap-2 bg-nexus-900 p-4 sm:flex">
-          <div className="mb-2 h-3 w-16 rounded bg-nexus-700" />
-          {[0, 1, 2, 3, 4, 5].map((i) => (
-            <div
-              key={i}
-              className={cn(
-                "h-2.5 rounded",
-                i === 1 ? "w-24 bg-spectral-500" : "w-20 bg-nexus-700",
-              )}
-            />
-          ))}
-          <div className="mt-auto h-2.5 w-14 rounded bg-nexus-700" />
-        </div>
-
-        {/* Main panel */}
-        <div className="flex-1 space-y-4 p-4 sm:p-5">
-          {/* Stat cards */}
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { accent: "bg-spectral-600", value: "w-10" },
-              { accent: "bg-teal-600", value: "w-8" },
-              { accent: "bg-nexus-500", value: "w-12" },
-            ].map((card, i) => (
-              <div
-                key={i}
-                className="space-y-2 rounded-lg border border-slate-200 bg-white p-3 shadow-xs"
-              >
-                <div className="h-2 w-14 rounded bg-slate-200" />
-                <div className={cn("h-4 rounded", card.accent, card.value)} />
-                <div className="h-2 w-10 rounded bg-slate-100" />
-              </div>
-            ))}
-          </div>
-
-          {/* Dense table */}
-          <div className="rounded-lg border border-slate-200">
-            <div className="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-3 py-2">
-              <span className="h-2 w-20 rounded bg-slate-300" />
-              <span className="h-2 w-14 rounded bg-slate-300" />
-              <span className="ml-auto h-2 w-16 rounded bg-slate-300" />
-            </div>
-            {rows.map((row, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 border-b border-slate-100 px-3 py-2.5 last:border-b-0"
-              >
-                <span className="size-2 rounded-full bg-spectral-500" />
-                <span className={cn("h-2.5 rounded bg-slate-200", row.widths[0])} />
-                <span className={cn("h-2.5 rounded bg-slate-100", row.widths[1])} />
-                <span className={cn("hidden h-2.5 rounded bg-slate-100 sm:block", row.widths[2])} />
-                <MockBadge className={cn("ml-auto", row.badge)} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -194,7 +80,13 @@ export function LandingHero() {
             </p>
           </div>
 
-          <DashboardMock />
+          <ScreenshotFrame
+            src="/screenshots/dashboard.png"
+            videoSrc="/screenshots/demo.webm"
+            alt="Nexus demo workspace — short walkthrough of the dashboard, equivalence workspace, and evidence claims"
+            caption="nexus /dashboard"
+            priority
+          />
         </div>
       </div>
     </section>

@@ -103,6 +103,28 @@ test.describe("Landing page", () => {
     await expect(menu).toBeHidden();
   });
 
+  test("hero and intelligence tour render real product media", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    // Hero shows the walkthrough clip with the dashboard still as poster.
+    const heroVideo = page.locator("section video").first();
+    await expect(heroVideo).toBeVisible();
+    await expect(heroVideo).toHaveAttribute(
+      "poster",
+      /\/screenshots\/dashboard\.png/,
+    );
+
+    // Product-tour strip: three framed screenshots in the intelligence section.
+    const tourImages = page.locator("#intelligence img");
+    await expect(tourImages).toHaveCount(3);
+    const firstLoaded = await tourImages.first().evaluate(
+      (el: HTMLImageElement) => el.complete && el.naturalWidth > 0,
+    );
+    expect(firstLoaded, "tour screenshot failed to load").toBe(true);
+  });
+
   test("page loads without console errors", async ({ page }) => {
     const errors: string[] = [];
     page.on("console", (message) => {

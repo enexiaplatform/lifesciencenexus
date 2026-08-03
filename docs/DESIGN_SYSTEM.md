@@ -168,7 +168,19 @@ bounce, no spring, no animation over 240ms.
 | `Logo` | The node-graph "N" mark. `size`, `variant="color" \| "mono"` (currentColor), `title` for a11y. |
 | `Wordmark` | Mark + "Life Science Nexus" in Space Grotesk; optional `href`, `showText`. |
 
-Static assets: `public/logo.svg`, `public/logo-lockup.svg`, `public/og.svg`.
+### Landing (`src/components/landing/`)
+
+| Component | Purpose |
+|---|---|
+| `ScreenshotFrame` | Browser-chrome frame (3 dots + address-bar caption) around a real product screenshot (`next/image`) or walkthrough clip (`videoSrc`, still as poster). |
+
+Landing media are real captures from the demo workspace, regenerated with
+`npm run screenshots` (`scripts/capture-screenshots.mjs`) whenever the demo
+dataset or app UI changes. Re-run after demo-data changes.
+
+Static assets: `public/logo.svg`, `public/logo-lockup.svg`, `public/og.svg`
+(source), `public/og.png` (rasterized for OG/Twitter — many platforms ignore
+SVG), `public/screenshots/*.png` + `demo.webm` (generated).
 
 ---
 

@@ -15,6 +15,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "screenshots": "node scripts/capture-screenshots.mjs",
     "check": "npm run typecheck && npm run lint && npm test",
     "db:migrate": "supabase db push",
     "verify:rls": "psql \"$DATABASE_URL\" -f scripts/verify-rls.sql",

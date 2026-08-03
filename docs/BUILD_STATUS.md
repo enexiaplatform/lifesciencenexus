@@ -47,6 +47,14 @@ Updated after each major phase. Legend: ✅ done · 🟡 in progress · ⬜ pend
 - Final gates (all run 2026-07-27): `npm run verify:production-readiness` → **exit 0** (typecheck + lint + 302 vitest + migrations verification + build); `verify:integrations` → PASS; `verify:demo-separation` → PASS (118/118 tables carry `is_demo`); Playwright 22/22.
 - Repository: pushed to `github.com/enexiaplatform/lifesciencenexus` (branch `main`).
 
+## Phase 10 — Landing visual upgrade — ✅
+
+- Real product screenshots replace the pure-CSS hero mock: `scripts/capture-screenshots.mjs` (`npm run screenshots`) captures the demo workspace (dashboard, equivalence workspace, evidence, pre-filled compare matrix, loaded cost-per-test scenario) at 2× DPR into `public/screenshots/`, rasterizes `public/og.svg` → `public/og.png` (1200×630), `apple-icon.svg` → `src/app/apple-icon.png` (180×180), and with `--video` records a ~13s walkthrough clip (`demo.webm`, ~1MB). Screenshots depend on the demo dataset — re-run after demo-data changes.
+- New `ScreenshotFrame` component (browser chrome + `next/image`/video); hero now plays the walkthrough clip with the dashboard still as poster; intelligence section gained a 3-shot product tour (equivalence, compare, cost-per-test).
+- OG/Twitter metadata switched from `og.svg` to `og.png`; PNG apple touch icon added for iOS.
+- Dead code removed: `src/components/module-placeholder.tsx` (unused).
+- Tests: `tests/e2e/landing.spec.ts` gained a media assertion (hero video poster + 3 tour images load).
+
 ## Credential-blocked items (tracked honestly)
 
 - Live Supabase project provisioning + migration apply + RLS verification scripts execution.

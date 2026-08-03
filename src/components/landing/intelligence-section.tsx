@@ -1,3 +1,4 @@
+import { ScreenshotFrame } from "@/components/landing/screenshot-frame";
 import { cn } from "@/lib/utils";
 
 function Chip({ children }: { children: string }) {
@@ -56,6 +57,28 @@ const ENGINES = [
   },
 ] as const;
 
+/** Real product screens backing three of the engines above. */
+const TOUR = [
+  {
+    src: "/screenshots/equivalence.png",
+    alt: "Equivalence workspace — source and candidate SKU scored per dimension with explicit unknowns",
+    caption: "nexus /equivalence",
+    title: "Equivalence workspace",
+  },
+  {
+    src: "/screenshots/compare.png",
+    alt: "Side-by-side SKU comparison matrix with met, not-met, and unknown verdicts",
+    caption: "nexus /compare",
+    title: "Comparison matrix",
+  },
+  {
+    src: "/screenshots/cost-per-test.png",
+    alt: "Cost-per-test scenario with pack format, price, and every assumption editable",
+    caption: "nexus /cost-per-test",
+    title: "Cost per test",
+  },
+] as const;
+
 export function IntelligenceSection() {
   return (
     <section
@@ -103,6 +126,22 @@ export function IntelligenceSection() {
                   {engine.note}
                 </p>
               ) : null}
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {TOUR.map((shot) => (
+            <div key={shot.src}>
+              <ScreenshotFrame
+                src={shot.src}
+                alt={shot.alt}
+                caption={shot.caption}
+                className="shadow-md"
+              />
+              <p className="mt-3 text-sm font-medium text-slate-900">
+                {shot.title}
+              </p>
             </div>
           ))}
         </div>
