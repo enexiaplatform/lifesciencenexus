@@ -119,6 +119,20 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       model: "AirGuard AG-200 (Demo)",
       category: "air_sampler",
     },
+    {
+      ...ctx.canonical(ASSET_MODELS.bio50),
+      manufacturerOrgId: ORGS.novara,
+      brandId: BRANDS.novaraCell,
+      model: "NovaraBio BIO-50 single-use bioreactor (Demo)",
+      category: "other",
+    },
+    {
+      ...ctx.canonical(ASSET_MODELS.ac150),
+      manufacturerOrgId: ORGS.condor,
+      brandId: BRANDS.condorSteri,
+      model: "CondorClave AC-150 autoclave (Demo)",
+      category: "autoclave",
+    },
   ];
 
   const installedAssets: InstalledAsset[] = [
@@ -179,6 +193,35 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       estimatedAnnualConsumption: 600,
       confidence: 0.85,
     },
+    {
+      // Single-use bioreactor at the biologics plant — drives CHO media
+      // pull-through (consumption model below).
+      ...ctx.tenantPrivate(ASSETS.bio50, DEMO_TENANT_ID),
+      assetModelId: ASSET_MODELS.bio50,
+      siteId: SITES.bachDangPlant,
+      laboratoryId: LABS.bachDangUpstream,
+      serialNumber: "DEMO-BIO50-0003",
+      installationDate: ctx.daysAgo(500),
+      status: "operational",
+      qualificationStatus: "iq_oq_pq_complete",
+      serviceProviderOrgId: ORGS.hongHa,
+      estimatedAnnualConsumption: 20,
+      confidence: 0.85,
+    },
+    {
+      // Autoclave — steam-cycle BI pull-through via compat to spore strips.
+      ...ctx.tenantPrivate(ASSETS.ac150, DEMO_TENANT_ID),
+      assetModelId: ASSET_MODELS.ac150,
+      siteId: SITES.bachDangPlant,
+      laboratoryId: LABS.bachDangQc,
+      serialNumber: "DEMO-AC150-0021",
+      installationDate: ctx.daysAgo(900),
+      status: "operational",
+      qualificationStatus: "iq_oq_pq_complete",
+      serviceProviderOrgId: ORGS.mekong,
+      estimatedAnnualConsumption: 200,
+      confidence: 0.8,
+    },
   ];
 
   const assetLifecycleEvents: AssetLifecycleEvent[] = [
@@ -209,6 +252,20 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       type: "installed",
       at: ctx.daysAgo(700),
       description: "Installed in QC Microbiology Laboratory sterility suite (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(ASSET_EVENTS.bio50Installed, DEMO_TENANT_ID),
+      installedAssetId: ASSETS.bio50,
+      type: "installed",
+      at: ctx.daysAgo(500),
+      description: "Installed in Upstream Process Development Laboratory (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(ASSET_EVENTS.ac150Installed, DEMO_TENANT_ID),
+      installedAssetId: ASSETS.ac150,
+      type: "installed",
+      at: ctx.daysAgo(900),
+      description: "Installed in QC Microbiology & BET Laboratory (Demo).",
     },
   ];
 
@@ -307,6 +364,14 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       skuId: SKUS.tsaPlates20,
       evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.85),
     },
+    {
+      // Steam-cycle validation pull-through: the autoclave consumes BI spore
+      // strips per cycle — the link from installed base to the BI shelf.
+      ...ctx.canonical(COMPATIBILITIES.ac150BiGst),
+      assetModelId: ASSET_MODELS.ac150,
+      skuId: SKUS.biGst100,
+      evidence: edgeEvidence(SOURCES.deltaCatalogue, "source_captured", 0.85),
+    },
   ];
 
   const consumptionModels: ConsumptionModel[] = [
@@ -317,6 +382,14 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       estimatedAnnualQuantity: 480,
       basis: "40 plates/month × 12 (Demo)",
       confidence: 0.7,
+    },
+    {
+      ...ctx.tenantPrivate(CONSUMPTION.bio50ChoMax, DEMO_TENANT_ID),
+      installedAssetId: ASSETS.bio50,
+      skuId: SKUS.choMax10,
+      estimatedAnnualQuantity: 20,
+      basis: "20 fed-batch runs/year × 10 L per run (Demo)",
+      confidence: 0.75,
     },
   ];
 
@@ -356,6 +429,24 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       validTo: ctx.daysAhead(200),
       evidence: edgeEvidence(SOURCES.internalNote, "unverified", 0.5),
     },
+    {
+      ...ctx.tenantPrivate(VENDOR_APPROVALS.novaraBachDang, DEMO_TENANT_ID),
+      organizationId: ORGS.bachDang,
+      supplierOrgId: ORGS.hongHa,
+      status: "approved",
+      validTo: ctx.daysAhead(300),
+      evidence: edgeEvidence(SOURCES.fieldObservation, "source_captured", 0.8),
+    },
+    {
+      // Protein A resin supplier not yet on the AVL → validation work is
+      // sequenced behind this approval.
+      ...ctx.tenantPrivate(VENDOR_APPROVALS.aurigaBachDang, DEMO_TENANT_ID),
+      organizationId: ORGS.bachDang,
+      supplierOrgId: ORGS.saigon,
+      status: "pending",
+      validTo: ctx.daysAhead(150),
+      evidence: edgeEvidence(SOURCES.internalNote, "unverified", 0.5),
+    },
   ];
 
   const productValidations: ProductValidation[] = [
@@ -384,6 +475,21 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       status: "planned",
       method: "Canister integrity + membrane recovery per USP <71> (Demo protocol)",
     },
+    {
+      // CHO media change at the biologics plant — in-progress comparability.
+      ...ctx.tenantPrivate(VALIDATIONS.choMaxBachDang, DEMO_TENANT_ID),
+      organizationId: ORGS.bachDang,
+      skuId: SKUS.choMax10,
+      status: "in_progress",
+      method: "Fed-batch comparability: growth, titer, glycan profile (Demo protocol)",
+    },
+    {
+      ...ctx.tenantPrivate(VALIDATIONS.proaBachDang, DEMO_TENANT_ID),
+      organizationId: ORGS.bachDang,
+      skuId: SKUS.proa1l,
+      status: "planned",
+      method: "Resin lifetime study: DBC over 50 cycles (Demo protocol)",
+    },
   ];
 
   const trialEvents: TrialEvent[] = [
@@ -403,6 +509,15 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       type: "trial_started",
       at: ctx.daysAgo(90),
       outcome: "GPT runs underway (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(TRIALS.choMaxSample, DEMO_TENANT_ID),
+      organizationId: ORGS.bachDang,
+      skuId: SKUS.choMax10,
+      productValidationId: VALIDATIONS.choMaxBachDang,
+      type: "sample_sent",
+      at: ctx.daysAgo(60),
+      notes: "Two 10 L equivalents sent for comparability runs (Demo).",
     },
   ];
 

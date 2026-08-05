@@ -292,6 +292,21 @@ test.describe("D. Map a market account", () => {
     await page.keyboard.press("Escape");
     await expect(handoff).toBeHidden();
   });
+
+  test("biologics account 360: site, upstream/QC labs and named contacts", async ({ page }) => {
+    test.setTimeout(60_000);
+    await page.goto("/organizations/org-bach-dang-biologics");
+    await expect(page.getByRole("heading", { name: "Bach Dang Biologics (Demo)" })).toBeVisible();
+
+    await page.getByRole("tab", { name: /Sites & laboratories/ }).click();
+    await expect(page.getByRole("link", { name: "Hai Phong Biologics Plant (Demo)" })).toBeVisible();
+    await expect(page.getByText("Upstream Process Development Laboratory (Demo)")).toBeVisible();
+    await expect(page.getByText("QC Microbiology & BET Laboratory (Demo)")).toBeVisible();
+
+    await page.getByRole("tab", { name: /Contacts/ }).click();
+    await expect(page.getByText("Hoang Thu Trang (Demo)")).toBeVisible();
+    await expect(page.getByText("Trinh Quoc Bao (Demo)")).toBeVisible();
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -341,8 +356,7 @@ test.describe("E. Record tender intelligence", () => {
     await expect(page.locator(`section[aria-label="${lotName}"]`)).toBeVisible();
   });
 
-  test("closed tender RRH-2026-003 shows evaluation-stage structure", async ({ page }) => {
-    await page.goto("/tenders");
+  test("closed tender RRH-2026-003 shows evaluation-stage structure", async ({ page }) => {    await page.goto("/tenders");
     await page.getByRole("link", { name: "RRH-2026-003" }).click();
     await page.waitForURL("**/tenders/tender-rrh-2026-003");
 

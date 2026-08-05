@@ -877,6 +877,24 @@ export function seedEvidence(ctx: SeedContext): DemoDatasetSlices {
       objectValue: ORGS.saigon, sourceId: SOURCES.saigonQuote2, confidence: confidence(0.75),
       reviewStatus: "source_captured", contradictingClaimIds: [],
     },
+    {
+      ...ctx.canonical(CLAIMS.bdUsesChoMax),
+      subjectEntityType: "organization", subjectEntityId: ORGS.bachDang, predicate: "current_user_of",
+      objectValue: SKUS.choMax10, sourceId: SOURCES.fieldObservation, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.bdUsesProa),
+      subjectEntityType: "organization", subjectEntityId: ORGS.bachDang, predicate: "current_user_of",
+      objectValue: SKUS.proa1l, sourceId: SOURCES.fieldObservation, confidence: confidence(0.7),
+      reviewStatus: "structurally_validated", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.pc80Iso14644),
+      subjectEntityType: "product", subjectEntityId: PRODUCTS.pc80Condor, predicate: "conforms_to_standard",
+      objectValue: STANDARDS.iso14644, sourceId: SOURCES.condorCatalogue, confidence: confidence(0.85),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
   ];
 
   // Review history behind the analyst-reviewed claims (the review queue itself

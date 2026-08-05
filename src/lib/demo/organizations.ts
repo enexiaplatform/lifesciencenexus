@@ -155,6 +155,16 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       identifiers: [],
     },
     {
+      // Biologics producer account: the demand side of the upstream →
+      // downstream portfolio (cell culture, purification, filtration, BET).
+      ...ctx.canonical(ORGS.bachDang),
+      name: "Bach Dang Biologics (Demo)",
+      types: ["pharmaceutical_company", "cdmo"],
+      country: "VN",
+      website: "https://bach-dang-biologics.example.vn",
+      identifiers: [{ scheme: "gmp_certificate", value: "GMP-DEMO-VN-204" }],
+    },
+    {
       ...ctx.canonical(ORGS.meridian),
       name: "Meridian Lab Systems (Demo)",
       types: ["manufacturer", "brand_owner"],
@@ -376,6 +386,12 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       city: "Ha Noi",
       country: "VN",
     },
+    {
+      ...ctx.canonical(ADDRESSES.bachDang),
+      line1: "Lot B-7, Demo Deep-C Industrial Zone",
+      city: "Hai Phong",
+      country: "VN",
+    },
   ];
 
   const geographies: Geography[] = [
@@ -495,6 +511,13 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       siteType: "laboratory_site",
       addressId: ADDRESSES.nfs,
     },
+    {
+      ...ctx.canonical(SITES.bachDangPlant),
+      organizationId: ORGS.bachDang,
+      name: "Hai Phong Biologics Plant (Demo)",
+      siteType: "factory",
+      addressId: ADDRESSES.bachDang,
+    },
   ];
 
   const facilityUnits: FacilityUnit[] = [
@@ -525,6 +548,18 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       name: "Dairy QC Microbiology Laboratory (Demo)",
       labType: "microbiology",
     },
+    {
+      ...ctx.canonical(LABS.bachDangUpstream),
+      siteId: SITES.bachDangPlant,
+      name: "Upstream Process Development Laboratory (Demo)",
+      labType: "r_and_d",
+    },
+    {
+      ...ctx.canonical(LABS.bachDangQc),
+      siteId: SITES.bachDangPlant,
+      name: "QC Microbiology & BET Laboratory (Demo)",
+      labType: "microbiology",
+    },
   ];
 
   const productionLines: ProductionLine[] = [
@@ -533,6 +568,12 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       siteId: SITES.deltaPharmaPlant,
       name: "Oral Solids Line 2 (Demo)",
       productDescription: "Tablets and hard capsules (Demo).",
+    },
+    {
+      ...ctx.canonical("line-bach-dang-mab"),
+      siteId: SITES.bachDangPlant,
+      name: "mAb Line 1 — 50 L single-use (Demo)",
+      productDescription: "Monoclonal antibody drug substance, CHO fed-batch (Demo).",
     },
   ];
 
@@ -577,6 +618,20 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       title: "QA Executive",
       email: "mai.nguyen@an-giang-foods.example.vn",
     },
+    {
+      ...ctx.tenantPrivate(PEOPLE.trinhQuocBao, DEMO_TENANT_ID),
+      fullName: "Trinh Quoc Bao (Demo)",
+      title: "Upstream Production Lead",
+      email: "bao.trinh@bach-dang-biologics.example.vn",
+      notes: "Owns CHO media and feed selection (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(PEOPLE.hoangThuTrang, DEMO_TENANT_ID),
+      fullName: "Hoang Thu Trang (Demo)",
+      title: "QC Manager",
+      email: "trang.hoang@bach-dang-biologics.example.vn",
+      notes: "BET release testing owner; evaluates rFC adoption (Demo).",
+    },
   ];
 
   const employmentRelationships: EmploymentRelationship[] = [
@@ -619,6 +674,22 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       role: "QA Executive",
       current: true,
       startedAt: ctx.daysAgo(400),
+    },
+    {
+      ...ctx.tenantPrivate("emp-bao-bach-dang", DEMO_TENANT_ID),
+      personId: PEOPLE.trinhQuocBao,
+      organizationId: ORGS.bachDang,
+      role: "Upstream Production Lead",
+      current: true,
+      startedAt: ctx.daysAgo(750),
+    },
+    {
+      ...ctx.tenantPrivate("emp-trang-bach-dang", DEMO_TENANT_ID),
+      personId: PEOPLE.hoangThuTrang,
+      organizationId: ORGS.bachDang,
+      role: "QC Manager",
+      current: true,
+      startedAt: ctx.daysAgo(980),
     },
   ];
 
@@ -665,6 +736,24 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       siteId: SITES.anGiangPlant,
       decisionRoles: ["user", "technical_evaluator"],
       isPrimary: true,
+    },
+    {
+      ...ctx.tenantPrivate("contact-bao-bach-dang", DEMO_TENANT_ID),
+      personId: PEOPLE.trinhQuocBao,
+      organizationId: ORGS.bachDang,
+      siteId: SITES.bachDangPlant,
+      decisionRoles: ["user", "technical_evaluator"],
+      isPrimary: false,
+      notes: "Technical contact for media/feeds and single-use assemblies (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate("contact-trang-bach-dang", DEMO_TENANT_ID),
+      personId: PEOPLE.hoangThuTrang,
+      organizationId: ORGS.bachDang,
+      siteId: SITES.bachDangPlant,
+      decisionRoles: ["qa_approver", "economic_buyer"],
+      isPrimary: true,
+      notes: "Signs off QC consumables budget incl. BET (Demo).",
     },
   ];
 

@@ -219,6 +219,12 @@ export function seedResearch(ctx: SeedContext): DemoDatasetSlices {
       entityType: "product",
       entityId: PRODUCTS.lalDelta,
     },
+    {
+      ...ctx.tenantPrivate(RESEARCH.mabLinkBachDang, DEMO_TENANT_ID),
+      projectId: RESEARCH.mabProject,
+      entityType: "organization",
+      entityId: ORGS.bachDang,
+    },
   ];
 
   const savedViews: SavedView[] = [

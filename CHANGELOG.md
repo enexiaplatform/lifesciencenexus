@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Demand-side biologics account + cleanroom standard anchor** (demo dataset
+  950 → 985 records): Bach Dang Biologics (Hai Phong mAb plant, CDMO) closes
+  the loop on the upstream → downstream portfolio — upstream PD and QC/BET
+  labs, mAb single-use production line, two named contacts, a NovaraBio
+  BIO-50 single-use bioreactor with a CHO-Max consumption model, a
+  CondorClave AC-150 autoclave whose consumable compatibility points at the
+  BI spore-strip shelf, vendor approvals (Hong Ha approved, Saigon pending),
+  CHO-Max comparability validation in progress plus a planned Protein A
+  resin lifetime study with trial events. Particle counters across both
+  brands are now anchored to the new ISO 14644-1 cleanroom standard, and the
+  mAb research project links the account.
+
+### Added (earlier in this cycle)
+
 - **Multi-model equipment lineups + BET cost-per-test** (demo dataset 904 →
   950 records): second models for the air-sampler and particle-counter
   shelves (Condor AirSampler AS-200 dual-head, AirGuard AG-200 high-volume,

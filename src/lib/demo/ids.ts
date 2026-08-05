@@ -31,6 +31,7 @@ export const ORGS = {
   hongHa: "org-hong-ha-scientific",
   songHuong: "org-song-huong-dairy",
   nfsCenter: "org-nfs-center",
+  bachDang: "org-bach-dang-biologics",
   meridian: "org-meridian-lab-systems",
   novara: "org-novara-bioprocess",
   kestrel: "org-kestrel-filtration",
@@ -51,6 +52,7 @@ export const ADDRESSES = {
   hongHa: "addr-hong-ha-ha-noi",
   songHuong: "addr-song-huong-hue",
   nfs: "addr-nfs-ha-noi",
+  bachDang: "addr-bach-dang-hai-phong",
 } as const;
 
 export const SITES = {
@@ -64,12 +66,15 @@ export const SITES = {
   hongHaOffice: "site-hong-ha-office",
   songHuongPlant: "site-song-huong-plant",
   nfsSite: "site-nfs-site",
+  bachDangPlant: "site-bach-dang-plant",
 } as const;
 
 export const LABS = {
   deltaPharmaMicro: "lab-delta-pharma-micro",
   redRiverMicro: "lab-red-river-micro",
   songHuongMicro: "lab-song-huong-micro",
+  bachDangUpstream: "lab-bach-dang-upstream",
+  bachDangQc: "lab-bach-dang-qc",
 } as const;
 
 export const PEOPLE = {
@@ -80,6 +85,8 @@ export const PEOPLE = {
   leThiHoa: "person-le-thi-hoa",
   daoVanMinh: "person-dao-van-minh",
   nguyenThiMai: "person-nguyen-thi-mai",
+  trinhQuocBao: "person-trinh-quoc-bao",
+  hoangThuTrang: "person-hoang-thu-trang",
 } as const;
 
 export const BRANDS = {
@@ -354,6 +361,7 @@ export const STANDARDS = {
   usp85: "std-usp-85",
   usp621: "std-usp-621",
   iso9308: "std-iso-9308",
+  iso14644: "std-iso-14644",
 } as const;
 
 export const STANDARD_VERSIONS = {
@@ -368,6 +376,7 @@ export const STANDARD_VERSIONS = {
   usp85v2024: "stdv-usp-85-2024",
   usp621v2024: "stdv-usp-621-2024",
   iso9308v2014: "stdv-iso-9308-2014",
+  iso14644v2015: "stdv-iso-14644-2015",
 } as const;
 
 export const ORGANISMS = {
@@ -517,6 +526,9 @@ export const CLAIMS = {
   ag200Distributed: "claim-ag200-distributed",
   pc80Distributed: "claim-pc80-distributed",
   pc300Distributed: "claim-pc300-distributed",
+  bdUsesChoMax: "claim-bd-uses-chomax",
+  bdUsesProa: "claim-bd-uses-proa",
+  pc80Iso14644: "claim-pc80-iso14644",
 } as const;
 
 export const EVIDENCE_REVIEWS = {
@@ -771,6 +783,8 @@ export const ASSET_MODELS = {
   sp1000: "model-steripump-sp1000",
   as200: "model-airsampler-as200",
   ag200: "model-airguard-ag200",
+  bio50: "model-novarabio-bio50",
+  ac150: "model-condorclave-ac150",
 } as const;
 
 export const ASSETS = {
@@ -778,6 +792,8 @@ export const ASSETS = {
   pc50: "asset-pc50-delta-pharma",
   ic35: "asset-ic35-song-huong",
   st200: "asset-st200-delta-pharma",
+  bio50: "asset-bio50-bach-dang",
+  ac150: "asset-ac150-bach-dang",
 } as const;
 
 export const ASSET_EVENTS = {
@@ -787,6 +803,8 @@ export const ASSET_EVENTS = {
   as100Pq: "qual-as100-pq",
   ic35Installed: "ale-ic35-installed",
   st200Installed: "ale-st200-installed",
+  bio50Installed: "ale-bio50-installed",
+  ac150Installed: "ale-ac150-installed",
 } as const;
 
 export const COMPATIBILITIES = {
@@ -801,26 +819,35 @@ export const COMPATIBILITIES = {
   sp1000SpCan: "compat-sp1000-spcan",
   as200Em: "compat-as200-em",
   ag200Tsa: "compat-ag200-tsa-plates",
+  ac150BiGst: "compat-ac150-bi-gst",
 } as const;
 
-export const CONSUMPTION = { as100Em: "cons-as100-em" } as const;
+export const CONSUMPTION = {
+  as100Em: "cons-as100-em",
+  bio50ChoMax: "cons-bio50-chomax",
+} as const;
 export const REPLACEMENT_ASSUMPTIONS = { airSampler: "rass-air-sampler" } as const;
 
 export const VENDOR_APPROVALS = {
   mekongExpired: "vappr-mekong-expired",
   saigonApproved: "vappr-saigon-approved",
   hongHaSongHuong: "vappr-hongha-songhuong",
+  novaraBachDang: "vappr-novara-bachdang",
+  aurigaBachDang: "vappr-auriga-bachdang",
 } as const;
 
 export const VALIDATIONS = {
   tdInProgress: "pval-td-in-progress",
   tsaPassed: "pval-tsa-passed",
   spCanPlanned: "pval-spcan-planned",
+  choMaxBachDang: "pval-chomax-bachdang",
+  proaBachDang: "pval-proa-bachdang",
 } as const;
 
 export const TRIALS = {
   tdSample: "trial-td-sample",
   tdStarted: "trial-td-started",
+  choMaxSample: "trial-chomax-sample",
 } as const;
 
 export const RESEARCH = {
@@ -850,6 +877,7 @@ export const RESEARCH = {
   mabLinkProa: "rpe-mab-proa",
   mabLinkSteriFlow: "rpe-mab-steriflow",
   mabLinkLal: "rpe-mab-lal",
+  mabLinkBachDang: "rpe-mab-bachdang",
   /** Deliberate tenant_other record for isolation tests. */
   otherProject: "rp-other-tenant-watch",
 } as const;

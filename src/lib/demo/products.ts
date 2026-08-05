@@ -1524,6 +1524,12 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
       code: "9308-1",
       title: "Water quality — Enumeration of Escherichia coli and coliform bacteria",
     },
+    {
+      ...ctx.canonical(STANDARDS.iso14644),
+      body: "ISO",
+      code: "14644-1",
+      title: "Cleanrooms and associated controlled environments — Classification of air cleanliness by particle concentration",
+    },
   ];
 
   const standardVersions: StandardVersion[] = [
@@ -1538,6 +1544,7 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical(STANDARD_VERSIONS.usp85v2024), standardId: STANDARDS.usp85, version: "2024", year: 2024, status: "current" },
     { ...ctx.canonical(STANDARD_VERSIONS.usp621v2024), standardId: STANDARDS.usp621, version: "2024", year: 2024, status: "current" },
     { ...ctx.canonical(STANDARD_VERSIONS.iso9308v2014), standardId: STANDARDS.iso9308, version: "2014", year: 2014, status: "current" },
+    { ...ctx.canonical(STANDARD_VERSIONS.iso14644v2015), standardId: STANDARDS.iso14644, version: "2015", year: 2015, status: "current" },
   ];
 
   const organisms: Organism[] = [
@@ -1792,10 +1799,15 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     // CondorCount PC-80 / PartiCount PC-300.
     { ...ctx.canonical("edge-pc80-app-em"), productId: PRODUCTS.pc80Condor, targetType: "application", targetId: APPLICATIONS.envMonitoring, role: "intended_use", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.85) },
     { ...ctx.canonical("edge-pc80-smp-air"), productId: PRODUCTS.pc80Condor, targetType: "sample_type", targetId: SAMPLE_TYPES.air, role: "sample_type", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-pc80-std-14644"), productId: PRODUCTS.pc80Condor, targetType: "standard", targetId: STANDARDS.iso14644, role: "conforms_to", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.85) },
     { ...ctx.canonical("edge-pc80-ind-pharma"), productId: PRODUCTS.pc80Condor, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.8) },
     { ...ctx.canonical("edge-pc300-app-em"), productId: PRODUCTS.pc300Meridian, targetType: "application", targetId: APPLICATIONS.envMonitoring, role: "intended_use", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.85) },
     { ...ctx.canonical("edge-pc300-smp-air"), productId: PRODUCTS.pc300Meridian, targetType: "sample_type", targetId: SAMPLE_TYPES.air, role: "sample_type", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-pc300-std-14644"), productId: PRODUCTS.pc300Meridian, targetType: "standard", targetId: STANDARDS.iso14644, role: "conforms_to", evidence: e(SOURCES.meridianCatalogue, "unverified", 0.5) },
     { ...ctx.canonical("edge-pc300-ind-pharma"), productId: PRODUCTS.pc300Meridian, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.8) },
+    // Retrofit ISO 14644 anchors onto the existing particle counters.
+    { ...ctx.canonical("edge-pc50-std-14644"), productId: PRODUCTS.pcCondor, targetType: "standard", targetId: STANDARDS.iso14644, role: "conforms_to", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-pc90-std-14644"), productId: PRODUCTS.pc90Meridian, targetType: "standard", targetId: STANDARDS.iso14644, role: "conforms_to", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.75) },
   ];
 
   return {
