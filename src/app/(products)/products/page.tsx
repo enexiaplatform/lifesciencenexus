@@ -136,7 +136,9 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
                       )}
                     </TableCell>
                     <TableCell>
-                      <CategoryBadge category={product.category} />
+                      <Link href={`/categories/${product.category}`} className="hover:underline" title={`Browse ${humanize(product.category)}`}>
+                        <CategoryBadge category={product.category} />
+                      </Link>
                     </TableCell>
                     <TableCell>
                       <ProductStatusBadge status={product.status} />

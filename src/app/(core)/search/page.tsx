@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { matchCategories, type CategoryMatch } from "@/components/products/categories";
 import { SearchClient } from "@/components/search/search-client";
 import { getRepository } from "@/lib/data";
 import type { SearchResult } from "@/lib/data/repository";
@@ -37,6 +38,7 @@ export default async function SearchPage({
   const visibility = parseVisibility(first(params.visibility));
 
   let results: SearchResult[] = [];
+  let categoryMatches: CategoryMatch[] = [];
   if (query.length > 0) {
     const repo = await getRepository();
     const found = await repo.search(query, {
@@ -47,6 +49,9 @@ export default async function SearchPage({
       visibility === "all"
         ? found
         : found.filter((result) => result.visibility === visibility);
+    // Category shelves matched by label/synonym ("closed sterility testing
+    // system" → sterility_testing_equipment) — capped at the best two.
+    categoryMatches = matchCategories(query).slice(0, 2);
   }
 
   return (
@@ -55,6 +60,7 @@ export default async function SearchPage({
       selectedTypes={types}
       visibility={visibility}
       results={results}
+      categoryMatches={categoryMatches}
     />
   );
 }

@@ -17,6 +17,7 @@ import {
   Gauge,
   GitCompareArrows,
   LayoutDashboard,
+  LayoutGrid,
   Link2,
   ListChecks,
   Package,
@@ -67,6 +68,7 @@ export const navSections: NavSection[] = [
     title: "Products",
     items: [
       { title: "Products", href: "/products", icon: Package },
+      { title: "Categories", href: "/categories", icon: LayoutGrid },
       { title: "Brands", href: "/brands", icon: Tag },
       { title: "Applications", href: "/applications", icon: FlaskConical },
       { title: "Methods", href: "/methods", icon: ListChecks },

@@ -7,6 +7,7 @@ import { Clock, Save, Search, X } from "lucide-react";
 
 import type { SearchResult } from "@/lib/data/repository";
 import type { EntityType, Visibility } from "@/lib/domain/types";
+import { CATEGORY_INFO, categoryHref, type CategoryMatch } from "@/components/products/categories";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -58,11 +59,13 @@ export function SearchClient({
   selectedTypes,
   visibility,
   results,
+  categoryMatches = [],
 }: {
   query: string;
   selectedTypes: EntityType[];
   visibility: VisibilityFilter;
   results: SearchResult[];
+  categoryMatches?: CategoryMatch[];
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -457,6 +460,43 @@ export function SearchClient({
         )}
 
         <div id="search-results" role="listbox" aria-label="Search results" className="space-y-5">
+          {hasQuery && categoryMatches.length > 0 && (
+            <section aria-label="Matching categories">
+              <h2 className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Categories
+                <Badge variant="secondary" className="text-[10px]">
+                  {categoryMatches.length}
+                </Badge>
+              </h2>
+              <ul className="divide-y divide-slate-100 rounded-lg border border-accent/30 bg-accent/5">
+                {categoryMatches.map((match) => {
+                  const info = CATEGORY_INFO[match.category];
+                  return (
+                    <li key={match.category}>
+                      <Link
+                        href={categoryHref(match.category)}
+                        onClick={() => recordRecent(query)}
+                        className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+                      >
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-medium text-slate-900">
+                            {info.label}
+                          </span>
+                          <span className="block truncate text-xs text-slate-500">
+                            {info.description}
+                          </span>
+                        </span>
+                        <Badge variant="secondary" className="max-w-44 truncate text-[10px] font-normal" title={`Matched: ${match.matchedOn}`}>
+                          category match: {match.matchedOn}
+                        </Badge>
+                        <span className="text-xs font-medium text-accent">Browse brands &amp; models →</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
           {groups.map(([type, items]) => (
             <section key={type}>
               <h2 className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
