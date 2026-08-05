@@ -340,6 +340,25 @@ test.describe("E. Record tender intelligence", () => {
     await expect(page.getByText("Saved.")).toBeVisible();
     await expect(page.locator(`section[aria-label="${lotName}"]`)).toBeVisible();
   });
+
+  test("closed tender RRH-2026-003 shows evaluation-stage structure", async ({ page }) => {
+    await page.goto("/tenders");
+    await page.getByRole("link", { name: "RRH-2026-003" }).click();
+    await page.waitForURL("**/tenders/tender-rrh-2026-003");
+
+    await expect(page.getByRole("heading", { name: /RRH-2026-003/ })).toBeVisible();
+    // Endotoxin/BET scope: rFC and LAL items mapped to SKUs.
+    await expect(
+      page.getByRole("cell", { name: "Recombinant Factor C endotoxin assay kits (Demo)", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("cell", { name: "LAL gel-clot cartridges (Demo)", exact: true }),
+    ).toBeVisible();
+    // Two competing bids, no award yet, and the deadline-extension event.
+    await expect(page.getByText(/Bidders \(2\)/)).toBeVisible();
+    await expect(page.getByText(/Awards \(0\)/)).toBeVisible();
+    await expect(page.getByText("Submission deadline extended by 10 days (Demo).").first()).toBeVisible();
+  });
 });
 
 // ---------------------------------------------------------------------------
