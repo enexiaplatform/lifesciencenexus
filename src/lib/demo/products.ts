@@ -43,11 +43,11 @@ import {
 import type { DemoDatasetSlices } from "./types";
 
 /**
- * Product graph fixtures: 10 manufacturers, 14 brands, 32 families across 15
- * categories, 35 products and 36 SKUs — spanning the upstream → downstream →
- * QC portfolio for Pharma API and Biopharma, the microbiology wedge with a
- * discontinued SKU with a successor and an import-created near-duplicate SKU —
- * plus the scientific / regulatory reference entities and the
+ * Product graph fixtures: 11 manufacturers, 17 brands, 40 families across 19
+ * categories, 43 products and 44 SKUs — spanning the upstream → downstream →
+ * QC/R&D portfolio for Pharma API and Biopharma, the microbiology wedge with
+ * a discontinued SKU with a successor and an import-created near-duplicate
+ * SKU — plus the scientific / regulatory reference entities and the
  * evidence-carrying product edges that make "research a product" demonstrable.
  */
 export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
@@ -66,6 +66,9 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical(BRANDS.vestaPure), ownerOrganizationId: ORGS.vesta, name: "VestaPure (Demo)" },
     { ...ctx.canonical(BRANDS.orizonEndo), ownerOrganizationId: ORGS.orizon, name: "OrizonEndo (Demo)" },
     { ...ctx.canonical(BRANDS.orizonQc), ownerOrganizationId: ORGS.orizon, name: "OrizonQC (Demo)" },
+    { ...ctx.canonical(BRANDS.picosep), ownerOrganizationId: ORGS.picosep, name: "PicoSep (Demo)" },
+    { ...ctx.canonical(BRANDS.auriSep), ownerOrganizationId: ORGS.auriga, name: "AuriSep (Demo)" },
+    { ...ctx.canonical(BRANDS.vestaRef), ownerOrganizationId: ORGS.vesta, name: "VestaRef (Demo)" },
   ];
 
   const productFamilies: ProductFamily[] = [
@@ -105,6 +108,15 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical(FAMILIES.orizonQc), brandId: BRANDS.orizonQc, name: "OrizonQC reference materials (Demo)", category: "microbial_reference_materials" },
     { ...ctx.canonical(FAMILIES.condorAccessories), brandId: BRANDS.condorSteri, name: "CondorSter lab accessories (Demo)", category: "microbiology_lab_accessories" },
     { ...ctx.canonical(FAMILIES.meridianAccessories), brandId: BRANDS.steripump, name: "SteriPump lab accessories (Demo)", category: "microbiology_lab_accessories" },
+    // -- Analytical QC / R&D wave -------------------------------------------------
+    { ...ctx.canonical(FAMILIES.picosepCols), brandId: BRANDS.picosep, name: "PicoSep UHPLC columns (Demo)", category: "analytical_chromatography" },
+    { ...ctx.canonical(FAMILIES.auriSepCols), brandId: BRANDS.auriSep, name: "AuriSep analytical columns (Demo)", category: "analytical_chromatography" },
+    { ...ctx.canonical(FAMILIES.vestaRef), brandId: BRANDS.vestaRef, name: "VestaRef chemical reference standards (Demo)", category: "reference_standards" },
+    { ...ctx.canonical(FAMILIES.orizonRef), brandId: BRANDS.orizonQc, name: "OrizonRef endotoxin standards (Demo)", category: "reference_standards" },
+    { ...ctx.canonical(FAMILIES.auroraWater), brandId: BRANDS.auroraChrom, name: "AuroraChrom water testing (Demo)", category: "water_testing" },
+    { ...ctx.canonical(FAMILIES.deltaWater), brandId: BRANDS.deltaBio, name: "DeltaWater water testing (Demo)", category: "water_testing" },
+    { ...ctx.canonical(FAMILIES.novaraFlex), brandId: BRANDS.novaraCell, name: "NovaraFlex single-use systems (Demo)", category: "single_use_systems" },
+    { ...ctx.canonical(FAMILIES.kestrelFlex), brandId: BRANDS.kestrelFlow, name: "KestrelFlex single-use systems (Demo)", category: "single_use_systems" },
   ];
 
   const products: Product[] = [
@@ -421,6 +433,98 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
       name: "SteriPump inoculating loops 10 uL sterile (Demo)",
       category: "microbiology_lab_accessories",
       description: "Disposable calibrated 10 uL inoculating loops, sterile, 1000/box (Demo).",
+      status: "active",
+    },
+    // -- Analytical QC / R&D wave ---------------------------------------------------
+    {
+      ...ctx.canonical(PRODUCTS.c18PicoSep),
+      familyId: FAMILIES.picosepCols,
+      manufacturerOrganizationId: ORGS.picosep,
+      name: "PicoSep C18 UHPLC column 2.1x100 mm (Demo)",
+      category: "analytical_chromatography",
+      description: "1.8 um C18 UHPLC column for assay and related-substances methods (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.c18AuriSep),
+      familyId: FAMILIES.auriSepCols,
+      manufacturerOrganizationId: ORGS.auriga,
+      name: "AuriSep C18 analytical column 4.6x150 mm (Demo)",
+      category: "analytical_chromatography",
+      description: "3.5 um C18 HPLC column for routine QC assays (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.rsVesta),
+      familyId: FAMILIES.vestaRef,
+      manufacturerOrganizationId: ORGS.vesta,
+      name: "VestaRef acetaminophen reference standard (Demo)",
+      category: "reference_standards",
+      description: "Certified chemical reference standard for assay calibration (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.cseOrizon),
+      familyId: FAMILIES.orizonRef,
+      manufacturerOrganizationId: ORGS.orizon,
+      name: "OrizonRef endotoxin CSE vials (Demo)",
+      category: "reference_standards",
+      description: "Control standard endotoxin for BET assay standard curves (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.waterAurora),
+      familyId: FAMILIES.auroraWater,
+      manufacturerOrganizationId: ORGS.aurora,
+      name: "AuroraChrom Coliform P/A water test kit (Demo)",
+      category: "water_testing",
+      description: "Chromogenic presence/absence kit for coliforms and E. coli in water (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.waterDelta),
+      familyId: FAMILIES.deltaWater,
+      manufacturerOrganizationId: ORGS.deltaBio,
+      name: "DeltaWater MF water testing kit (Demo)",
+      category: "water_testing",
+      description: "Membrane-filtration kit with m-Endo medium for water bioburden (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.subNovara),
+      familyId: FAMILIES.novaraFlex,
+      manufacturerOrganizationId: ORGS.novara,
+      name: "NovaraFlex single-use bioreactor bag 50 L (Demo)",
+      category: "single_use_systems",
+      description: "Gamma-irradiated single-use stirred-tank bioreactor bag assembly (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.sumKestrel),
+      familyId: FAMILIES.kestrelFlex,
+      manufacturerOrganizationId: ORGS.kestrel,
+      name: "KestrelFlex single-use mixing bag 100 L (Demo)",
+      category: "single_use_systems",
+      description: "Single-use mixing bag with impeller and sterile connectors (Demo).",
+      status: "active",
+    },
+    // -- Second models: same-brand depth on the sterility shelf -------------------
+    {
+      ...ctx.canonical(PRODUCTS.st300Condor),
+      familyId: FAMILIES.condorSteriPump,
+      manufacturerOrganizationId: ORGS.condor,
+      name: "SteriTest ST-300 high-throughput sterility testing system (Demo)",
+      category: "sterility_testing_equipment",
+      description: "Dual-head closed sterility testing system for high sample volumes (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.sp1000Meridian),
+      familyId: FAMILIES.steripump,
+      manufacturerOrganizationId: ORGS.meridian,
+      name: "SteriPump SP-1000 compact sterility testing system (Demo)",
+      category: "sterility_testing_equipment",
+      description: "Compact single-canister closed sterility testing system for low-throughput labs (Demo).",
       status: "active",
     },
   ];
@@ -913,6 +1017,124 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
       countryAvailability: ["VN"],
       status: "active",
     },
+    {
+      ...ctx.canonical(SKUS.c18ps21),
+      productId: PRODUCTS.c18PicoSep,
+      catalogueNumber: "PCS-C1821",
+      name: "PicoSep C18 UHPLC column 2.1x100 mm 1.8 um (Demo)",
+      alternateNames: ["PicoSep UHPLC column (Demo)"],
+      formatId: FORMATS.canister,
+      shelfLifeMonths: 36,
+      storageCondition: "ambient",
+      countryAvailability: ["VN", "SG"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.c18as46),
+      productId: PRODUCTS.c18AuriSep,
+      catalogueNumber: "AGS-C1846",
+      name: "AuriSep C18 column 4.6x150 mm 3.5 um (Demo)",
+      alternateNames: [],
+      formatId: FORMATS.canister,
+      shelfLifeMonths: 36,
+      storageCondition: "ambient",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.rsAcet),
+      productId: PRODUCTS.rsVesta,
+      catalogueNumber: "VCH-RS101",
+      name: "Acetaminophen reference standard 1 g (Demo)",
+      alternateNames: ["Paracetamol RS (Demo)"],
+      formatId: FORMATS.canister,
+      shelfLifeMonths: 48,
+      storageCondition: "ambient, dry",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.cse10),
+      productId: PRODUCTS.cseOrizon,
+      catalogueNumber: "OBA-CSE10",
+      name: "Endotoxin CSE 10 EU/vial 10 vials (Demo)",
+      alternateNames: ["Control standard endotoxin (Demo)"],
+      formatId: FORMATS.pellet,
+      shelfLifeMonths: 36,
+      storageCondition: "2-8 °C",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.waterPa100),
+      productId: PRODUCTS.waterAurora,
+      catalogueNumber: "ABW-W100",
+      name: "Coliform P/A water test kit 100 tests (Demo)",
+      alternateNames: ["Presence/absence water test (Demo)"],
+      formatId: FORMATS.canister,
+      shelfLifeMonths: 18,
+      storageCondition: "ambient, dry",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.waterMf50),
+      productId: PRODUCTS.waterDelta,
+      catalogueNumber: "DBS-W200",
+      name: "DeltaWater MF kit 50 tests (Demo)",
+      alternateNames: ["Membrane filtration water kit (Demo)"],
+      formatId: FORMATS.canister,
+      shelfLifeMonths: 12,
+      storageCondition: "2-8 °C",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.sub50),
+      productId: PRODUCTS.subNovara,
+      catalogueNumber: "NBP-SUB50",
+      name: "NovaraFlex bioreactor bag 50 L (Demo)",
+      alternateNames: ["Single-use bioreactor bag (Demo)"],
+      formatId: FORMATS.canister,
+      shelfLifeMonths: 24,
+      storageCondition: "ambient, dry",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.sum100),
+      productId: PRODUCTS.sumKestrel,
+      catalogueNumber: "KFL-SUM100",
+      name: "KestrelFlex mixing bag 100 L (Demo)",
+      alternateNames: ["Single-use mixing bag (Demo)"],
+      formatId: FORMATS.canister,
+      shelfLifeMonths: 24,
+      storageCondition: "ambient, dry",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.st300),
+      productId: PRODUCTS.st300Condor,
+      catalogueNumber: "CLW-ST300",
+      name: "SteriTest ST-300 dual-head pump unit (Demo)",
+      alternateNames: ["Condor high-throughput sterility system (Demo)"],
+      formatId: FORMATS.instrument,
+      storageCondition: "ambient",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.sp1000),
+      productId: PRODUCTS.sp1000Meridian,
+      catalogueNumber: "MLS-SP1000",
+      name: "SteriPump SP-1000 compact pump unit (Demo)",
+      alternateNames: ["Meridian compact sterility system (Demo)"],
+      formatId: FORMATS.instrument,
+      storageCondition: "ambient",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
   ];
 
   const packConfigurations: PackConfiguration[] = [
@@ -954,6 +1176,16 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical(PACKS.tsa5kg), skuId: SKUS.tsa5kg, quantity: 5, unit: "kg", description: "5 kg pail" },
     { ...ctx.canonical(PACKS.choMax100), skuId: SKUS.choMax100, quantity: 100, unit: "L", description: "Powder for 100 L of medium" },
     { ...ctx.canonical(PACKS.steriCan50), skuId: SKUS.steriCan50, quantity: 1, unit: "box", unitsPerPack: 50, description: "50 canisters per box" },
+    { ...ctx.canonical(PACKS.c18ps21), skuId: SKUS.c18ps21, quantity: 1, unit: "unit", description: "One column, 2.1x100 mm" },
+    { ...ctx.canonical(PACKS.c18as46), skuId: SKUS.c18as46, quantity: 1, unit: "unit", description: "One column, 4.6x150 mm" },
+    { ...ctx.canonical(PACKS.rsAcet), skuId: SKUS.rsAcet, quantity: 1, unit: "g", description: "1 g vial" },
+    { ...ctx.canonical(PACKS.cse10), skuId: SKUS.cse10, quantity: 1, unit: "pack", unitsPerPack: 10, description: "10 vials per pack" },
+    { ...ctx.canonical(PACKS.waterPa100), skuId: SKUS.waterPa100, quantity: 100, unit: "test", description: "Kit for 100 tests" },
+    { ...ctx.canonical(PACKS.waterMf50), skuId: SKUS.waterMf50, quantity: 50, unit: "test", description: "Kit for 50 tests" },
+    { ...ctx.canonical(PACKS.sub50), skuId: SKUS.sub50, quantity: 1, unit: "unit", description: "One 50 L bag assembly" },
+    { ...ctx.canonical(PACKS.sum100), skuId: SKUS.sum100, quantity: 1, unit: "unit", description: "One 100 L mixing bag" },
+    { ...ctx.canonical(PACKS.st300), skuId: SKUS.st300, quantity: 1, unit: "unit", description: "One dual-head pump unit" },
+    { ...ctx.canonical(PACKS.sp1000), skuId: SKUS.sp1000, quantity: 1, unit: "unit", description: "One compact pump unit" },
   ];
 
   const productDocuments: ProductDocument[] = [
@@ -1108,6 +1340,8 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical(APPLICATIONS.downstreamPurification), name: "Downstream purification", industryCodes: ["pharma"] },
     { ...ctx.canonical(APPLICATIONS.endotoxinTesting), name: "Endotoxin testing", industryCodes: ["pharma"] },
     { ...ctx.canonical(APPLICATIONS.sterileFiltration), name: "Sterile filtration", industryCodes: ["pharma"] },
+    { ...ctx.canonical(APPLICATIONS.analyticalQc), name: "Analytical QC", industryCodes: ["pharma"] },
+    { ...ctx.canonical(APPLICATIONS.waterQualityTesting), name: "Water quality testing", industryCodes: ["pharma", "food_beverage"] },
   ];
 
   const methods: Method[] = [
@@ -1128,6 +1362,12 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
       name: "Affinity chromatography",
       description: "Protein A / ligand-based capture chromatography (Demo).",
       standardIds: [],
+    },
+    {
+      ...ctx.canonical(METHODS.hplc),
+      name: "High-performance liquid chromatography",
+      description: "HPLC/UHPLC assay and purity methods (Demo).",
+      standardIds: [STANDARDS.usp621],
     },
   ];
 
@@ -1187,6 +1427,18 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
       code: "85",
       title: "Bacterial Endotoxins Test",
     },
+    {
+      ...ctx.canonical(STANDARDS.usp621),
+      body: "USP",
+      code: "621",
+      title: "Chromatography",
+    },
+    {
+      ...ctx.canonical(STANDARDS.iso9308),
+      body: "ISO",
+      code: "9308-1",
+      title: "Water quality — Enumeration of Escherichia coli and coliform bacteria",
+    },
   ];
 
   const standardVersions: StandardVersion[] = [
@@ -1199,6 +1451,8 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical(STANDARD_VERSIONS.iso11290v2017), standardId: STANDARDS.iso11290, version: "2017", year: 2017, status: "current" },
     { ...ctx.canonical(STANDARD_VERSIONS.iso11138v2017), standardId: STANDARDS.iso11138, version: "2017", year: 2017, status: "current" },
     { ...ctx.canonical(STANDARD_VERSIONS.usp85v2024), standardId: STANDARDS.usp85, version: "2024", year: 2024, status: "current" },
+    { ...ctx.canonical(STANDARD_VERSIONS.usp621v2024), standardId: STANDARDS.usp621, version: "2024", year: 2024, status: "current" },
+    { ...ctx.canonical(STANDARD_VERSIONS.iso9308v2014), standardId: STANDARDS.iso9308, version: "2014", year: 2014, status: "current" },
   ];
 
   const organisms: Organism[] = [
@@ -1231,6 +1485,7 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical(TEST_TYPES.bioburden), name: "Bioburden" },
     { ...ctx.canonical(TEST_TYPES.sterilityTest), name: "Sterility test" },
     { ...ctx.canonical(TEST_TYPES.endotoxinTest), name: "Bacterial endotoxins test" },
+    { ...ctx.canonical(TEST_TYPES.assayHplc), name: "Assay (HPLC)" },
   ];
 
   const incubationConditions: IncubationCondition[] = [
@@ -1401,6 +1656,47 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical("edge-loops-app-limits"), productId: PRODUCTS.loopsMeridian, targetType: "application", targetId: APPLICATIONS.microbialLimits, role: "intended_use", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.75) },
     { ...ctx.canonical("edge-loops-ind-pharma"), productId: PRODUCTS.loopsMeridian, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.7) },
     { ...ctx.canonical("edge-loops-ind-food"), productId: PRODUCTS.loopsMeridian, targetType: "industry", targetId: INDUSTRIES.food, role: "target_industry", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.7) },
+    // -- Analytical QC / R&D wave edges ----------------------------------------------
+    { ...ctx.canonical("edge-c18ps-app-aqc"), productId: PRODUCTS.c18PicoSep, targetType: "application", targetId: APPLICATIONS.analyticalQc, role: "intended_use", evidence: e(SOURCES.picosepCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-c18ps-mth-hplc"), productId: PRODUCTS.c18PicoSep, targetType: "method", targetId: METHODS.hplc, role: "method", evidence: e(SOURCES.picosepCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-c18ps-tt-assay"), productId: PRODUCTS.c18PicoSep, targetType: "test_type", targetId: TEST_TYPES.assayHplc, role: "test_type", evidence: e(SOURCES.picosepCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-c18ps-std-621"), productId: PRODUCTS.c18PicoSep, targetType: "standard", targetId: STANDARDS.usp621, role: "conforms_to", evidence: e(SOURCES.picosepCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-c18ps-ind-pharma"), productId: PRODUCTS.c18PicoSep, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.picosepCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-c18as-app-aqc"), productId: PRODUCTS.c18AuriSep, targetType: "application", targetId: APPLICATIONS.analyticalQc, role: "intended_use", evidence: e(SOURCES.aurigaCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-c18as-mth-hplc"), productId: PRODUCTS.c18AuriSep, targetType: "method", targetId: METHODS.hplc, role: "method", evidence: e(SOURCES.aurigaCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-c18as-tt-assay"), productId: PRODUCTS.c18AuriSep, targetType: "test_type", targetId: TEST_TYPES.assayHplc, role: "test_type", evidence: e(SOURCES.aurigaCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-c18as-ind-pharma"), productId: PRODUCTS.c18AuriSep, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.aurigaCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-rs-app-aqc"), productId: PRODUCTS.rsVesta, targetType: "application", targetId: APPLICATIONS.analyticalQc, role: "intended_use", evidence: e(SOURCES.vestaCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-rs-tt-assay"), productId: PRODUCTS.rsVesta, targetType: "test_type", targetId: TEST_TYPES.assayHplc, role: "test_type", evidence: e(SOURCES.vestaCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-rs-ind-pharma"), productId: PRODUCTS.rsVesta, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.vestaCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-cse-app-endo"), productId: PRODUCTS.cseOrizon, targetType: "application", targetId: APPLICATIONS.endotoxinTesting, role: "intended_use", evidence: e(SOURCES.orizonCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-cse-std-usp85"), productId: PRODUCTS.cseOrizon, targetType: "standard", targetId: STANDARDS.usp85, role: "supports", evidence: e(SOURCES.orizonCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-cse-ind-pharma"), productId: PRODUCTS.cseOrizon, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.orizonCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-waterpa-app-water"), productId: PRODUCTS.waterAurora, targetType: "application", targetId: APPLICATIONS.waterQualityTesting, role: "intended_use", evidence: e(SOURCES.auroraCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-waterpa-orgm-ecoli"), productId: PRODUCTS.waterAurora, targetType: "organism", targetId: ORGANISMS.ecoli, role: "detection", evidence: e(SOURCES.auroraCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-waterpa-std-9308"), productId: PRODUCTS.waterAurora, targetType: "standard", targetId: STANDARDS.iso9308, role: "conforms_to", evidence: e(SOURCES.auroraCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-waterpa-smp-water"), productId: PRODUCTS.waterAurora, targetType: "sample_type", targetId: SAMPLE_TYPES.water, role: "sample_type", evidence: e(SOURCES.auroraCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-waterpa-ind-food"), productId: PRODUCTS.waterAurora, targetType: "industry", targetId: INDUSTRIES.food, role: "target_industry", evidence: e(SOURCES.auroraCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-watermf-app-water"), productId: PRODUCTS.waterDelta, targetType: "application", targetId: APPLICATIONS.waterQualityTesting, role: "intended_use", evidence: e(SOURCES.deltaCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-watermf-mth-membrane"), productId: PRODUCTS.waterDelta, targetType: "method", targetId: METHODS.membraneFiltration, role: "method", evidence: e(SOURCES.deltaCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-watermf-std-9308"), productId: PRODUCTS.waterDelta, targetType: "standard", targetId: STANDARDS.iso9308, role: "conforms_to", evidence: e(SOURCES.deltaCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-watermf-smp-water"), productId: PRODUCTS.waterDelta, targetType: "sample_type", targetId: SAMPLE_TYPES.water, role: "sample_type", evidence: e(SOURCES.deltaCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-watermf-ind-pharma"), productId: PRODUCTS.waterDelta, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.deltaCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-sub-app-upstream"), productId: PRODUCTS.subNovara, targetType: "application", targetId: APPLICATIONS.upstreamCellCulture, role: "intended_use", evidence: e(SOURCES.novaraCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-sub-ind-pharma"), productId: PRODUCTS.subNovara, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.novaraCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-sum-app-upstream"), productId: PRODUCTS.sumKestrel, targetType: "application", targetId: APPLICATIONS.upstreamCellCulture, role: "intended_use", evidence: e(SOURCES.kestrelCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-sum-app-downstream"), productId: PRODUCTS.sumKestrel, targetType: "application", targetId: APPLICATIONS.downstreamPurification, role: "intended_use", evidence: e(SOURCES.kestrelCatalogue, "source_captured", 0.75) },
+    { ...ctx.canonical("edge-sum-ind-pharma"), productId: PRODUCTS.sumKestrel, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.kestrelCatalogue, "source_captured", 0.8) },
+    // SteriTest ST-300 (Condor) — high-throughput sibling of the ST-200.
+    { ...ctx.canonical("edge-st300-app-sterility"), productId: PRODUCTS.st300Condor, targetType: "application", targetId: APPLICATIONS.sterilityTesting, role: "intended_use", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-st300-std-usp71"), productId: PRODUCTS.st300Condor, targetType: "standard", targetId: STANDARDS.usp71, role: "conforms_to", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-st300-mth-membrane"), productId: PRODUCTS.st300Condor, targetType: "method", targetId: METHODS.membraneFiltration, role: "method", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.9) },
+    { ...ctx.canonical("edge-st300-ind-pharma"), productId: PRODUCTS.st300Condor, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.85) },
+    // SteriPump SP-1000 (Meridian) — compact sibling of the SP-3000.
+    { ...ctx.canonical("edge-sp1000-app-sterility"), productId: PRODUCTS.sp1000Meridian, targetType: "application", targetId: APPLICATIONS.sterilityTesting, role: "intended_use", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-sp1000-std-usp71"), productId: PRODUCTS.sp1000Meridian, targetType: "standard", targetId: STANDARDS.usp71, role: "conforms_to", evidence: e(SOURCES.meridianCatalogue, "unverified", 0.5) },
+    { ...ctx.canonical("edge-sp1000-mth-membrane"), productId: PRODUCTS.sp1000Meridian, targetType: "method", targetId: METHODS.membraneFiltration, role: "method", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-sp1000-ind-pharma"), productId: PRODUCTS.sp1000Meridian, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.8) },
   ];
 
   return {

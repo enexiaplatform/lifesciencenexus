@@ -40,6 +40,9 @@ test.describe("G. Browse a category to choose a model", () => {
     await expect(
       condorSection.getByRole("link", { name: "SteriTest ST-200 closed sterility testing system (Demo)" }),
     ).toBeVisible();
+    await expect(
+      condorSection.getByRole("link", { name: "SteriTest ST-300 high-throughput sterility testing system (Demo)" }),
+    ).toBeVisible();
     await expect(condorSection.getByText("CLW-ST200")).toBeVisible();
     await expect(condorSection.getByText("185,000,000")).toBeVisible();
 
@@ -47,6 +50,9 @@ test.describe("G. Browse a category to choose a model", () => {
     await expect(meridianSection).toBeVisible();
     await expect(
       meridianSection.getByRole("link", { name: "SteriPump SP-3000 closed sterility testing system (Demo)" }),
+    ).toBeVisible();
+    await expect(
+      meridianSection.getByRole("link", { name: "SteriPump SP-1000 compact sterility testing system (Demo)" }),
     ).toBeVisible();
     await expect(meridianSection.getByText("MLS-SP3000")).toBeVisible();
 
@@ -71,7 +77,7 @@ test.describe("G. Browse a category to choose a model", () => {
     await expect(page.getByRole("heading", { name: "Product categories" })).toBeVisible();
     const shelf = page.getByRole("link", { name: /Sterility testing equipment/ });
     await expect(shelf).toBeVisible();
-    await expect(shelf.getByText(/2 products · 2 brands/)).toBeVisible();
+    await expect(shelf.getByText(/4 products · 2 brands/)).toBeVisible();
     // The biological indicators shelf was empty before this data wave.
     await expect(
       page.getByRole("link", { name: /Biological indicators/ }).getByText(/2 products · 2 brands/),
@@ -83,6 +89,10 @@ test.describe("G. Browse a category to choose a model", () => {
       /Environmental monitoring consumables/,
       /Microbial reference materials/,
       /Microbiology lab accessories/,
+      /Analytical chromatography/,
+      /Reference standards/,
+      /Water testing/,
+      /Single-use systems/,
     ]) {
       await expect(
         page.getByRole("link", { name }).getByText(/2 products · 2 brands/),
@@ -232,6 +242,50 @@ test.describe("G. Browse a category to choose a model", () => {
     ).toBeVisible();
     await expect(
       page.getByRole("link", { name: "SteriPump inoculating loops 10 uL sterile (Demo)" }),
+    ).toBeVisible();
+  });
+
+  test("analytical QC shelves: HPLC columns, reference standards, water testing, SUT", async ({ page }) => {
+    // Analytical chromatography: UHPLC vs routine HPLC column.
+    await page.goto("/categories/analytical_chromatography");
+    await expect(page.getByRole("heading", { name: "Analytical chromatography" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "PicoSep C18 UHPLC column 2.1x100 mm (Demo)" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "AuriSep C18 analytical column 4.6x150 mm (Demo)" }),
+    ).toBeVisible();
+    await expect(page.getByText("USP 621").first()).toBeVisible();
+
+    // Reference standards: chemical RS vs endotoxin CSE.
+    await page.goto("/categories/reference_standards");
+    await expect(page.getByRole("heading", { name: "Reference standards" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "VestaRef acetaminophen reference standard (Demo)" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "OrizonRef endotoxin CSE vials (Demo)" }),
+    ).toBeVisible();
+
+    // Water testing: P/A screening vs countable MF.
+    await page.goto("/categories/water_testing");
+    await expect(page.getByRole("heading", { name: "Water testing" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "AuroraChrom Coliform P/A water test kit (Demo)" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "DeltaWater MF water testing kit (Demo)" }),
+    ).toBeVisible();
+    await expect(page.getByText("ISO 9308-1").first()).toBeVisible();
+
+    // Single-use systems: bioreactor bag vs mixing bag.
+    await page.goto("/categories/single_use_systems");
+    await expect(page.getByRole("heading", { name: "Single-use systems" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "NovaraFlex single-use bioreactor bag 50 L (Demo)" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "KestrelFlex single-use mixing bag 100 L (Demo)" }),
     ).toBeVisible();
   });
 });

@@ -37,6 +37,7 @@ export const ORGS = {
   auriga: "org-auriga-separations",
   vesta: "org-vesta-chemicals",
   orizon: "org-orizon-bioanalytics",
+  picosep: "org-picosep-analytics",
 } as const;
 
 export const ADDRESSES = {
@@ -96,6 +97,9 @@ export const BRANDS = {
   vestaPure: "brand-vestapure",
   orizonEndo: "brand-orizonendo",
   orizonQc: "brand-orizonqc",
+  picosep: "brand-picosep",
+  auriSep: "brand-aurisep",
+  vestaRef: "brand-vestaref",
 } as const;
 
 export const FAMILIES = {
@@ -131,6 +135,14 @@ export const FAMILIES = {
   orizonQc: "fam-orizon-qc",
   condorAccessories: "fam-condor-accessories",
   meridianAccessories: "fam-meridian-accessories",
+  picosepCols: "fam-picosep-columns",
+  auriSepCols: "fam-aurisep-columns",
+  vestaRef: "fam-vesta-ref",
+  orizonRef: "fam-orizon-ref",
+  auroraWater: "fam-aurora-water",
+  deltaWater: "fam-delta-water",
+  novaraFlex: "fam-novaraflex",
+  kestrelFlex: "fam-kestrelflex",
 } as const;
 
 export const PRODUCTS = {
@@ -169,6 +181,16 @@ export const PRODUCTS = {
   qcEcoliOrizon: "prod-qc-ecoli-orizon",
   turntableCondor: "prod-turntable-condor",
   loopsMeridian: "prod-loops-meridian",
+  c18PicoSep: "prod-c18-picosep",
+  c18AuriSep: "prod-c18-aurisep",
+  rsVesta: "prod-rs-vesta",
+  cseOrizon: "prod-cse-orizon",
+  waterAurora: "prod-water-aurora",
+  waterDelta: "prod-water-delta",
+  subNovara: "prod-sub-novara",
+  sumKestrel: "prod-sum-kestrel",
+  st300Condor: "prod-st300-condor",
+  sp1000Meridian: "prod-sp1000-meridian",
 } as const;
 
 export const SKUS = {
@@ -213,6 +235,16 @@ export const SKUS = {
   tsa5kg: "sku-tsa-5kg",
   choMax100: "sku-chomax-100",
   steriCan50: "sku-steri-can-50",
+  c18ps21: "sku-c18ps-21",
+  c18as46: "sku-c18as-46",
+  rsAcet: "sku-rs-acet",
+  cse10: "sku-cse-10",
+  waterPa100: "sku-water-pa-100",
+  waterMf50: "sku-water-mf-50",
+  sub50: "sku-sub-50",
+  sum100: "sku-sum-100",
+  st300: "sku-st300",
+  sp1000: "sku-sp1000",
 } as const;
 
 export const PACKS = {
@@ -254,6 +286,16 @@ export const PACKS = {
   tsa5kg: "pack-tsa-5kg",
   choMax100: "pack-chomax-100",
   steriCan50: "pack-steri-can-50",
+  c18ps21: "pack-c18ps-21",
+  c18as46: "pack-c18as-46",
+  rsAcet: "pack-rs-acet",
+  cse10: "pack-cse-10",
+  waterPa100: "pack-water-pa-100",
+  waterMf50: "pack-water-mf-50",
+  sub50: "pack-sub-50",
+  sum100: "pack-sum-100",
+  st300: "pack-st300",
+  sp1000: "pack-sp1000",
 } as const;
 
 export const FORMATS = {
@@ -277,12 +319,15 @@ export const APPLICATIONS = {
   downstreamPurification: "app-downstream-purification",
   endotoxinTesting: "app-endotoxin-testing",
   sterileFiltration: "app-sterile-filtration",
+  analyticalQc: "app-analytical-qc",
+  waterQualityTesting: "app-water-quality-testing",
 } as const;
 
 export const METHODS = {
   membraneFiltration: "mth-membrane-filtration",
   plateCount: "mth-plate-count",
   affinityChromatography: "mth-affinity-chromatography",
+  hplc: "mth-hplc",
 } as const;
 
 export const STANDARDS = {
@@ -295,6 +340,8 @@ export const STANDARDS = {
   iso11290: "std-iso-11290",
   iso11138: "std-iso-11138",
   usp85: "std-usp-85",
+  usp621: "std-usp-621",
+  iso9308: "std-iso-9308",
 } as const;
 
 export const STANDARD_VERSIONS = {
@@ -307,6 +354,8 @@ export const STANDARD_VERSIONS = {
   iso11290v2017: "stdv-iso-11290-2017",
   iso11138v2017: "stdv-iso-11138-2017",
   usp85v2024: "stdv-usp-85-2024",
+  usp621v2024: "stdv-usp-621-2024",
+  iso9308v2014: "stdv-iso-9308-2014",
 } as const;
 
 export const ORGANISMS = {
@@ -339,6 +388,7 @@ export const TEST_TYPES = {
   bioburden: "tt-bioburden",
   sterilityTest: "tt-sterility-test",
   endotoxinTest: "tt-endotoxin-test",
+  assayHplc: "tt-assay-hplc",
 } as const;
 
 export const INCUBATION = { aerobic3035: "inc-aerobic-30-35-3d" } as const;
@@ -370,6 +420,7 @@ export const SOURCES = {
   hongHaQuote2: "src-hongha-quote-2",
   mekongQuote2: "src-mekong-quote-2",
   rrh3TenderDoc: "src-rrh3-tender-doc",
+  picosepCatalogue: "src-picosep-catalogue",
 } as const;
 
 export const SOURCE_DOCUMENTS = {
@@ -435,6 +486,21 @@ export const CLAIMS = {
   tsa5kgDistributed: "claim-tsa-5kg-distributed",
   choMax100Distributed: "claim-chomax-100-distributed",
   steriCan50Distributed: "claim-steri-can-50-distributed",
+  c18psDistributed: "claim-c18ps-distributed",
+  c18asDistributed: "claim-c18as-distributed",
+  rsDistributed: "claim-rs-distributed",
+  cseDistributed: "claim-cse-distributed",
+  waterPaDistributed: "claim-water-pa-distributed",
+  waterMfDistributed: "claim-water-mf-distributed",
+  subDistributed: "claim-sub-distributed",
+  sumDistributed: "claim-sum-distributed",
+  c18psConforms: "claim-c18ps-conforms",
+  waterPaConforms: "claim-water-pa-conforms",
+  cseConforms: "claim-cse-conforms",
+  st300Distributed: "claim-st300-distributed",
+  sp1000Distributed: "claim-sp1000-distributed",
+  st200Sp3000Equiv: "claim-st200-sp3000-equiv",
+  rfcLalEquiv: "claim-rfc-lal-equiv",
 } as const;
 
 export const EVIDENCE_REVIEWS = {
@@ -505,6 +571,16 @@ export const LISTINGS = {
   mekongTsa5kg: "listing-mekong-tsa-5kg",
   hongHaChoMax100: "listing-hongha-chomax-100",
   mekongSteriCan50: "listing-mekong-steri-can-50",
+  hongHaC18ps: "listing-hongha-c18ps",
+  saigonC18as: "listing-saigon-c18as",
+  mekongRs: "listing-mekong-rs",
+  hongHaCse: "listing-hongha-cse",
+  hongHaWaterPa: "listing-hongha-water-pa",
+  saigonWaterMf: "listing-saigon-water-mf",
+  hongHaSub: "listing-hongha-sub",
+  mekongSum: "listing-mekong-sum",
+  mekongSt300: "listing-mekong-st300",
+  saigonSp1000: "listing-saigon-sp1000",
 } as const;
 
 export const AVAILABILITY = {
@@ -543,6 +619,16 @@ export const AVAILABILITY = {
   tsa5kgInStock: "avail-tsa-5kg-in-stock",
   choMax100Limited: "avail-chomax-100-limited",
   steriCan50InStock: "avail-steri-can-50-in-stock",
+  c18psInStock: "avail-c18ps-in-stock",
+  c18asInStock: "avail-c18as-in-stock",
+  rsInStock: "avail-rs-in-stock",
+  cseInStock: "avail-cse-in-stock",
+  waterPaInStock: "avail-water-pa-in-stock",
+  waterMfLimited: "avail-water-mf-limited",
+  subInStock: "avail-sub-in-stock",
+  sumLimited: "avail-sum-limited",
+  st300InStock: "avail-st300-in-stock",
+  sp1000Limited: "avail-sp1000-limited",
 } as const;
 
 export const PRICES = {
@@ -585,6 +671,16 @@ export const PRICES = {
   steriCan50: "price-steri-can-50",
   spCanOld: "price-spcan-old",
   proaOld: "price-proa-old",
+  c18ps: "price-c18ps",
+  c18as: "price-c18as",
+  rsAcet: "price-rs-acet",
+  cse: "price-cse",
+  waterPa: "price-water-pa",
+  waterMf: "price-water-mf",
+  sub50: "price-sub-50",
+  sum100: "price-sum-100",
+  st300: "price-st300",
+  sp1000: "price-sp1000",
 } as const;
 
 export const PRICE_COMPONENTS = {
@@ -643,6 +739,8 @@ export const ASSET_MODELS = {
   sp3000: "model-steripump-sp3000",
   ag90: "model-airguard-ag90",
   pc90: "model-particount-pc90",
+  st300: "model-steritest-st300",
+  sp1000: "model-steripump-sp1000",
 } as const;
 
 export const ASSETS = {
@@ -669,6 +767,8 @@ export const COMPATIBILITIES = {
   sp3000SpCan: "compat-sp3000-spcan",
   ag90Tsa: "compat-ag90-tsa-plates",
   ag90Sda: "compat-ag90-sda-plates",
+  st300Steri: "compat-st300-sterican",
+  sp1000SpCan: "compat-sp1000-spcan",
 } as const;
 
 export const CONSUMPTION = { as100Em: "cons-as100-em" } as const;
@@ -730,6 +830,8 @@ export const COST_SCENARIOS = {
 export const EQUIVALENCES = {
   tsaDeltaVsAcme: "equiv-tsa-delta-vs-acme",
   sdaVsTsaPlates: "equiv-sda-vs-tsa-plates",
+  st200VsSp3000: "equiv-st200-vs-sp3000",
+  rfcVsLal: "equiv-rfc-vs-lal",
 } as const;
 
 export const MEMBERSHIPS = {

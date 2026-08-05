@@ -203,6 +203,14 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       website: "https://orizon-bioanalytics.example.nl",
       identifiers: [{ scheme: "tax_code", value: "NL-DEMO-0010" }],
     },
+    {
+      ...ctx.canonical(ORGS.picosep),
+      name: "PicoSep Analytics (Demo)",
+      types: ["manufacturer", "brand_owner"],
+      country: "JP",
+      website: "https://picosep-analytics.example.jp",
+      identifiers: [{ scheme: "tax_code", value: "JP-DEMO-0011" }],
+    },
   ];
 
   const organizationAliases: OrganizationAlias[] = [
@@ -292,6 +300,13 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       toOrgId: ORGS.auriga,
       type: "distributes_for",
       evidence: edgeEvidence(SOURCES.aurigaCatalogue, "source_captured", 0.75),
+    },
+    {
+      ...ctx.canonical("rel-hongha-distributes-picosep"),
+      fromOrgId: ORGS.hongHa,
+      toOrgId: ORGS.picosep,
+      type: "distributes_for",
+      evidence: edgeEvidence(SOURCES.picosepCatalogue, "source_captured", 0.75),
     },
   ];
 

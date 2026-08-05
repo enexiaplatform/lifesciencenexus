@@ -9,6 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Second models per sterility brand + cross-type equivalence records** (demo
+  dataset 874 → 904 records): SteriTest ST-300 high-throughput dual-head
+  system and SteriPump SP-1000 compact system give each sterility brand a
+  two-model lineup on the shelf. Two new equivalence assessments extend the
+  workspace beyond media: SteriTest ST-200 vs SteriPump SP-3000 (equipment,
+  ~74 functional_equivalent) and EndoZyme rFC vs DeltaTest LAL gel-clot
+  (~62 closest_alternative with a major difference on alternative-method
+  validation under USP <85>). Both new models carry asset models, canister
+  compatibilities, listings, prices and availability.
+
+### Added (earlier in this cycle)
+
+- **Analytical QC / R&D wave** (demo dataset 763 → 874 records). Four more
+  schema-level categories (migration
+  `20260803000002_extend_product_categories_round2.sql`):
+  `analytical_chromatography` (PicoSep C18 UHPLC vs AuriSep C18 HPLC, new
+  manufacturer PicoSep Analytics JP, anchored to the new USP <621>),
+  `reference_standards` (VestaRef acetaminophen RS vs OrizonRef endotoxin
+  CSE), `water_testing` (AuroraChrom coliform P/A kit vs DeltaWater MF kit,
+  anchored to the new ISO 9308-1), and `single_use_systems` (NovaraFlex
+  50 L bioreactor bag vs KestrelFlex 100 L mixing bag). New reference
+  entities: Analytical QC + Water quality testing applications, HPLC method,
+  Assay (HPLC) test type. Category metadata, VI/EN synonyms and "how to
+  choose" hints for all four shelves.
+
+### Added (earlier in this cycle)
+
 - **Depth pass across the whole dataset** (demo dataset 704 → 763 records):
   pack-size variants with their own pack economics (TSA 100 g / 5 kg, CHO-Max
   100 L process scale, SteriCan 50/box bulk), price-history pairs for the

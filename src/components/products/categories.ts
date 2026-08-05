@@ -173,6 +173,41 @@ const OVERRIDES: Partial<Record<ProductCategory, Partial<CategoryInfo>>> = {
       "Compare cost per test, not per kit — kit sizes differ widely.",
     ],
   },
+  analytical_chromatography: {
+    description: "QC/R&D: HPLC and UHPLC analytical columns for assay, purity and related-substances methods.",
+    synonyms: ["hplc column", "uhplc column", "c18 column", "cột hplc", "sắc ký lỏng"],
+    selectionHints: [
+      "Match particle size and dimensions to the validated method (USP <621> allows only limited adjustments).",
+      "Sub-2 µm UHPLC columns need UHPLC-rated hardware — check system pressure limits first.",
+      "Compare price per injection (column lifetime), not price per column.",
+    ],
+  },
+  reference_standards: {
+    description: "QC: certified chemical and endotoxin reference standards for calibration and system suitability.",
+    synonyms: ["reference standard", "crs", "cse", "endotoxin standard", "chuẩn tham chiếu", "chuẩn đối chiếu"],
+    selectionHints: [
+      "Require a certificate with assigned content/potency and traceability statement.",
+      "Match the standard to the compendial method (e.g. CSE for USP <85> assays).",
+    ],
+  },
+  water_testing: {
+    description: "QC: microbiological testing of purified water, WFI and process water (P/A kits, MF kits).",
+    synonyms: ["water test", "water testing", "coliform water test", "kiểm tra nước", "xét nghiệm nước"],
+    selectionHints: [
+      "Presence/absence kits suit screening; membrane filtration gives countable results per ISO 9308-1.",
+      "Match the kit to the sample matrix (purified water vs WFI vs source water).",
+    ],
+  },
+  single_use_systems: {
+    label: "Single-use systems",
+    description: "Upstream bioprocess: gamma-irradiated single-use bags, bioreactor bags and mixing assemblies.",
+    synonyms: ["single-use bag", "bioreactor bag", "mixing bag", "sut", "túi sinh học dùng một lần"],
+    selectionHints: [
+      "Verify extractables/leachables documentation and gamma irradiation certificates.",
+      "Match bag volume and connector types to the installed hardware footprint.",
+      "Lead times for configured assemblies run 4–8 weeks — plan safety stock accordingly.",
+    ],
+  },
   other: {
     description: "Products not yet classified into a specific category.",
     synonyms: [],

@@ -166,6 +166,10 @@ export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {
   purification_chromatography: "Purification & chromatography",
   process_filtration: "Process filtration",
   endotoxin_testing: "Endotoxin testing",
+  analytical_chromatography: "Analytical chromatography",
+  reference_standards: "Reference standards",
+  water_testing: "Water testing",
+  single_use_systems: "Single-use systems",
   other: "Other",
 };
 

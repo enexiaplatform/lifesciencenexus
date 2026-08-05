@@ -74,7 +74,7 @@ describe("workflow 2 — compare equivalents", () => {
   it("seeds a functional_equivalent (~78) and a closest_alternative (~60) with full dimension detail", async () => {
     const r = repo();
     const records = (await r.list("equivalence_record", { pageSize: 50 })).items;
-    expect(records).toHaveLength(2);
+    expect(records).toHaveLength(4);
 
     const functional = records.find((record) => record.id === EQUIVALENCES.tsaDeltaVsAcme);
     expect(functional?.classification).toBe("functional_equivalent");
@@ -96,6 +96,21 @@ describe("workflow 2 — compare equivalents", () => {
     expect(alternative?.overallScore).toBeGreaterThanOrEqual(55);
     expect(alternative?.overallScore).toBeLessThan(65);
     expect(alternative?.differences.some((difference) => difference.severity === "major")).toBe(true);
+
+    // Equipment and assay equivalences added in the depth wave.
+    const equipment = records.find((record) => record.id === EQUIVALENCES.st200VsSp3000);
+    expect(equipment?.classification).toBe("functional_equivalent");
+    expect(equipment?.overallScore).toBeGreaterThanOrEqual(70);
+    expect(equipment?.overallScore).toBeLessThan(80);
+    for (const dimension of EQUIVALENCE_DIMENSIONS) {
+      expect(equipment?.dimensionScores[dimension].score).not.toBeNull();
+    }
+
+    const assay = records.find((record) => record.id === EQUIVALENCES.rfcVsLal);
+    expect(assay?.classification).toBe("closest_alternative");
+    expect(assay?.overallScore).toBeGreaterThanOrEqual(55);
+    expect(assay?.overallScore).toBeLessThan(70);
+    expect(assay?.differences.some((difference) => difference.severity === "major")).toBe(true);
   });
 
   it("marks the discontinued competitor SKU with a successor", async () => {

@@ -379,6 +379,82 @@ export function seedResearch(ctx: SeedContext): DemoDatasetSlices {
       evidenceClaimIds: [CLAIMS.tpShelfLife],
       reviewState: "source_captured",
     },
+    {
+      // Equipment equivalence: two closed sterility testing systems.
+      ...ctx.canonical(EQUIVALENCES.st200VsSp3000),
+      sourceSkuId: SKUS.sp3000,
+      candidateSkuId: SKUS.st200,
+      classification: "functional_equivalent",
+      overallScore: 74.5,
+      dimensionScores: {
+        formula_composition: { score: 80, weight: 25, note: "Both closed membrane-filtration pump systems; SP-3000 adds electronic flow control (Demo)." },
+        intended_use_application: { score: 90, weight: 20, note: "Both intended for USP <71> sterility testing (Demo)." },
+        method_standard_compatibility: { score: 70, weight: 15, note: "SP-3000 USP <71> conformance still unverified (Demo)." },
+        organism_performance: { score: 70, weight: 15, note: "No comparative recovery data on file for either system (Demo)." },
+        preparation_conditions: { score: 85, weight: 10, note: "Both run the same SteriCan canister workflow (Demo)." },
+        regulatory_documents: { score: 60, weight: 5, note: "Meridian dossier lacks VN registration documents (Demo)." },
+        format_pack: { score: 90, weight: 5, note: "Both single pump units, benchtop footprint (Demo)." },
+        local_availability: { score: 55, weight: 5, note: "ST-200 in stock; SP-3000 on 45-day import lead time (Demo)." },
+      },
+      rationale:
+        "Both are closed membrane-filtration sterility testing systems accepting SteriCan canisters; the SP-3000 is a workable alternative pending verification of its USP <71> conformance claim (Demo assessment).",
+      differences: [
+        {
+          dimension: "local_availability",
+          description: "SP-3000 imports on ~45-day lead time while the ST-200 is stocked locally (Demo).",
+          severity: "moderate",
+        },
+        {
+          dimension: "method_standard_compatibility",
+          description: "SP-3000 USP <71> conformance is an unverified catalogue claim (Demo).",
+          severity: "moderate",
+        },
+      ],
+      validationConsiderations: [
+        "Run a parallel method suitability (bacteriostasis/fungistasis) study before switching systems (Demo).",
+        "Confirm SteriCan canister lot-to-lot compatibility with the SP-3000 dock (Demo).",
+      ],
+      evidenceClaimIds: [CLAIMS.st200Sp3000Equiv, CLAIMS.sp3000Conforms],
+      reviewState: "source_captured",
+    },
+    {
+      // Assay equivalence: animal-free rFC vs compendial LAL gel-clot.
+      ...ctx.canonical(EQUIVALENCES.rfcVsLal),
+      sourceSkuId: SKUS.endoZyme192,
+      candidateSkuId: SKUS.lalCart50,
+      classification: "closest_alternative",
+      overallScore: 62.5,
+      dimensionScores: {
+        formula_composition: { score: 40, weight: 25, note: "Recombinant Factor C reagent vs natural LAL — different reagent principle (Demo)." },
+        intended_use_application: { score: 85, weight: 20, note: "Both intended for bacterial endotoxins testing (Demo)." },
+        method_standard_compatibility: { score: 65, weight: 15, note: "rFC requires method validation as an alternative method under USP <85>; gel-clot is compendial (Demo)." },
+        organism_performance: { score: 70, weight: 15, note: "Both detect gram-negative endotoxin; rFC is insensitive to glucan interference (Demo)." },
+        preparation_conditions: { score: 75, weight: 10, note: "rFC kinetic fluorescent readout needs a fluorometer; gel-clot is read visually (Demo)." },
+        regulatory_documents: { score: 60, weight: 5, note: "rFC acceptance varies by regulator and filing (Demo)." },
+        format_pack: { score: 60, weight: 5, note: "192-test kit vs 50-cartridge kit (Demo)." },
+        local_availability: { score: 70, weight: 5, note: "Both in stock locally (Demo)." },
+      },
+      rationale:
+        "The rFC kit is a closest alternative to gel-clot LAL rather than a drop-in equivalent: same measurand and USP <85> anchor, but a different reagent principle that requires alternative-method validation (Demo assessment).",
+      differences: [
+        {
+          dimension: "formula_composition",
+          description: "Recombinant reagent vs horseshoe-crab lysate — different supply-chain and sustainability profile (Demo).",
+          severity: "moderate",
+        },
+        {
+          dimension: "method_standard_compatibility",
+          description: "rFC is an alternative method under USP <85> and needs validation per product matrix (Demo).",
+          severity: "major",
+        },
+      ],
+      validationConsiderations: [
+        "Run alternative-method validation (comparability vs gel-clot) per product matrix before adopting rFC (Demo).",
+        "Confirm fluorometer availability in the QC lab (Demo).",
+      ],
+      evidenceClaimIds: [CLAIMS.rfcLalEquiv, CLAIMS.lalConforms],
+      reviewState: "source_captured",
+    },
   ];
 
   return {

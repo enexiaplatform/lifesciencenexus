@@ -218,6 +218,14 @@ export function seedEvidence(ctx: SeedContext): DemoDatasetSlices {
       publishedAt: ctx.daysAgo(55),
       capturedAt: ctx.dateTimeDaysAgo(54),
     },
+    {
+      ...ctx.canonical(SOURCES.picosepCatalogue),
+      type: "manufacturer_catalogue",
+      title: "PicoSep Analytics UHPLC Columns Catalogue 2026 (Demo)",
+      publisher: "PicoSep Analytics (Demo)",
+      publishedAt: ctx.daysAgo(100),
+      capturedAt: ctx.dateTimeDaysAgo(90),
+    },
   ];
 
   const sourceDocuments: SourceDocument[] = [
@@ -754,6 +762,96 @@ export function seedEvidence(ctx: SeedContext): DemoDatasetSlices {
       subjectEntityType: "sku", subjectEntityId: SKUS.steriCan50, predicate: "distributed_by",
       objectValue: ORGS.mekong, sourceId: SOURCES.mekongQuote2, confidence: confidence(0.8),
       reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.c18psDistributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.c18ps21, predicate: "distributed_by",
+      objectValue: ORGS.hongHa, sourceId: SOURCES.hongHaQuote2, confidence: confidence(0.8),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.c18asDistributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.c18as46, predicate: "distributed_by",
+      objectValue: ORGS.saigon, sourceId: SOURCES.saigonQuote2, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.rsDistributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.rsAcet, predicate: "distributed_by",
+      objectValue: ORGS.mekong, sourceId: SOURCES.mekongQuote2, confidence: confidence(0.8),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.cseDistributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.cse10, predicate: "distributed_by",
+      objectValue: ORGS.hongHa, sourceId: SOURCES.hongHaQuote2, confidence: confidence(0.8),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.waterPaDistributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.waterPa100, predicate: "distributed_by",
+      objectValue: ORGS.hongHa, sourceId: SOURCES.hongHaQuote2, confidence: confidence(0.8),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.waterMfDistributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.waterMf50, predicate: "distributed_by",
+      objectValue: ORGS.saigon, sourceId: SOURCES.saigonQuote2, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.subDistributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.sub50, predicate: "distributed_by",
+      objectValue: ORGS.hongHa, sourceId: SOURCES.hongHaQuote2, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.sumDistributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.sum100, predicate: "distributed_by",
+      objectValue: ORGS.mekong, sourceId: SOURCES.mekongQuote2, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.c18psConforms),
+      subjectEntityType: "product", subjectEntityId: PRODUCTS.c18PicoSep, predicate: "conforms_to_standard",
+      objectValue: STANDARDS.usp621, sourceId: SOURCES.picosepCatalogue, confidence: confidence(0.85),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.waterPaConforms),
+      subjectEntityType: "product", subjectEntityId: PRODUCTS.waterAurora, predicate: "conforms_to_standard",
+      objectValue: STANDARDS.iso9308, sourceId: SOURCES.auroraCatalogue, confidence: confidence(0.5),
+      reviewStatus: "unverified", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.cseConforms),
+      subjectEntityType: "product", subjectEntityId: PRODUCTS.cseOrizon, predicate: "conforms_to_standard",
+      objectValue: STANDARDS.usp85, sourceId: SOURCES.orizonCatalogue, confidence: confidence(0.85),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.st300Distributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.st300, predicate: "distributed_by",
+      objectValue: ORGS.mekong, sourceId: SOURCES.mekongQuote2, confidence: confidence(0.8),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.sp1000Distributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.sp1000, predicate: "distributed_by",
+      objectValue: ORGS.saigon, sourceId: SOURCES.saigonQuote2, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.st200Sp3000Equiv),
+      subjectEntityType: "sku", subjectEntityId: SKUS.sp3000, predicate: "equivalent_formula_to",
+      objectValue: SKUS.st200, sourceId: SOURCES.meridianCatalogue, confidence: confidence(0.55),
+      reviewStatus: "unverified", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.rfcLalEquiv),
+      subjectEntityType: "sku", subjectEntityId: SKUS.endoZyme192, predicate: "equivalent_formula_to",
+      objectValue: SKUS.lalCart50, sourceId: SOURCES.orizonCatalogue, confidence: confidence(0.5),
+      reviewStatus: "unverified", contradictingClaimIds: [],
     },
   ];
 

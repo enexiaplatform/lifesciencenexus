@@ -91,6 +91,20 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       model: "PartiCount PC-90 (Demo)",
       category: "particle_counter",
     },
+    {
+      ...ctx.canonical(ASSET_MODELS.st300),
+      manufacturerOrgId: ORGS.condor,
+      brandId: BRANDS.condorSteri,
+      model: "SteriTest ST-300 (Demo)",
+      category: "sterility_testing",
+    },
+    {
+      ...ctx.canonical(ASSET_MODELS.sp1000),
+      manufacturerOrgId: ORGS.meridian,
+      brandId: BRANDS.steripump,
+      model: "SteriPump SP-1000 (Demo)",
+      category: "sterility_testing",
+    },
   ];
 
   const installedAssets: InstalledAsset[] = [
@@ -254,6 +268,18 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       assetModelId: ASSET_MODELS.ag90,
       skuId: SKUS.sdaPlates20,
       evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.8),
+    },
+    {
+      ...ctx.canonical(COMPATIBILITIES.st300Steri),
+      assetModelId: ASSET_MODELS.st300,
+      skuId: SKUS.steriCan10,
+      evidence: edgeEvidence(SOURCES.condorCatalogue, "source_captured", 0.9),
+    },
+    {
+      ...ctx.canonical(COMPATIBILITIES.sp1000SpCan),
+      assetModelId: ASSET_MODELS.sp1000,
+      skuId: SKUS.spCan10,
+      evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.85),
     },
   ];
 
