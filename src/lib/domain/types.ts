@@ -486,7 +486,12 @@ export interface Brand extends BaseEntity {
   name: string;
 }
 
-/** The ten initial category verticals plus an escape hatch. */
+/**
+ * Category verticals: the microbiology-QC wedge plus the wider
+ * upstream → downstream → QC portfolio for Pharma API and Biopharma
+ * (cell culture, process chemicals, purification, filtration, endotoxin),
+ * and an escape hatch.
+ */
 export const PRODUCT_CATEGORIES = [
   "dehydrated_culture_media",
   "ready_prepared_media",
@@ -498,6 +503,11 @@ export const PRODUCT_CATEGORIES = [
   "particle_counters",
   "sterility_testing_equipment",
   "microbiology_lab_accessories",
+  "cell_culture_media",
+  "process_chemicals",
+  "purification_chromatography",
+  "process_filtration",
+  "endotoxin_testing",
   "other",
 ] as const;
 export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];

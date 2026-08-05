@@ -161,6 +161,11 @@ export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {
   particle_counters: "Particle counters",
   sterility_testing_equipment: "Sterility testing equipment",
   microbiology_lab_accessories: "Microbiology lab accessories",
+  cell_culture_media: "Cell culture media",
+  process_chemicals: "Process chemicals",
+  purification_chromatography: "Purification & chromatography",
+  process_filtration: "Process filtration",
+  endotoxin_testing: "Endotoxin testing",
   other: "Other",
 };
 

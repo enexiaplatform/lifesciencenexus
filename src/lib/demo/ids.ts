@@ -27,6 +27,16 @@ export const ORGS = {
   anGiangFoods: "org-an-giang-foods",
   mekongContractLabs: "org-mekong-contract-labs",
   redRiverHospital: "org-red-river-hospital",
+  aurora: "org-aurora-bioworks",
+  hongHa: "org-hong-ha-scientific",
+  songHuong: "org-song-huong-dairy",
+  nfsCenter: "org-nfs-center",
+  meridian: "org-meridian-lab-systems",
+  novara: "org-novara-bioprocess",
+  kestrel: "org-kestrel-filtration",
+  auriga: "org-auriga-separations",
+  vesta: "org-vesta-chemicals",
+  orizon: "org-orizon-bioanalytics",
 } as const;
 
 export const ADDRESSES = {
@@ -37,6 +47,9 @@ export const ADDRESSES = {
   anGiang: "addr-an-giang-long-xuyen",
   contractLabs: "addr-mekong-contract-labs-can-tho",
   redRiver: "addr-red-river-ha-noi",
+  hongHa: "addr-hong-ha-ha-noi",
+  songHuong: "addr-song-huong-hue",
+  nfs: "addr-nfs-ha-noi",
 } as const;
 
 export const SITES = {
@@ -47,11 +60,15 @@ export const SITES = {
   redRiverMain: "site-red-river-main",
   anGiangPlant: "site-an-giang-plant",
   contractLabsSite: "site-mekong-contract-labs-site",
+  hongHaOffice: "site-hong-ha-office",
+  songHuongPlant: "site-song-huong-plant",
+  nfsSite: "site-nfs-site",
 } as const;
 
 export const LABS = {
   deltaPharmaMicro: "lab-delta-pharma-micro",
   redRiverMicro: "lab-red-river-micro",
+  songHuongMicro: "lab-song-huong-micro",
 } as const;
 
 export const PEOPLE = {
@@ -59,6 +76,9 @@ export const PEOPLE = {
   tranThiBinh: "person-tran-thi-binh",
   /** Deliberate tenant_other record for isolation tests. */
   phamThiLan: "person-pham-thi-lan",
+  leThiHoa: "person-le-thi-hoa",
+  daoVanMinh: "person-dao-van-minh",
+  nguyenThiMai: "person-nguyen-thi-mai",
 } as const;
 
 export const BRANDS = {
@@ -66,6 +86,16 @@ export const BRANDS = {
   deltaBio: "brand-deltabio",
   condorAir: "brand-condor-air",
   condorSteri: "brand-condor-steri",
+  auroraChrom: "brand-aurorachrom",
+  steripump: "brand-steripump",
+  meridianAir: "brand-meridian-air",
+  steriSure: "brand-sterisure",
+  novaraCell: "brand-novaracell",
+  kestrelFlow: "brand-kestrelflow",
+  auriSelect: "brand-auriselect",
+  vestaPure: "brand-vestapure",
+  orizonEndo: "brand-orizonendo",
+  orizonQc: "brand-orizonqc",
 } as const;
 
 export const FAMILIES = {
@@ -78,6 +108,29 @@ export const FAMILIES = {
   condorEm: "fam-condor-em",
   condorCount: "fam-condor-count",
   condorSteri: "fam-condor-steri",
+  auroraChrom: "fam-aurorachrom",
+  auroraPlates: "fam-aurora-plates",
+  condorSteriPump: "fam-condor-steripump",
+  steripump: "fam-steripump",
+  meridianAir: "fam-meridian-air",
+  meridianCount: "fam-meridian-count",
+  deltaBi: "fam-delta-bi",
+  steriSureBi: "fam-sterisure-bi",
+  choMax: "fam-novara-chomax",
+  deltaGrow: "fam-delta-grow",
+  vestaSolvents: "fam-vesta-solvents",
+  novaraBuffers: "fam-novara-buffers",
+  auriSelectResin: "fam-auriselect-resin",
+  kestrelMembrane: "fam-kestrel-membrane",
+  kestrelSteriFlow: "fam-kestrel-steriflow",
+  auriFlow: "fam-auriflow-tff",
+  endoZyme: "fam-orizon-endozyme",
+  deltaTest: "fam-delta-test-lal",
+  spCan: "fam-steripump-canisters",
+  deltaEm: "fam-delta-em",
+  orizonQc: "fam-orizon-qc",
+  condorAccessories: "fam-condor-accessories",
+  meridianAccessories: "fam-meridian-accessories",
 } as const;
 
 export const PRODUCTS = {
@@ -93,6 +146,29 @@ export const PRODUCTS = {
   emCondor: "prod-em-condor",
   pcCondor: "prod-pc-condor",
   steriCondor: "prod-steri-condor",
+  ccAurora: "prod-cc-aurora",
+  ccPlatesAurora: "prod-cc-plates-aurora",
+  st200Condor: "prod-st200-condor",
+  sp3000Meridian: "prod-sp3000-meridian",
+  ag90Meridian: "prod-ag90-meridian",
+  pc90Meridian: "prod-pc90-meridian",
+  biDelta: "prod-bi-delta",
+  biSteriSure: "prod-bi-sterisure",
+  choMaxNovara: "prod-chomax-novara",
+  feedDelta: "prod-feed-delta",
+  etohVesta: "prod-etoh-vesta",
+  pbsNovara: "prod-pbs-novara",
+  proaAuriga: "prod-proa-auriga",
+  qKestrel: "prod-qmem-kestrel",
+  steriFlowKestrel: "prod-steriflow-kestrel",
+  tffAuriga: "prod-tff-auriga",
+  endoZymeOrizon: "prod-endozyme-orizon",
+  lalDelta: "prod-lal-delta",
+  spCanMeridian: "prod-spcan-meridian",
+  dcpDelta: "prod-dcp-delta",
+  qcEcoliOrizon: "prod-qc-ecoli-orizon",
+  turntableCondor: "prod-turntable-condor",
+  loopsMeridian: "prod-loops-meridian",
 } as const;
 
 export const SKUS = {
@@ -110,6 +186,33 @@ export const SKUS = {
   emContact20: "sku-em-contact-20",
   pc50: "sku-pc50",
   steriCan10: "sku-steri-can-10",
+  cc500: "sku-cc-500",
+  ccPlates20: "sku-cc-plates-20",
+  st200: "sku-st200",
+  sp3000: "sku-sp3000",
+  ag90: "sku-ag90",
+  pc90: "sku-pc90",
+  biGst100: "sku-bi-gst-100",
+  biAmp20: "sku-bi-amp-20",
+  choMax10: "sku-chomax-10",
+  feed1l: "sku-feed-1l",
+  etoh20l: "sku-etoh-20l",
+  pbs5l: "sku-pbs-5l",
+  proa1l: "sku-proa-1l",
+  qmem10: "sku-qmem-10",
+  steriFlow3: "sku-steriflow-3",
+  tff30k: "sku-tff-30k",
+  endoZyme192: "sku-endozyme-192",
+  lalCart50: "sku-lal-cart-50",
+  spCan10: "sku-spcan-10",
+  dcp20: "sku-dcp-20",
+  qcEcoli10: "sku-qc-ecoli-10",
+  turntable: "sku-turntable",
+  loops1000: "sku-loops-1000",
+  tsa100: "sku-tsa-100",
+  tsa5kg: "sku-tsa-5kg",
+  choMax100: "sku-chomax-100",
+  steriCan50: "sku-steri-can-50",
 } as const;
 
 export const PACKS = {
@@ -124,6 +227,33 @@ export const PACKS = {
   steri10: "pack-steri-10",
   airAs100: "pack-air-as100",
   pc50: "pack-pc50",
+  cc500: "pack-cc-500",
+  ccPlates20: "pack-cc-plates-20",
+  st200: "pack-st200",
+  sp3000: "pack-sp3000",
+  ag90: "pack-ag90",
+  pc90: "pack-pc90",
+  biGst100: "pack-bi-gst-100",
+  biAmp20: "pack-bi-amp-20",
+  choMax10: "pack-chomax-10",
+  feed1l: "pack-feed-1l",
+  etoh20l: "pack-etoh-20l",
+  pbs5l: "pack-pbs-5l",
+  proa1l: "pack-proa-1l",
+  qmem10: "pack-qmem-10",
+  steriFlow3: "pack-steriflow-3",
+  tff30k: "pack-tff-30k",
+  endoZyme192: "pack-endozyme-192",
+  lalCart50: "pack-lal-cart-50",
+  spCan10: "pack-spcan-10",
+  dcp20: "pack-dcp-20",
+  qcEcoli10: "pack-qc-ecoli-10",
+  turntable: "pack-turntable",
+  loops1000: "pack-loops-1000",
+  tsa100: "pack-tsa-100",
+  tsa5kg: "pack-tsa-5kg",
+  choMax100: "pack-chomax-100",
+  steriCan50: "pack-steri-can-50",
 } as const;
 
 export const FORMATS = {
@@ -140,11 +270,19 @@ export const APPLICATIONS = {
   envMonitoring: "app-environmental-monitoring",
   growthPromotion: "app-growth-promotion",
   mediaFill: "app-media-fill",
+  pathogenDetection: "app-pathogen-detection",
+  sterilizationValidation: "app-sterilization-validation",
+  upstreamCellCulture: "app-upstream-cell-culture",
+  apiSynthesis: "app-api-synthesis",
+  downstreamPurification: "app-downstream-purification",
+  endotoxinTesting: "app-endotoxin-testing",
+  sterileFiltration: "app-sterile-filtration",
 } as const;
 
 export const METHODS = {
   membraneFiltration: "mth-membrane-filtration",
   plateCount: "mth-plate-count",
+  affinityChromatography: "mth-affinity-chromatography",
 } as const;
 
 export const STANDARDS = {
@@ -153,6 +291,10 @@ export const STANDARDS = {
   usp61: "std-usp-61",
   usp71: "std-usp-71",
   tcvnDemo: "std-tcvn-9999",
+  iso6579: "std-iso-6579",
+  iso11290: "std-iso-11290",
+  iso11138: "std-iso-11138",
+  usp85: "std-usp-85",
 } as const;
 
 export const STANDARD_VERSIONS = {
@@ -161,6 +303,10 @@ export const STANDARD_VERSIONS = {
   usp61v2024: "stdv-usp-61-2024",
   usp71v2024: "stdv-usp-71-2024",
   tcvnV2025: "stdv-tcvn-9999-2025",
+  iso6579v2017: "stdv-iso-6579-2017",
+  iso11290v2017: "stdv-iso-11290-2017",
+  iso11138v2017: "stdv-iso-11138-2017",
+  usp85v2024: "stdv-usp-85-2024",
 } as const;
 
 export const ORGANISMS = {
@@ -169,6 +315,9 @@ export const ORGANISMS = {
   saur: "orgm-staphylococcus-aureus-atcc-6538",
   paer: "orgm-pseudomonas-aeruginosa-atcc-9027",
   calb: "orgm-candida-albicans-atcc-10231",
+  listeria: "orgm-listeria-monocytogenes-atcc-13932",
+  salmonella: "orgm-salmonella-enterica-atcc-14028",
+  gstearo: "orgm-geobacillus-stearothermophilus-atcc-12980",
 } as const;
 
 export const SAMPLE_TYPES = {
@@ -176,6 +325,9 @@ export const SAMPLE_TYPES = {
   air: "smp-air",
   surface: "smp-surface-swab",
   rawMaterial: "smp-raw-material",
+  milk: "smp-raw-milk",
+  cellCultureBroth: "smp-cell-culture-broth",
+  bulkDrugSubstance: "smp-bulk-drug-substance",
 } as const;
 
 export const INDUSTRIES = {
@@ -186,6 +338,7 @@ export const INDUSTRIES = {
 export const TEST_TYPES = {
   bioburden: "tt-bioburden",
   sterilityTest: "tt-sterility-test",
+  endotoxinTest: "tt-endotoxin-test",
 } as const;
 
 export const INCUBATION = { aerobic3035: "inc-aerobic-30-35-3d" } as const;
@@ -204,11 +357,26 @@ export const SOURCES = {
   iso11133: "src-iso-11133",
   fieldObservation: "src-field-observation",
   importRecord: "src-import-record",
+  auroraCatalogue: "src-aurora-catalogue",
+  hongHaQuote: "src-hongha-quote",
+  nfsTenderDoc: "src-nfs-tender-doc",
+  meridianCatalogue: "src-meridian-catalogue",
+  saigonQuote2: "src-saigon-quote-2",
+  novaraCatalogue: "src-novara-catalogue",
+  kestrelCatalogue: "src-kestrel-catalogue",
+  aurigaCatalogue: "src-auriga-catalogue",
+  vestaCatalogue: "src-vesta-catalogue",
+  orizonCatalogue: "src-orizon-catalogue",
+  hongHaQuote2: "src-hongha-quote-2",
+  mekongQuote2: "src-mekong-quote-2",
+  rrh3TenderDoc: "src-rrh3-tender-doc",
 } as const;
 
 export const SOURCE_DOCUMENTS = {
   tenderPdf: "sdoc-tender-pdf",
   mekongQuotePdf: "sdoc-mekong-quote-pdf",
+  nfsTenderPdf: "sdoc-nfs-tender-pdf",
+  rrh3TenderPdf: "sdoc-rrh3-tender-pdf",
 } as const;
 
 export const CLAIMS = {
@@ -230,12 +398,51 @@ export const CLAIMS = {
   sdaPrice: "claim-sda-price",
   as100Warranty: "claim-as100-warranty",
   tenderIncumbent: "claim-tender-incumbent",
+  ccDistributed: "claim-cc-distributed",
+  ccpDistributed: "claim-ccp-distributed",
+  ccConforms: "claim-cc-conforms",
+  ccListeria: "claim-cc-listeria",
+  ccPrice: "claim-cc-price",
+  ccpShelfLife: "claim-ccp-shelf-life",
+  st200Distributed: "claim-st200-distributed",
+  sp3000Distributed: "claim-sp3000-distributed",
+  st200Price: "claim-st200-price",
+  sp3000Conforms: "claim-sp3000-conforms",
+  ag90Distributed: "claim-ag90-distributed",
+  pc90Distributed: "claim-pc90-distributed",
+  biGstConforms: "claim-bi-gst-conforms",
+  biAmpConforms: "claim-bi-amp-conforms",
+  choMaxDistributed: "claim-chomax-distributed",
+  feedDistributed: "claim-feed-distributed",
+  etohDistributed: "claim-etoh-distributed",
+  pbsDistributed: "claim-pbs-distributed",
+  proaDistributed: "claim-proa-distributed",
+  qmemDistributed: "claim-qmem-distributed",
+  steriFlowDistributed: "claim-steriflow-distributed",
+  tffDistributed: "claim-tff-distributed",
+  endoZymeDistributed: "claim-endozyme-distributed",
+  lalDistributed: "claim-lal-distributed",
+  endoZymeConforms: "claim-endozyme-conforms",
+  lalConforms: "claim-lal-conforms",
+  etohUspGrade: "claim-etoh-usp-grade",
+  spCanDistributed: "claim-spcan-distributed",
+  dcpDistributed: "claim-dcp-distributed",
+  qcEcoliDistributed: "claim-qc-ecoli-distributed",
+  loopsDistributed: "claim-loops-distributed",
+  turntableDistributed: "claim-turntable-distributed",
+  dcpConforms: "claim-dcp-conforms",
+  tsa100Distributed: "claim-tsa-100-distributed",
+  tsa5kgDistributed: "claim-tsa-5kg-distributed",
+  choMax100Distributed: "claim-chomax-100-distributed",
+  steriCan50Distributed: "claim-steri-can-50-distributed",
 } as const;
 
 export const EVIDENCE_REVIEWS = {
   conformsCaptured: "rev-tsa-conforms-captured",
   conformsAnalyst: "rev-tsa-conforms-analyst",
   mekongAnalyst: "rev-mekong-analyst",
+  lalAnalyst: "rev-lal-analyst",
+  tenderAnalyst: "rev-tender-analyst",
 } as const;
 
 export const DQ_ISSUES = {
@@ -243,17 +450,20 @@ export const DQ_ISSUES = {
   stalePrice: "dq-stale-price-sda",
   missingWebsite: "dq-missing-website-an-giang",
   missingGtin: "dq-missing-gtin-pc50",
+  missingGtinAg90: "dq-missing-gtin-ag90",
 } as const;
 
 export const SUPPLIER_PROFILES = {
   mekong: "supp-mekong",
   mekongDup: "supp-mekong-dup",
   saigon: "supp-saigon",
+  hongHa: "supp-hongha",
 } as const;
 
 export const AGREEMENTS = {
   acmeMekong: "dagr-acme-mekong",
   deltaSaigon: "dagr-delta-saigon",
+  auroraHongHa: "dagr-aurora-hongha",
 } as const;
 
 export const LISTINGS = {
@@ -268,6 +478,33 @@ export const LISTINGS = {
   saigonQc: "listing-saigon-qc",
   saigonNa2: "listing-saigon-na2",
   saigonSteri: "listing-saigon-steri",
+  hongHaCc: "listing-hongha-cc",
+  hongHaCcp: "listing-hongha-ccp",
+  mekongSt200: "listing-mekong-st200",
+  saigonSp3000: "listing-saigon-sp3000",
+  saigonAg90: "listing-saigon-ag90",
+  saigonPc90: "listing-saigon-pc90",
+  saigonBiGst: "listing-saigon-bi-gst",
+  saigonBiAmp: "listing-saigon-bi-amp",
+  hongHaChoMax: "listing-hongha-chomax",
+  saigonFeed: "listing-saigon-feed",
+  mekongEtoh: "listing-mekong-etoh",
+  hongHaPbs: "listing-hongha-pbs",
+  saigonProa: "listing-saigon-proa",
+  mekongQmem: "listing-mekong-qmem",
+  mekongSteriFlow: "listing-mekong-steriflow",
+  saigonTff: "listing-saigon-tff",
+  hongHaEndoZyme: "listing-hongha-endozyme",
+  saigonLal: "listing-saigon-lal",
+  saigonSpCan: "listing-saigon-spcan",
+  saigonDcp: "listing-saigon-dcp",
+  hongHaQcEcoli: "listing-hongha-qc-ecoli",
+  mekongTurntable: "listing-mekong-turntable",
+  saigonLoops: "listing-saigon-loops",
+  mekongTsa100: "listing-mekong-tsa-100",
+  mekongTsa5kg: "listing-mekong-tsa-5kg",
+  hongHaChoMax100: "listing-hongha-chomax-100",
+  mekongSteriCan50: "listing-mekong-steri-can-50",
 } as const;
 
 export const AVAILABILITY = {
@@ -279,6 +516,33 @@ export const AVAILABILITY = {
   emInStock: "avail-em-in-stock",
   pcInStock: "avail-pc-in-stock",
   na2InStock: "avail-na2-in-stock",
+  ccInStock: "avail-cc-in-stock",
+  ccpInStock: "avail-ccp-in-stock",
+  st200InStock: "avail-st200-in-stock",
+  sp3000Limited: "avail-sp3000-limited",
+  ag90InStock: "avail-ag90-in-stock",
+  pc90InStock: "avail-pc90-in-stock",
+  biGstInStock: "avail-bi-gst-in-stock",
+  biAmpLimited: "avail-bi-amp-limited",
+  choMaxInStock: "avail-chomax-in-stock",
+  feedInStock: "avail-feed-in-stock",
+  etohInStock: "avail-etoh-in-stock",
+  pbsLimited: "avail-pbs-limited",
+  proaLimited: "avail-proa-limited",
+  qmemInStock: "avail-qmem-in-stock",
+  steriFlowInStock: "avail-steriflow-in-stock",
+  tffInStock: "avail-tff-in-stock",
+  endoZymeInStock: "avail-endozyme-in-stock",
+  lalInStock: "avail-lal-in-stock",
+  spCanInStock: "avail-spcan-in-stock",
+  dcpInStock: "avail-dcp-in-stock",
+  qcEcoliInStock: "avail-qc-ecoli-in-stock",
+  turntableInStock: "avail-turntable-in-stock",
+  loopsInStock: "avail-loops-in-stock",
+  tsa100InStock: "avail-tsa-100-in-stock",
+  tsa5kgInStock: "avail-tsa-5kg-in-stock",
+  choMax100Limited: "avail-chomax-100-limited",
+  steriCan50InStock: "avail-steri-can-50-in-stock",
 } as const;
 
 export const PRICES = {
@@ -291,6 +555,36 @@ export const PRICES = {
   sdaStale: "price-sda-stale",
   qc: "price-qc",
   em: "price-em",
+  ccOld: "price-cc-old",
+  ccNew: "price-cc-new",
+  ccp: "price-ccp",
+  st200: "price-st200",
+  sp3000: "price-sp3000",
+  ag90: "price-ag90",
+  pc90: "price-pc90",
+  biGst: "price-bi-gst",
+  biAmp: "price-bi-amp",
+  choMax: "price-chomax",
+  feed: "price-feed",
+  etoh: "price-etoh",
+  pbs: "price-pbs",
+  proa: "price-proa",
+  qmem: "price-qmem",
+  steriFlow: "price-steriflow",
+  tff: "price-tff",
+  endoZyme: "price-endozyme",
+  lal: "price-lal",
+  spCan: "price-spcan",
+  dcp: "price-dcp",
+  qcEcoli: "price-qc-ecoli",
+  turntable: "price-turntable",
+  loops: "price-loops",
+  tsa100: "price-tsa-100",
+  tsa5kg: "price-tsa-5kg",
+  choMax100: "price-chomax-100",
+  steriCan50: "price-steri-can-50",
+  spCanOld: "price-spcan-old",
+  proaOld: "price-proa-old",
 } as const;
 
 export const PRICE_COMPONENTS = {
@@ -298,7 +592,11 @@ export const PRICE_COMPONENTS = {
   sdaDuty: "pcomp-sda-duty",
 } as const;
 
-export const COMMERCIAL_TERMS = { mekong: "cterms-mekong" } as const;
+export const COMMERCIAL_TERMS = {
+  mekong: "cterms-mekong",
+  saigon: "cterms-saigon",
+  hongHa: "cterms-hongha",
+} as const;
 
 export const TENDER = {
   tender: "tender-rrh-2025-014",
@@ -316,14 +614,42 @@ export const TENDER = {
   evAwarded: "tev-rrh-awarded",
 } as const;
 
+export const TENDER2 = {
+  tender: "tender-nfs-2026-007",
+  lotMedia: "lot-nfs-media",
+  itemCc: "item-nfs-cc",
+  itemCcp: "item-nfs-ccp",
+  evPublished: "tev-nfs-published",
+  evClarification: "tev-nfs-clarification",
+} as const;
+
+export const TENDER3 = {
+  tender: "tender-rrh-2026-003",
+  lotEndo: "lot-rrh3-endo",
+  itemEndoZyme: "item-rrh3-endozyme",
+  itemLal: "item-rrh3-lal",
+  bidHongHa: "bid-rrh3-hongha",
+  bidSaigon: "bid-rrh3-saigon",
+  evPublished: "tev-rrh3-published",
+  evExtended: "tev-rrh3-extended",
+  evClosed: "tev-rrh3-closed",
+} as const;
+
 export const ASSET_MODELS = {
   as100: "model-airsampler-as100",
   pc50: "model-condorcount-pc50",
+  ic35: "model-condor-incubator-ic35",
+  st200: "model-steritest-st200",
+  sp3000: "model-steripump-sp3000",
+  ag90: "model-airguard-ag90",
+  pc90: "model-particount-pc90",
 } as const;
 
 export const ASSETS = {
   as100: "asset-as100-delta-pharma",
   pc50: "asset-pc50-delta-pharma",
+  ic35: "asset-ic35-song-huong",
+  st200: "asset-st200-delta-pharma",
 } as const;
 
 export const ASSET_EVENTS = {
@@ -331,11 +657,18 @@ export const ASSET_EVENTS = {
   pc50Installed: "ale-pc50-installed",
   as100Calibration: "maint-as100-calibration",
   as100Pq: "qual-as100-pq",
+  ic35Installed: "ale-ic35-installed",
+  st200Installed: "ale-st200-installed",
 } as const;
 
 export const COMPATIBILITIES = {
   as100Em: "compat-as100-em",
   as100Tp: "compat-as100-tp",
+  st200Steri: "compat-st200-sterican",
+  sp3000Steri: "compat-sp3000-sterican",
+  sp3000SpCan: "compat-sp3000-spcan",
+  ag90Tsa: "compat-ag90-tsa-plates",
+  ag90Sda: "compat-ag90-sda-plates",
 } as const;
 
 export const CONSUMPTION = { as100Em: "cons-as100-em" } as const;
@@ -344,11 +677,13 @@ export const REPLACEMENT_ASSUMPTIONS = { airSampler: "rass-air-sampler" } as con
 export const VENDOR_APPROVALS = {
   mekongExpired: "vappr-mekong-expired",
   saigonApproved: "vappr-saigon-approved",
+  hongHaSongHuong: "vappr-hongha-songhuong",
 } as const;
 
 export const VALIDATIONS = {
   tdInProgress: "pval-td-in-progress",
   tsaPassed: "pval-tsa-passed",
+  spCanPlanned: "pval-spcan-planned",
 } as const;
 
 export const TRIALS = {
@@ -371,6 +706,18 @@ export const RESEARCH = {
   linkTender: "rpe-tender",
   savedView: "view-ready-media-skus",
   exportPdf: "export-ready-media-pdf",
+  dairyProject: "rp-dairy-pathogen-hue",
+  dairyNote: "rnote-dairy-listeria",
+  dairyFinding: "rfind-dairy-fact",
+  dairyLinkOrg: "rpe-dairy-org",
+  dairyLinkProduct: "rpe-dairy-product",
+  mabProject: "rp-mab-downstream-vn",
+  mabNote: "rnote-mab-resin-cogs",
+  mabFinding: "rfind-mab-fact",
+  mabFindingUnknown: "rfind-mab-unknown",
+  mabLinkProa: "rpe-mab-proa",
+  mabLinkSteriFlow: "rpe-mab-steriflow",
+  mabLinkLal: "rpe-mab-lal",
   /** Deliberate tenant_other record for isolation tests. */
   otherProject: "rp-other-tenant-watch",
 } as const;

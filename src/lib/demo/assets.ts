@@ -56,6 +56,41 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       model: "CondorCount PC-50 (Demo)",
       category: "particle_counter",
     },
+    {
+      ...ctx.canonical(ASSET_MODELS.ic35),
+      manufacturerOrgId: ORGS.condor,
+      brandId: BRANDS.condorAir,
+      model: "Condor Incubator IC-35 (Demo)",
+      category: "incubator",
+    },
+    {
+      ...ctx.canonical(ASSET_MODELS.st200),
+      manufacturerOrgId: ORGS.condor,
+      brandId: BRANDS.condorSteri,
+      model: "SteriTest ST-200 (Demo)",
+      category: "sterility_testing",
+    },
+    {
+      ...ctx.canonical(ASSET_MODELS.sp3000),
+      manufacturerOrgId: ORGS.meridian,
+      brandId: BRANDS.steripump,
+      model: "SteriPump SP-3000 (Demo)",
+      category: "sterility_testing",
+    },
+    {
+      ...ctx.canonical(ASSET_MODELS.ag90),
+      manufacturerOrgId: ORGS.meridian,
+      brandId: BRANDS.meridianAir,
+      model: "AirGuard AG-90 (Demo)",
+      category: "air_sampler",
+    },
+    {
+      ...ctx.canonical(ASSET_MODELS.pc90),
+      manufacturerOrgId: ORGS.meridian,
+      brandId: BRANDS.meridianAir,
+      model: "PartiCount PC-90 (Demo)",
+      category: "particle_counter",
+    },
   ];
 
   const installedAssets: InstalledAsset[] = [
@@ -87,6 +122,35 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       serviceProviderOrgId: ORGS.mekong,
       confidence: 0.75,
     },
+    {
+      // Incubator at the dairy account — no consumable mappings either, so it
+      // joins the asset_without_consumables signal set.
+      ...ctx.tenantPrivate(ASSETS.ic35, DEMO_TENANT_ID),
+      assetModelId: ASSET_MODELS.ic35,
+      siteId: SITES.songHuongPlant,
+      laboratoryId: LABS.songHuongMicro,
+      serialNumber: "DEMO-IC35-0019",
+      installationDate: ctx.daysAgo(800),
+      status: "operational",
+      qualificationStatus: "partial",
+      serviceProviderOrgId: ORGS.hongHa,
+      confidence: 0.8,
+    },
+    {
+      // SteriTest ST-200 in routine use — compatible consumables mapped, so it
+      // demonstrates the consumable_pullthrough signal for closed systems.
+      ...ctx.tenantPrivate(ASSETS.st200, DEMO_TENANT_ID),
+      assetModelId: ASSET_MODELS.st200,
+      siteId: SITES.deltaPharmaPlant,
+      laboratoryId: LABS.deltaPharmaMicro,
+      serialNumber: "DEMO-ST200-0011",
+      installationDate: ctx.daysAgo(700),
+      status: "operational",
+      qualificationStatus: "iq_oq_pq_complete",
+      serviceProviderOrgId: ORGS.mekong,
+      estimatedAnnualConsumption: 600,
+      confidence: 0.85,
+    },
   ];
 
   const assetLifecycleEvents: AssetLifecycleEvent[] = [
@@ -103,6 +167,20 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       type: "installed",
       at: ctx.daysAgo(1500),
       description: "Installed in QC Microbiology Laboratory (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(ASSET_EVENTS.ic35Installed, DEMO_TENANT_ID),
+      installedAssetId: ASSETS.ic35,
+      type: "installed",
+      at: ctx.daysAgo(800),
+      description: "Installed in Dairy QC Microbiology Laboratory (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(ASSET_EVENTS.st200Installed, DEMO_TENANT_ID),
+      installedAssetId: ASSETS.st200,
+      type: "installed",
+      at: ctx.daysAgo(700),
+      description: "Installed in QC Microbiology Laboratory sterility suite (Demo).",
     },
   ];
 
@@ -140,6 +218,42 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       assetModelId: ASSET_MODELS.as100,
       skuId: SKUS.tsaPlates20,
       evidence: edgeEvidence(SOURCES.fieldObservation, "unverified", 0.6),
+    },
+    {
+      // Both closed sterility testing systems use the same SteriCan canisters —
+      // the cross-brand consumable anchor for the category comparison view.
+      ...ctx.canonical(COMPATIBILITIES.st200Steri),
+      assetModelId: ASSET_MODELS.st200,
+      skuId: SKUS.steriCan10,
+      evidence: edgeEvidence(SOURCES.condorCatalogue, "source_captured", 0.9),
+    },
+    {
+      ...ctx.canonical(COMPATIBILITIES.sp3000Steri),
+      assetModelId: ASSET_MODELS.sp3000,
+      skuId: SKUS.steriCan10,
+      evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.8),
+    },
+    {
+      // SP-3000 also takes Meridian's own closed canisters — the SP-3000 shelf
+      // row therefore shows both the own-brand and the cross-brand option.
+      ...ctx.canonical(COMPATIBILITIES.sp3000SpCan),
+      assetModelId: ASSET_MODELS.sp3000,
+      skuId: SKUS.spCan10,
+      evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.9),
+    },
+    {
+      // AirGuard AG-90 takes standard 90 mm plates from any media brand — the
+      // open-system counterpoint to the AS-100's proprietary contact plates.
+      ...ctx.canonical(COMPATIBILITIES.ag90Tsa),
+      assetModelId: ASSET_MODELS.ag90,
+      skuId: SKUS.tsaPlates20,
+      evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.85),
+    },
+    {
+      ...ctx.canonical(COMPATIBILITIES.ag90Sda),
+      assetModelId: ASSET_MODELS.ag90,
+      skuId: SKUS.sdaPlates20,
+      evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.8),
     },
   ];
 
@@ -182,6 +296,14 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       validTo: ctx.daysAhead(365),
       evidence: edgeEvidence(SOURCES.fieldObservation, "source_captured", 0.85),
     },
+    {
+      ...ctx.tenantPrivate(VENDOR_APPROVALS.hongHaSongHuong, DEMO_TENANT_ID),
+      organizationId: ORGS.songHuong,
+      supplierOrgId: ORGS.hongHa,
+      status: "pending",
+      validTo: ctx.daysAhead(200),
+      evidence: edgeEvidence(SOURCES.internalNote, "unverified", 0.5),
+    },
   ];
 
   const productValidations: ProductValidation[] = [
@@ -200,6 +322,15 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       status: "passed",
       method: "Growth promotion per ISO 11133 (Demo protocol)",
       completedAt: ctx.daysAgo(300),
+    },
+    {
+      // Planned → also feeds the validation_pending signal alongside the
+      // in-progress DeltaBio TSA validation.
+      ...ctx.tenantPrivate(VALIDATIONS.spCanPlanned, DEMO_TENANT_ID),
+      organizationId: ORGS.deltaPharma,
+      skuId: SKUS.spCan10,
+      status: "planned",
+      method: "Canister integrity + membrane recovery per USP <71> (Demo protocol)",
     },
   ];
 

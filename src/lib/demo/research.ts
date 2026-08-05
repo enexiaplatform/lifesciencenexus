@@ -54,6 +54,24 @@ export function seedResearch(ctx: SeedContext): DemoDatasetSlices {
       industryCodes: ["pharma"],
       status: "active",
     },
+    {
+      ...ctx.tenantPrivate(RESEARCH.dairyProject, DEMO_TENANT_ID),
+      title: "Dairy pathogen monitoring — Hue (Demo)",
+      question: "Which chromogenic media fit the Song Huong Dairy Listeria/coliform monitoring program?",
+      scope: "Dairy QC laboratories, central Vietnam, 2026 (Demo).",
+      geographyCodes: ["VN"],
+      industryCodes: ["food_beverage"],
+      status: "active",
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.mabProject, DEMO_TENANT_ID),
+      title: "mAb downstream consumables — Vietnam (Demo)",
+      question: "What does a single-use downstream train (Protein A capture → polishing → sterile filtration → BET release) cost per batch for a Vietnamese mAb producer?",
+      scope: "Biopharma producers and CDMOs, Vietnam, 2026 (Demo).",
+      geographyCodes: ["VN"],
+      industryCodes: ["pharma"],
+      status: "active",
+    },
   ];
 
   const researchNotes: ResearchNote[] = [
@@ -70,6 +88,20 @@ export function seedResearch(ctx: SeedContext): DemoDatasetSlices {
       text: "Hospital tenders bundle dehydrated media with QC organisms — see RRH-2025-014 (Demo note).",
       entityType: "tender",
       entityId: TENDER.tender,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.dairyNote, DEMO_TENANT_ID),
+      projectId: RESEARCH.dairyProject,
+      text: "QC supervisor wants to consolidate coliform and Listeria screening on one chromogenic supplier (Demo note).",
+      entityType: "organization",
+      entityId: ORGS.songHuong,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.mabNote, DEMO_TENANT_ID),
+      projectId: RESEARCH.mabProject,
+      text: "Protein A resin dominates downstream COGS — landed VN price per litre varies widely by channel (Demo note).",
+      entityType: "product",
+      entityId: PRODUCTS.proaAuriga,
     },
   ];
 
@@ -109,6 +141,27 @@ export function seedResearch(ctx: SeedContext): DemoDatasetSlices {
       text: "Capture fresh distributor quotations for ready plates before the RRH renewal tender (Demo recommendation).",
       evidenceClaimIds: [],
     },
+    {
+      ...ctx.tenantPrivate(RESEARCH.dairyFinding, DEMO_TENANT_ID),
+      projectId: RESEARCH.dairyProject,
+      kind: "verified_fact",
+      text: "AuroraChrom coliform agar is distributed in Vietnam by a demo distributor with a captured quotation (Demo finding).",
+      evidenceClaimIds: [CLAIMS.ccDistributed],
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.mabFinding, DEMO_TENANT_ID),
+      projectId: RESEARCH.mabProject,
+      kind: "verified_fact",
+      text: "Both an animal-free rFC assay and a compendial LAL gel-clot option are distributed in Vietnam with captured quotations (Demo finding).",
+      evidenceClaimIds: [CLAIMS.endoZymeDistributed, CLAIMS.lalDistributed],
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.mabFindingUnknown, DEMO_TENANT_ID),
+      projectId: RESEARCH.mabProject,
+      kind: "unknown",
+      text: "Actual Protein A resin cycle life under Vietnamese feedstock conditions is unknown — cost-per-cycle cannot be finalized (Demo gap).",
+      evidenceClaimIds: [],
+    },
   ];
 
   const researchProjectEntities: ResearchProjectEntity[] = [
@@ -135,6 +188,36 @@ export function seedResearch(ctx: SeedContext): DemoDatasetSlices {
       projectId: RESEARCH.project,
       entityType: "tender",
       entityId: TENDER.tender,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.dairyLinkOrg, DEMO_TENANT_ID),
+      projectId: RESEARCH.dairyProject,
+      entityType: "organization",
+      entityId: ORGS.songHuong,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.dairyLinkProduct, DEMO_TENANT_ID),
+      projectId: RESEARCH.dairyProject,
+      entityType: "product",
+      entityId: PRODUCTS.ccPlatesAurora,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.mabLinkProa, DEMO_TENANT_ID),
+      projectId: RESEARCH.mabProject,
+      entityType: "product",
+      entityId: PRODUCTS.proaAuriga,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.mabLinkSteriFlow, DEMO_TENANT_ID),
+      projectId: RESEARCH.mabProject,
+      entityType: "product",
+      entityId: PRODUCTS.steriFlowKestrel,
+    },
+    {
+      ...ctx.tenantPrivate(RESEARCH.mabLinkLal, DEMO_TENANT_ID),
+      projectId: RESEARCH.mabProject,
+      entityType: "product",
+      entityId: PRODUCTS.lalDelta,
     },
   ];
 

@@ -121,6 +121,88 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       country: "VN",
       identifiers: [],
     },
+    // -- Second wave: chromogenic-media manufacturer, northern distributor,
+    //    dairy customer and a government food-safety buyer --------------------
+    {
+      ...ctx.canonical(ORGS.aurora),
+      name: "Aurora BioWorks (Demo)",
+      types: ["manufacturer", "brand_owner"],
+      country: "KR",
+      website: "https://aurora-bioworks.example.kr",
+      identifiers: [{ scheme: "tax_code", value: "KR-DEMO-0004" }],
+    },
+    {
+      ...ctx.canonical(ORGS.hongHa),
+      name: "Hong Ha Scientific (Demo)",
+      types: ["distributor", "importer"],
+      country: "VN",
+      website: "https://hong-ha-scientific.example.vn",
+      identifiers: [{ scheme: "tax_code", value: "0105551234-DEMO" }],
+    },
+    {
+      ...ctx.canonical(ORGS.songHuong),
+      name: "Song Huong Dairy (Demo)",
+      types: ["food_manufacturer"],
+      country: "VN",
+      website: "https://song-huong-dairy.example.vn",
+      identifiers: [],
+    },
+    {
+      ...ctx.canonical(ORGS.nfsCenter),
+      name: "Northern Food Safety Center (Demo)",
+      types: ["government_laboratory"],
+      country: "VN",
+      identifiers: [],
+    },
+    {
+      ...ctx.canonical(ORGS.meridian),
+      name: "Meridian Lab Systems (Demo)",
+      types: ["manufacturer", "brand_owner"],
+      country: "IT",
+      website: "https://meridian-lab-systems.example.it",
+      identifiers: [{ scheme: "tax_code", value: "IT-DEMO-0005" }],
+    },
+    // -- Upstream → downstream portfolio manufacturers (biopharma + API) -------
+    {
+      ...ctx.canonical(ORGS.novara),
+      name: "Novara Bioprocess (Demo)",
+      types: ["manufacturer", "brand_owner"],
+      country: "CH",
+      website: "https://novara-bioprocess.example.ch",
+      identifiers: [{ scheme: "tax_code", value: "CH-DEMO-0006" }],
+    },
+    {
+      ...ctx.canonical(ORGS.kestrel),
+      name: "Kestrel Filtration (Demo)",
+      types: ["manufacturer", "brand_owner"],
+      country: "US",
+      website: "https://kestrel-filtration.example.com",
+      identifiers: [{ scheme: "tax_code", value: "US-DEMO-0007" }],
+    },
+    {
+      ...ctx.canonical(ORGS.auriga),
+      name: "Auriga Separations (Demo)",
+      types: ["manufacturer", "brand_owner"],
+      country: "SE",
+      website: "https://auriga-separations.example.se",
+      identifiers: [{ scheme: "tax_code", value: "SE-DEMO-0008" }],
+    },
+    {
+      ...ctx.canonical(ORGS.vesta),
+      name: "Vesta Chemicals (Demo)",
+      types: ["manufacturer", "brand_owner"],
+      country: "DE",
+      website: "https://vesta-chemicals.example.de",
+      identifiers: [{ scheme: "tax_code", value: "DE-DEMO-0009" }],
+    },
+    {
+      ...ctx.canonical(ORGS.orizon),
+      name: "Orizon BioAnalytics (Demo)",
+      types: ["manufacturer", "brand_owner"],
+      country: "NL",
+      website: "https://orizon-bioanalytics.example.nl",
+      identifiers: [{ scheme: "tax_code", value: "NL-DEMO-0010" }],
+    },
   ];
 
   const organizationAliases: OrganizationAlias[] = [
@@ -161,6 +243,55 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       toOrgId: ORGS.deltaBio,
       type: "distributes_for",
       evidence: edgeEvidence(SOURCES.deltaCatalogue, "source_captured", 0.8),
+    },
+    {
+      ...ctx.canonical("rel-hongha-distributes-aurora"),
+      fromOrgId: ORGS.hongHa,
+      toOrgId: ORGS.aurora,
+      type: "distributes_for",
+      evidence: edgeEvidence(SOURCES.auroraCatalogue, "source_captured", 0.8),
+    },
+    {
+      ...ctx.canonical("rel-saigon-distributes-meridian"),
+      fromOrgId: ORGS.saigon,
+      toOrgId: ORGS.meridian,
+      type: "distributes_for",
+      evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.75),
+    },
+    {
+      ...ctx.canonical("rel-hongha-distributes-novara"),
+      fromOrgId: ORGS.hongHa,
+      toOrgId: ORGS.novara,
+      type: "distributes_for",
+      evidence: edgeEvidence(SOURCES.novaraCatalogue, "source_captured", 0.8),
+    },
+    {
+      ...ctx.canonical("rel-hongha-distributes-orizon"),
+      fromOrgId: ORGS.hongHa,
+      toOrgId: ORGS.orizon,
+      type: "distributes_for",
+      evidence: edgeEvidence(SOURCES.orizonCatalogue, "source_captured", 0.75),
+    },
+    {
+      ...ctx.canonical("rel-mekong-distributes-kestrel"),
+      fromOrgId: ORGS.mekong,
+      toOrgId: ORGS.kestrel,
+      type: "distributes_for",
+      evidence: edgeEvidence(SOURCES.kestrelCatalogue, "source_captured", 0.8),
+    },
+    {
+      ...ctx.canonical("rel-mekong-distributes-vesta"),
+      fromOrgId: ORGS.mekong,
+      toOrgId: ORGS.vesta,
+      type: "distributes_for",
+      evidence: edgeEvidence(SOURCES.vestaCatalogue, "source_captured", 0.75),
+    },
+    {
+      ...ctx.canonical("rel-saigon-distributes-auriga"),
+      fromOrgId: ORGS.saigon,
+      toOrgId: ORGS.auriga,
+      type: "distributes_for",
+      evidence: edgeEvidence(SOURCES.aurigaCatalogue, "source_captured", 0.75),
     },
   ];
 
@@ -211,6 +342,25 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       city: "Ha Noi",
       country: "VN",
     },
+    {
+      ...ctx.canonical(ADDRESSES.hongHa),
+      line1: "45 Demo Lane, Cau Giay",
+      city: "Ha Noi",
+      country: "VN",
+    },
+    {
+      ...ctx.canonical(ADDRESSES.songHuong),
+      line1: "9 Demo Road, Huong Tra",
+      city: "Hue",
+      province: "Thua Thien Hue",
+      country: "VN",
+    },
+    {
+      ...ctx.canonical(ADDRESSES.nfs),
+      line1: "77 Demo Street, Dong Da",
+      city: "Ha Noi",
+      country: "VN",
+    },
   ];
 
   const geographies: Geography[] = [
@@ -226,6 +376,34 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       ...ctx.canonical("geo-vn-hn"),
       code: "VN-HN",
       name: "Ha Noi (Demo)",
+      level: "city",
+      parentCode: "VN",
+    },
+    {
+      ...ctx.canonical("geo-vn-hue"),
+      code: "VN-HUE",
+      name: "Hue (Demo)",
+      level: "city",
+      parentCode: "VN",
+    },
+    {
+      ...ctx.canonical("geo-vn-dn"),
+      code: "VN-DN",
+      name: "Da Nang (Demo)",
+      level: "city",
+      parentCode: "VN",
+    },
+    {
+      ...ctx.canonical("geo-vn-ct"),
+      code: "VN-CT",
+      name: "Can Tho (Demo)",
+      level: "city",
+      parentCode: "VN",
+    },
+    {
+      ...ctx.canonical("geo-vn-hp"),
+      code: "VN-HP",
+      name: "Hai Phong (Demo)",
       level: "city",
       parentCode: "VN",
     },
@@ -281,6 +459,27 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       siteType: "laboratory_site",
       addressId: ADDRESSES.contractLabs,
     },
+    {
+      ...ctx.canonical(SITES.hongHaOffice),
+      organizationId: ORGS.hongHa,
+      name: "Cau Giay Head Office (Demo)",
+      siteType: "office",
+      addressId: ADDRESSES.hongHa,
+    },
+    {
+      ...ctx.canonical(SITES.songHuongPlant),
+      organizationId: ORGS.songHuong,
+      name: "Huong Tra Dairy Plant (Demo)",
+      siteType: "factory",
+      addressId: ADDRESSES.songHuong,
+    },
+    {
+      ...ctx.canonical(SITES.nfsSite),
+      organizationId: ORGS.nfsCenter,
+      name: "Dong Da Laboratory Campus (Demo)",
+      siteType: "laboratory_site",
+      addressId: ADDRESSES.nfs,
+    },
   ];
 
   const facilityUnits: FacilityUnit[] = [
@@ -303,6 +502,12 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       ...ctx.canonical(LABS.redRiverMicro),
       siteId: SITES.redRiverMain,
       name: "Hospital Microbiology Laboratory (Demo)",
+      labType: "microbiology",
+    },
+    {
+      ...ctx.canonical(LABS.songHuongMicro),
+      siteId: SITES.songHuongPlant,
+      name: "Dairy QC Microbiology Laboratory (Demo)",
       labType: "microbiology",
     },
   ];
@@ -337,6 +542,26 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       fullName: "Pham Thi Lan (Demo)",
       title: "Lab Director",
     },
+    {
+      ...ctx.tenantPrivate(PEOPLE.leThiHoa, DEMO_TENANT_ID),
+      fullName: "Le Thi Hoa (Demo)",
+      title: "QC Supervisor",
+      email: "hoa.le@song-huong-dairy.example.vn",
+      notes: "Runs Listeria monitoring program (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(PEOPLE.daoVanMinh, DEMO_TENANT_ID),
+      fullName: "Dao Van Minh (Demo)",
+      title: "Procurement Officer",
+      email: "minh.dao@nfs-center.example.vn",
+      notes: "Runs BET/BI tenders at the center (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate(PEOPLE.nguyenThiMai, DEMO_TENANT_ID),
+      fullName: "Nguyen Thi Mai (Demo)",
+      title: "QA Executive",
+      email: "mai.nguyen@an-giang-foods.example.vn",
+    },
   ];
 
   const employmentRelationships: EmploymentRelationship[] = [
@@ -355,6 +580,30 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       role: "Procurement Lead",
       current: true,
       startedAt: ctx.daysAgo(900),
+    },
+    {
+      ...ctx.tenantPrivate("emp-hoa-song-huong", DEMO_TENANT_ID),
+      personId: PEOPLE.leThiHoa,
+      organizationId: ORGS.songHuong,
+      role: "QC Supervisor",
+      current: true,
+      startedAt: ctx.daysAgo(600),
+    },
+    {
+      ...ctx.tenantPrivate("emp-minh-nfs", DEMO_TENANT_ID),
+      personId: PEOPLE.daoVanMinh,
+      organizationId: ORGS.nfsCenter,
+      role: "Procurement Officer",
+      current: true,
+      startedAt: ctx.daysAgo(1100),
+    },
+    {
+      ...ctx.tenantPrivate("emp-mai-an-giang", DEMO_TENANT_ID),
+      personId: PEOPLE.nguyenThiMai,
+      organizationId: ORGS.anGiangFoods,
+      role: "QA Executive",
+      current: true,
+      startedAt: ctx.daysAgo(400),
     },
   ];
 
@@ -375,6 +624,32 @@ export function seedOrganizations(ctx: SeedContext): DemoDatasetSlices {
       siteId: SITES.deltaPharmaPlant,
       decisionRoles: ["procurement", "economic_buyer"],
       isPrimary: false,
+    },
+    {
+      ...ctx.tenantPrivate("contact-hoa-song-huong", DEMO_TENANT_ID),
+      personId: PEOPLE.leThiHoa,
+      organizationId: ORGS.songHuong,
+      siteId: SITES.songHuongPlant,
+      decisionRoles: ["qa_approver", "technical_evaluator"],
+      isPrimary: true,
+      notes: "Owns pathogen monitoring budget (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate("contact-minh-nfs", DEMO_TENANT_ID),
+      personId: PEOPLE.daoVanMinh,
+      organizationId: ORGS.nfsCenter,
+      siteId: SITES.nfsSite,
+      decisionRoles: ["procurement", "economic_buyer"],
+      isPrimary: true,
+      notes: "Contact for RRH/NFS tender clarifications (Demo).",
+    },
+    {
+      ...ctx.tenantPrivate("contact-mai-an-giang", DEMO_TENANT_ID),
+      personId: PEOPLE.nguyenThiMai,
+      organizationId: ORGS.anGiangFoods,
+      siteId: SITES.anGiangPlant,
+      decisionRoles: ["user", "technical_evaluator"],
+      isPrimary: true,
     },
   ];
 
