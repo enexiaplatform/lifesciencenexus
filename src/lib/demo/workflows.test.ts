@@ -125,7 +125,7 @@ describe("workflow 2 — compare equivalents", () => {
 describe("workflow 3 — cost per test", () => {
   it("computes both seeded scenarios (dehydrated 500 g vs ready plates 20/pack)", async () => {
     const scenarios = (await repo().list("cost_per_test_scenario", { pageSize: 50 })).items;
-    expect(scenarios).toHaveLength(2);
+    expect(scenarios).toHaveLength(4);
     const results = scenarios.map((scenario) => ({ scenario, result: calculateCostPerTest(scenario.input) }));
     for (const { result } of results) {
       expect(result.effectiveCostPerTest).toBeGreaterThan(0);
@@ -138,6 +138,17 @@ describe("workflow 3 — cost per test", () => {
     const dehydrated = results.find((entry) => entry.scenario.skuId === SKUS.tsa500)?.result;
     const plates = results.find((entry) => entry.scenario.skuId === SKUS.tsaPlates20)?.result;
     expect(dehydrated?.usableTests).toBeGreaterThan(plates?.usableTests ?? 0);
+
+    // BET assays: per-test reagent cost is lower for the rFC kit despite the
+    // higher kit price, even after fluorometer allocation.
+    const lal = results.find((entry) => entry.scenario.skuId === SKUS.lalCart50)?.result;
+    const rfc = results.find((entry) => entry.scenario.skuId === SKUS.endoZyme192)?.result;
+    // usableTests already nets out waste/repeat rates, so it sits below the
+    // nominal kit sizes (50 and 192) — and the rFC kit still yields far more.
+    expect(lal?.usableTests).toBeLessThan(50);
+    expect(rfc?.usableTests).toBeLessThanOrEqual(192);
+    expect(rfc?.usableTests ?? 0).toBeGreaterThan((lal?.usableTests ?? 0) * 3);
+    expect(rfc?.effectiveCostPerTest ?? Infinity).toBeLessThan(lal?.effectiveCostPerTest ?? 0);
   });
 });
 

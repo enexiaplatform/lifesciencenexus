@@ -11,7 +11,7 @@
 Green build: typecheck / lint / 302 vitest tests / `next build` pass.
 
 - Full domain core (79 entity types, 8 pure engines), repository seam with
-  demo backend (904 synthetic records, `tenant_demo`).
+  demo backend (950 synthetic records, `tenant_demo`).
 - All UI modules: Market, Products, Intelligence, Search, Research/Review,
   Data Ops (import wizard, entity resolution, data quality), Settings.
 - API v1 surface + `openapi.json`; Memoire handoff + Atlas read API as

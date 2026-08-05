@@ -115,7 +115,10 @@ test.describe("G. Browse a category to choose a model", () => {
       condorSection.getByRole("link", { name: "Condor AirSampler AS-100 (Demo)" }),
     ).toBeVisible();
     await expect(
-      condorSection.getByRole("link", { name: "AS-100 contact plates ready 20/pack (Demo)" }),
+      condorSection.getByRole("link", { name: "Condor AirSampler AS-200 high-volume air sampler (Demo)" }),
+    ).toBeVisible();
+    await expect(
+      condorSection.getByRole("link", { name: "AS-100 contact plates ready 20/pack (Demo)" }).first(),
     ).toBeVisible();
 
     const meridianSection = page.locator('section[aria-label="Meridian Air (Demo)"]');
@@ -123,10 +126,13 @@ test.describe("G. Browse a category to choose a model", () => {
     await expect(
       meridianSection.getByRole("link", { name: "AirGuard AG-90 microbial air sampler (Demo)" }),
     ).toBeVisible();
+    await expect(
+      meridianSection.getByRole("link", { name: "AirGuard AG-200 high-volume air sampler (Demo)" }),
+    ).toBeVisible();
     await expect(meridianSection.getByText("78,000,000")).toBeVisible();
     // Open system: compatible with standard 90 mm plates from other brands.
     await expect(
-      meridianSection.getByRole("link", { name: "TSA ready plates 90 mm 20/pack (Demo)" }),
+      meridianSection.getByRole("link", { name: "TSA ready plates 90 mm 20/pack (Demo)" }).first(),
     ).toBeVisible();
   });
 

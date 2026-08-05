@@ -105,6 +105,20 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       model: "SteriPump SP-1000 (Demo)",
       category: "sterility_testing",
     },
+    {
+      ...ctx.canonical(ASSET_MODELS.as200),
+      manufacturerOrgId: ORGS.condor,
+      brandId: BRANDS.condorAir,
+      model: "AirSampler AS-200 (Demo)",
+      category: "air_sampler",
+    },
+    {
+      ...ctx.canonical(ASSET_MODELS.ag200),
+      manufacturerOrgId: ORGS.meridian,
+      brandId: BRANDS.meridianAir,
+      model: "AirGuard AG-200 (Demo)",
+      category: "air_sampler",
+    },
   ];
 
   const installedAssets: InstalledAsset[] = [
@@ -279,6 +293,18 @@ export function seedAssets(ctx: SeedContext): DemoDatasetSlices {
       ...ctx.canonical(COMPATIBILITIES.sp1000SpCan),
       assetModelId: ASSET_MODELS.sp1000,
       skuId: SKUS.spCan10,
+      evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.85),
+    },
+    {
+      ...ctx.canonical(COMPATIBILITIES.as200Em),
+      assetModelId: ASSET_MODELS.as200,
+      skuId: SKUS.emContact20,
+      evidence: edgeEvidence(SOURCES.condorCatalogue, "source_captured", 0.85),
+    },
+    {
+      ...ctx.canonical(COMPATIBILITIES.ag200Tsa),
+      assetModelId: ASSET_MODELS.ag200,
+      skuId: SKUS.tsaPlates20,
       evidence: edgeEvidence(SOURCES.meridianCatalogue, "source_captured", 0.85),
     },
   ];

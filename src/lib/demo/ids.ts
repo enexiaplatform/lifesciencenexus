@@ -191,6 +191,10 @@ export const PRODUCTS = {
   sumKestrel: "prod-sum-kestrel",
   st300Condor: "prod-st300-condor",
   sp1000Meridian: "prod-sp1000-meridian",
+  as200Condor: "prod-as200-condor",
+  ag200Meridian: "prod-ag200-meridian",
+  pc80Condor: "prod-pc80-condor",
+  pc300Meridian: "prod-pc300-meridian",
 } as const;
 
 export const SKUS = {
@@ -245,6 +249,10 @@ export const SKUS = {
   sum100: "sku-sum-100",
   st300: "sku-st300",
   sp1000: "sku-sp1000",
+  as200: "sku-as200",
+  ag200: "sku-ag200",
+  pc80: "sku-pc80",
+  pc300: "sku-pc300",
 } as const;
 
 export const PACKS = {
@@ -296,6 +304,10 @@ export const PACKS = {
   sum100: "pack-sum-100",
   st300: "pack-st300",
   sp1000: "pack-sp1000",
+  as200: "pack-as200",
+  ag200: "pack-ag200",
+  pc80: "pack-pc80",
+  pc300: "pack-pc300",
 } as const;
 
 export const FORMATS = {
@@ -501,6 +513,10 @@ export const CLAIMS = {
   sp1000Distributed: "claim-sp1000-distributed",
   st200Sp3000Equiv: "claim-st200-sp3000-equiv",
   rfcLalEquiv: "claim-rfc-lal-equiv",
+  as200Distributed: "claim-as200-distributed",
+  ag200Distributed: "claim-ag200-distributed",
+  pc80Distributed: "claim-pc80-distributed",
+  pc300Distributed: "claim-pc300-distributed",
 } as const;
 
 export const EVIDENCE_REVIEWS = {
@@ -581,6 +597,10 @@ export const LISTINGS = {
   mekongSum: "listing-mekong-sum",
   mekongSt300: "listing-mekong-st300",
   saigonSp1000: "listing-saigon-sp1000",
+  mekongAs200: "listing-mekong-as200",
+  saigonAg200: "listing-saigon-ag200",
+  mekongPc80: "listing-mekong-pc80",
+  saigonPc300: "listing-saigon-pc300",
 } as const;
 
 export const AVAILABILITY = {
@@ -629,6 +649,10 @@ export const AVAILABILITY = {
   sumLimited: "avail-sum-limited",
   st300InStock: "avail-st300-in-stock",
   sp1000Limited: "avail-sp1000-limited",
+  as200InStock: "avail-as200-in-stock",
+  ag200Limited: "avail-ag200-limited",
+  pc80InStock: "avail-pc80-in-stock",
+  pc300InStock: "avail-pc300-in-stock",
 } as const;
 
 export const PRICES = {
@@ -681,6 +705,10 @@ export const PRICES = {
   sum100: "price-sum-100",
   st300: "price-st300",
   sp1000: "price-sp1000",
+  as200: "price-as200",
+  ag200: "price-ag200",
+  pc80: "price-pc80",
+  pc300: "price-pc300",
 } as const;
 
 export const PRICE_COMPONENTS = {
@@ -741,6 +769,8 @@ export const ASSET_MODELS = {
   pc90: "model-particount-pc90",
   st300: "model-steritest-st300",
   sp1000: "model-steripump-sp1000",
+  as200: "model-airsampler-as200",
+  ag200: "model-airguard-ag200",
 } as const;
 
 export const ASSETS = {
@@ -769,6 +799,8 @@ export const COMPATIBILITIES = {
   ag90Sda: "compat-ag90-sda-plates",
   st300Steri: "compat-st300-sterican",
   sp1000SpCan: "compat-sp1000-spcan",
+  as200Em: "compat-as200-em",
+  ag200Tsa: "compat-ag200-tsa-plates",
 } as const;
 
 export const CONSUMPTION = { as100Em: "cons-as100-em" } as const;
@@ -825,6 +857,8 @@ export const RESEARCH = {
 export const COST_SCENARIOS = {
   tsaDehydrated: "cpt-tsa-dehydrated",
   tsaPlates: "cpt-tsa-plates",
+  betLal: "cpt-bet-lal",
+  betRfc: "cpt-bet-rfc",
 } as const;
 
 export const EQUIVALENCES = {

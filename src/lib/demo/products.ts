@@ -527,6 +527,43 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
       description: "Compact single-canister closed sterility testing system for low-throughput labs (Demo).",
       status: "active",
     },
+    // -- Second models: air sampling + particle counting lineups -------------------
+    {
+      ...ctx.canonical(PRODUCTS.as200Condor),
+      familyId: FAMILIES.condorAir,
+      manufacturerOrganizationId: ORGS.condor,
+      name: "Condor AirSampler AS-200 high-volume air sampler (Demo)",
+      category: "air_samplers",
+      description: "Dual-head 200 L/min active air sampler for large cleanrooms (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.ag200Meridian),
+      familyId: FAMILIES.meridianAir,
+      manufacturerOrganizationId: ORGS.meridian,
+      name: "AirGuard AG-200 high-volume air sampler (Demo)",
+      category: "air_samplers",
+      description: "High-volume 200 L/min sampler using standard 90 mm plates (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.pc80Condor),
+      familyId: FAMILIES.condorCount,
+      manufacturerOrganizationId: ORGS.condor,
+      name: "CondorCount PC-80 benchtop particle counter (Demo)",
+      category: "particle_counters",
+      description: "Benchtop 0.3 um particle counter with 8 size channels (Demo).",
+      status: "active",
+    },
+    {
+      ...ctx.canonical(PRODUCTS.pc300Meridian),
+      familyId: FAMILIES.meridianCount,
+      manufacturerOrganizationId: ORGS.meridian,
+      name: "PartiCount PC-300 online particle counter (Demo)",
+      category: "particle_counters",
+      description: "Fixed online 0.3 um particle counter for continuous monitoring (Demo).",
+      status: "active",
+    },
   ];
 
   const productFormats: ProductFormat[] = [
@@ -1135,6 +1172,50 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
       countryAvailability: ["VN"],
       status: "active",
     },
+    {
+      ...ctx.canonical(SKUS.as200),
+      productId: PRODUCTS.as200Condor,
+      catalogueNumber: "CLW-AS200",
+      name: "AirSampler AS-200 200 L/min dual-head (Demo)",
+      alternateNames: ["Condor high-volume air sampler (Demo)"],
+      formatId: FORMATS.instrument,
+      storageCondition: "ambient",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.ag200),
+      productId: PRODUCTS.ag200Meridian,
+      catalogueNumber: "MLS-AG200",
+      name: "AirGuard AG-200 200 L/min air sampler (Demo)",
+      alternateNames: ["Meridian high-volume air sampler (Demo)"],
+      formatId: FORMATS.instrument,
+      storageCondition: "ambient",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.pc80),
+      productId: PRODUCTS.pc80Condor,
+      catalogueNumber: "CLW-PC80",
+      name: "CondorCount PC-80 benchtop 0.3 um 8-channel (Demo)",
+      alternateNames: [],
+      formatId: FORMATS.instrument,
+      storageCondition: "ambient",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
+    {
+      ...ctx.canonical(SKUS.pc300),
+      productId: PRODUCTS.pc300Meridian,
+      catalogueNumber: "MLS-PC300",
+      name: "PartiCount PC-300 online 0.3 um (Demo)",
+      alternateNames: ["Meridian online particle counter (Demo)"],
+      formatId: FORMATS.instrument,
+      storageCondition: "ambient",
+      countryAvailability: ["VN"],
+      status: "active",
+    },
   ];
 
   const packConfigurations: PackConfiguration[] = [
@@ -1186,6 +1267,10 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical(PACKS.sum100), skuId: SKUS.sum100, quantity: 1, unit: "unit", description: "One 100 L mixing bag" },
     { ...ctx.canonical(PACKS.st300), skuId: SKUS.st300, quantity: 1, unit: "unit", description: "One dual-head pump unit" },
     { ...ctx.canonical(PACKS.sp1000), skuId: SKUS.sp1000, quantity: 1, unit: "unit", description: "One compact pump unit" },
+    { ...ctx.canonical(PACKS.as200), skuId: SKUS.as200, quantity: 1, unit: "unit", description: "One instrument" },
+    { ...ctx.canonical(PACKS.ag200), skuId: SKUS.ag200, quantity: 1, unit: "unit", description: "One instrument" },
+    { ...ctx.canonical(PACKS.pc80), skuId: SKUS.pc80, quantity: 1, unit: "unit", description: "One instrument" },
+    { ...ctx.canonical(PACKS.pc300), skuId: SKUS.pc300, quantity: 1, unit: "unit", description: "One instrument" },
   ];
 
   const productDocuments: ProductDocument[] = [
@@ -1697,6 +1782,20 @@ export function seedProducts(ctx: SeedContext): DemoDatasetSlices {
     { ...ctx.canonical("edge-sp1000-std-usp71"), productId: PRODUCTS.sp1000Meridian, targetType: "standard", targetId: STANDARDS.usp71, role: "conforms_to", evidence: e(SOURCES.meridianCatalogue, "unverified", 0.5) },
     { ...ctx.canonical("edge-sp1000-mth-membrane"), productId: PRODUCTS.sp1000Meridian, targetType: "method", targetId: METHODS.membraneFiltration, role: "method", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.85) },
     { ...ctx.canonical("edge-sp1000-ind-pharma"), productId: PRODUCTS.sp1000Meridian, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.8) },
+    // AirSampler AS-200 / AirGuard AG-200 (high-volume siblings).
+    { ...ctx.canonical("edge-as200-app-em"), productId: PRODUCTS.as200Condor, targetType: "application", targetId: APPLICATIONS.envMonitoring, role: "intended_use", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-as200-smp-air"), productId: PRODUCTS.as200Condor, targetType: "sample_type", targetId: SAMPLE_TYPES.air, role: "sample_type", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-as200-ind-pharma"), productId: PRODUCTS.as200Condor, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-ag200-app-em"), productId: PRODUCTS.ag200Meridian, targetType: "application", targetId: APPLICATIONS.envMonitoring, role: "intended_use", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-ag200-smp-air"), productId: PRODUCTS.ag200Meridian, targetType: "sample_type", targetId: SAMPLE_TYPES.air, role: "sample_type", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-ag200-ind-pharma"), productId: PRODUCTS.ag200Meridian, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.8) },
+    // CondorCount PC-80 / PartiCount PC-300.
+    { ...ctx.canonical("edge-pc80-app-em"), productId: PRODUCTS.pc80Condor, targetType: "application", targetId: APPLICATIONS.envMonitoring, role: "intended_use", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-pc80-smp-air"), productId: PRODUCTS.pc80Condor, targetType: "sample_type", targetId: SAMPLE_TYPES.air, role: "sample_type", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-pc80-ind-pharma"), productId: PRODUCTS.pc80Condor, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.condorCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-pc300-app-em"), productId: PRODUCTS.pc300Meridian, targetType: "application", targetId: APPLICATIONS.envMonitoring, role: "intended_use", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.85) },
+    { ...ctx.canonical("edge-pc300-smp-air"), productId: PRODUCTS.pc300Meridian, targetType: "sample_type", targetId: SAMPLE_TYPES.air, role: "sample_type", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.8) },
+    { ...ctx.canonical("edge-pc300-ind-pharma"), productId: PRODUCTS.pc300Meridian, targetType: "industry", targetId: INDUSTRIES.pharma, role: "target_industry", evidence: e(SOURCES.meridianCatalogue, "source_captured", 0.8) },
   ];
 
   return {

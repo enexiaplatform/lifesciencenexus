@@ -853,6 +853,30 @@ export function seedEvidence(ctx: SeedContext): DemoDatasetSlices {
       objectValue: SKUS.lalCart50, sourceId: SOURCES.orizonCatalogue, confidence: confidence(0.5),
       reviewStatus: "unverified", contradictingClaimIds: [],
     },
+    {
+      ...ctx.canonical(CLAIMS.as200Distributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.as200, predicate: "distributed_by",
+      objectValue: ORGS.mekong, sourceId: SOURCES.mekongQuote2, confidence: confidence(0.8),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.ag200Distributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.ag200, predicate: "distributed_by",
+      objectValue: ORGS.saigon, sourceId: SOURCES.saigonQuote2, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.pc80Distributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.pc80, predicate: "distributed_by",
+      objectValue: ORGS.mekong, sourceId: SOURCES.mekongQuote2, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
+    {
+      ...ctx.canonical(CLAIMS.pc300Distributed),
+      subjectEntityType: "sku", subjectEntityId: SKUS.pc300, predicate: "distributed_by",
+      objectValue: ORGS.saigon, sourceId: SOURCES.saigonQuote2, confidence: confidence(0.75),
+      reviewStatus: "source_captured", contradictingClaimIds: [],
+    },
   ];
 
   // Review history behind the analyst-reviewed claims (the review queue itself

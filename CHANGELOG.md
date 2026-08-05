@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Multi-model equipment lineups + BET cost-per-test** (demo dataset 904 →
+  950 records): second models for the air-sampler and particle-counter
+  shelves (Condor AirSampler AS-200 dual-head, AirGuard AG-200 high-volume,
+  CondorCount PC-80 8-channel benchtop, PartiCount PC-300 online), each with
+  asset models, plate compatibilities, listings, prices and availability.
+  Two new cost-per-test scenarios make the BET assay choice numeric:
+  gel-clot LAL (50-test kit, high hands-on time) vs rFC kinetic (192-test
+  kit + fluorometer allocation + alternative-method validation amortization)
+  — the workspace test asserts rFC wins on effective cost per test.
+
+### Added (earlier in this cycle)
+
 - **Second models per sterility brand + cross-type equivalence records** (demo
   dataset 874 → 904 records): SteriTest ST-300 high-throughput dual-head
   system and SteriPump SP-1000 compact system give each sterility brand a

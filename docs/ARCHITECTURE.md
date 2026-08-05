@@ -116,7 +116,7 @@ only (`src/lib/api/auth.ts`).
 - `NEXUS_DATA_BACKEND=supabase|demo` forces a backend;
 - otherwise auto-detect: `NEXT_PUBLIC_SUPABASE_URL` +
   `NEXT_PUBLIC_SUPABASE_ANON_KEY` present → `supabase`, else `demo`;
-- the demo backend is `src/lib/data/demo-repository.ts` over the 904-record
+- the demo backend is `src/lib/data/demo-repository.ts` over the 950-record
   synthetic dataset in `src/lib/demo/` (tenant `tenant_demo`; deliberate
   `tenant_other` records prove isolation);
 - `src/lib/data/supabase-repository.ts` currently **throws loudly** —

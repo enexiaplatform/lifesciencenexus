@@ -168,6 +168,10 @@ export function seedPrices(ctx: SeedContext, packConfigurations: PackConfigurati
     { ...ctx.canonical(LISTINGS.mekongSum), supplierOrgId: ORGS.mekong, skuId: SKUS.sum100, relationshipType: "authorized_distributor", evidence: edgeEvidence(SOURCES.mekongQuote2, "source_captured", 0.75) },
     { ...ctx.canonical(LISTINGS.mekongSt300), supplierOrgId: ORGS.mekong, skuId: SKUS.st300, relationshipType: "authorized_distributor", evidence: edgeEvidence(SOURCES.mekongQuote2, "source_captured", 0.8) },
     { ...ctx.canonical(LISTINGS.saigonSp1000), supplierOrgId: ORGS.saigon, skuId: SKUS.sp1000, relationshipType: "non_exclusive_distributor", evidence: edgeEvidence(SOURCES.saigonQuote2, "source_captured", 0.75) },
+    { ...ctx.canonical(LISTINGS.mekongAs200), supplierOrgId: ORGS.mekong, skuId: SKUS.as200, relationshipType: "authorized_distributor", evidence: edgeEvidence(SOURCES.mekongQuote2, "source_captured", 0.8) },
+    { ...ctx.canonical(LISTINGS.saigonAg200), supplierOrgId: ORGS.saigon, skuId: SKUS.ag200, relationshipType: "non_exclusive_distributor", evidence: edgeEvidence(SOURCES.saigonQuote2, "source_captured", 0.75) },
+    { ...ctx.canonical(LISTINGS.mekongPc80), supplierOrgId: ORGS.mekong, skuId: SKUS.pc80, relationshipType: "authorized_distributor", evidence: edgeEvidence(SOURCES.mekongQuote2, "source_captured", 0.75) },
+    { ...ctx.canonical(LISTINGS.saigonPc300), supplierOrgId: ORGS.saigon, skuId: SKUS.pc300, relationshipType: "non_exclusive_distributor", evidence: edgeEvidence(SOURCES.saigonQuote2, "source_captured", 0.75) },
   ];
 
   const availabilityObservations: AvailabilityObservation[] = [
@@ -217,6 +221,10 @@ export function seedPrices(ctx: SeedContext, packConfigurations: PackConfigurati
     { ...ctx.canonical(AVAILABILITY.sumLimited), supplierOrgId: ORGS.mekong, skuId: SKUS.sum100, country: "VN", observedAt: ctx.daysAgo(12), status: "limited", leadTimeDays: 40 },
     { ...ctx.canonical(AVAILABILITY.st300InStock), supplierOrgId: ORGS.mekong, skuId: SKUS.st300, country: "VN", observedAt: ctx.daysAgo(18), status: "in_stock", leadTimeDays: 28 },
     { ...ctx.canonical(AVAILABILITY.sp1000Limited), supplierOrgId: ORGS.saigon, skuId: SKUS.sp1000, country: "VN", observedAt: ctx.daysAgo(20), status: "limited", leadTimeDays: 50 },
+    { ...ctx.canonical(AVAILABILITY.as200InStock), supplierOrgId: ORGS.mekong, skuId: SKUS.as200, country: "VN", observedAt: ctx.daysAgo(17), status: "in_stock", leadTimeDays: 35 },
+    { ...ctx.canonical(AVAILABILITY.ag200Limited), supplierOrgId: ORGS.saigon, skuId: SKUS.ag200, country: "VN", observedAt: ctx.daysAgo(19), status: "limited", leadTimeDays: 55 },
+    { ...ctx.canonical(AVAILABILITY.pc80InStock), supplierOrgId: ORGS.mekong, skuId: SKUS.pc80, country: "VN", observedAt: ctx.daysAgo(21), status: "in_stock", leadTimeDays: 30 },
+    { ...ctx.canonical(AVAILABILITY.pc300InStock), supplierOrgId: ORGS.saigon, skuId: SKUS.pc300, country: "VN", observedAt: ctx.daysAgo(23), status: "in_stock", leadTimeDays: 42 },
   ];
 
   const commercialTerms: CommercialTerms[] = [
@@ -804,6 +812,34 @@ export function seedPrices(ctx: SeedContext, packConfigurations: PackConfigurati
       ...ctx.canonical(PRICES.sp1000),
       skuId: SKUS.sp1000, packConfigurationId: PACKS.sp1000, supplierOrgId: ORGS.saigon,
       originalAmount: 96_000_000, originalCurrency: "VND", observationDate: ctx.daysAgo(22),
+      taxIncluded: false, vatRate: 0.1, incoterm: "CIF", geography: "VN", quantity: 1,
+      sourceId: SOURCES.saigonQuote2, confidence: confidence(0.7), evidenceState: "source_captured", isSynthetic: true,
+    },
+    {
+      ...ctx.canonical(PRICES.as200),
+      skuId: SKUS.as200, packConfigurationId: PACKS.as200, supplierOrgId: ORGS.mekong,
+      originalAmount: 165_000_000, originalCurrency: "VND", observationDate: ctx.daysAgo(16),
+      taxIncluded: false, vatRate: 0.1, incoterm: "DAP", geography: "VN", quantity: 1,
+      sourceId: SOURCES.mekongQuote2, confidence: confidence(0.75), evidenceState: "source_captured", isSynthetic: true,
+    },
+    {
+      ...ctx.canonical(PRICES.ag200),
+      skuId: SKUS.ag200, packConfigurationId: PACKS.ag200, supplierOrgId: ORGS.saigon,
+      originalAmount: 128_000_000, originalCurrency: "VND", observationDate: ctx.daysAgo(22),
+      taxIncluded: false, vatRate: 0.1, incoterm: "CIF", geography: "VN", quantity: 1,
+      sourceId: SOURCES.saigonQuote2, confidence: confidence(0.7), evidenceState: "source_captured", isSynthetic: true,
+    },
+    {
+      ...ctx.canonical(PRICES.pc80),
+      skuId: SKUS.pc80, packConfigurationId: PACKS.pc80, supplierOrgId: ORGS.mekong,
+      originalAmount: 142_000_000, originalCurrency: "VND", observationDate: ctx.daysAgo(16),
+      taxIncluded: false, vatRate: 0.1, incoterm: "DAP", geography: "VN", quantity: 1,
+      sourceId: SOURCES.mekongQuote2, confidence: confidence(0.75), evidenceState: "source_captured", isSynthetic: true,
+    },
+    {
+      ...ctx.canonical(PRICES.pc300),
+      skuId: SKUS.pc300, packConfigurationId: PACKS.pc300, supplierOrgId: ORGS.saigon,
+      originalAmount: 118_000_000, originalCurrency: "VND", observationDate: ctx.daysAgo(22),
       taxIncluded: false, vatRate: 0.1, incoterm: "CIF", geography: "VN", quantity: 1,
       sourceId: SOURCES.saigonQuote2, confidence: confidence(0.7), evidenceState: "source_captured", isSynthetic: true,
     },
