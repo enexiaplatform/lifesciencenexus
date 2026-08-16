@@ -55,9 +55,17 @@ Updated after each major phase. Legend: ✅ done · 🟡 in progress · ⬜ pend
 - Dead code removed: `src/components/module-placeholder.tsx` (unused).
 - Tests: `tests/e2e/landing.spec.ts` gained a media assertion (hero video poster + 3 tour images load).
 
+## Phase 11 — Commercial readiness: marketing surface + auth UI — ✅
+
+- **Marketing surface**: `/pricing` (Demo / Professional / Enterprise tiers, 13-row plan comparison on real modules only, `scope="col"` a11y), `/contact` request-access form (zod `leadSchema` shared client/server, server action with honest no-persistence success copy + demo-mode note, full `aria-invalid`/`aria-describedby`/`role="status"`), `/legal/privacy` (11 sections, verified against the codebase: synthetic demo data, no analytics cookies, RLS isolation, Supabase/Vercel subprocessors) and `/legal/terms` (12 sections, Singapore governing law — counsel review tracked in KNOWN_LIMITATIONS). Landing gained `FaqSection` (7 Q&As, native `<details>`) and `PricingTeaser`; navbar gained Pricing + Sign in + Request access (section anchors now rooted `/#…` so they work from any page); footer gained a Company column. Hero gained a "Request access" secondary link.
+- **Auth UI (env-gated Supabase Auth)**: `src/lib/auth/` — pure `decideAccess` gating (public paths vs workspace; `/api` keeps x-api-key), `sanitizeNextPath` (open-redirect guard), zod form schemas. `src/lib/supabase/middleware.ts` now gates workspace routes when Supabase env is configured; demo mode passes through unchanged. New routes: `/login`, `/signup`, `/forgot-password`, `/reset-password` (all render a "Demo deployment" notice when env is absent), `GET /auth/callback` (code exchange), `POST /auth/sign-out`. App shell: the 7 group layouts fetch the session user null-safely; authenticated users get a Radix account dropdown (email, Settings, Sign out); demo keeps the "DA" avatar.
+- **SEO/env**: `NEXT_PUBLIC_SITE_URL` in env schema + `.env.example`; sitemap/robots consume `siteUrl`; sitemap lists the 4 marketing routes; `docs/DEPLOYMENT.md` gained a Supabase Auth setup section.
+- **Tests**: 351 vitest green (was 302; +49: gating, auth schemas, lead schema, pricing/faq/contact-form renders). Playwright **52/52** green (was 22; +30: `marketing.spec.ts`, `auth.spec.ts`, expanded `landing.spec.ts`). `npm run build` green with all new routes.
+- **Housekeeping**: a stale, half-applied demo-data refactor predating this phase (`src/lib/demo/{ids,organizations,products}.ts`, uncommitted, ~1,240 type errors) was preserved via `git stash` ("WIP: half-applied demo-data refactor (pre-Phase-11, found breaking build)") — recover with `git stash pop` if it was intentional; the working tree matches the green 985-record HEAD dataset.
+
 ## Credential-blocked items (tracked honestly)
 
 - Live Supabase project provisioning + migration apply + RLS verification scripts execution.
+- Auth UI exercised against live Supabase Auth (gating is unit-tested; demo-mode paths e2e-tested — KNOWN_LIMITATIONS item 12).
 - Vercel deployment + smoke tests on the deployed URL.
 - Real Memoire/Atlas runtime integration (contract + mocks + tests only, per plan).
-- Playwright browser run (browsers not installed in this environment; spec + config ready).

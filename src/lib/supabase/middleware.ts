@@ -1,12 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { decideAccess } from "@/lib/auth/gating";
+
 /**
- * Refresh the Supabase auth session on each request. In demo mode (no
- * Supabase env vars configured) this is a no-op pass-through.
- *
- * Auth gating / redirects are intentionally not implemented yet; this helper
- * only keeps the session cookie fresh.
+ * Refresh the Supabase auth session on each request and, when Supabase env
+ * vars are configured, gate workspace routes: anonymous requests to
+ * non-public paths are redirected to `/login?next=…` (see
+ * `src/lib/auth/gating.ts`). In demo mode (no env vars) this is a no-op
+ * pass-through and every route stays open.
  */
 export async function updateSession(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -36,7 +38,15 @@ export async function updateSession(request: NextRequest) {
   });
 
   // Refresh the session; do not remove this call.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Gate workspace routes now that env vars are present (auth enabled).
+  const decision = decideAccess(request.nextUrl.pathname, !!user, true);
+  if (!decision.allow) {
+    return NextResponse.redirect(new URL(decision.redirectTo, request.url));
+  }
 
   return response;
 }

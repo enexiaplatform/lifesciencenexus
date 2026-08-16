@@ -119,3 +119,27 @@ skipped (NOTICE) unless the two fixed-UUID users are created first.
   seeded project.
 - **Remediation:** documented in `docs/DATABASE.md` §Setup; a Supabase seed
   function or Admin-API script is the v0.2 fix.
+
+### 12. Auth UI has never run against a live Supabase project
+Phase 11 shipped the full auth surface (`/login`, `/signup`,
+`/forgot-password`, `/reset-password`, `/auth/callback`, `/auth/sign-out`,
+middleware gating via `decideAccess`, app-shell account menu), but this
+environment has no Supabase credentials: the gating logic is covered by unit
+tests and the demo-mode paths by Playwright, while the authenticated flows
+(email confirmation, password recovery, session refresh, redirect gating)
+have never executed end-to-end.
+- **Impact:** a wiring mistake in the Supabase-specific paths (redirect URLs,
+  cookie handling, email templates) would only surface at first deployment.
+- **Remediation:** with the v0.2 Supabase provisioning (item 1), run the
+  smoke checklist in `docs/DEPLOYMENT.md` §Supabase Auth setup against a
+  staging project before inviting the first tenant.
+
+### 13. Legal pages pending counsel review
+`/legal/privacy` and `/legal/terms` were drafted to match the codebase's
+actual behavior (synthetic demo data, no analytics cookies, RLS isolation,
+Supabase/Vercel subprocessors, Singapore governing law) but have not been
+reviewed by legal counsel.
+- **Impact:** clauses may not match the operating entity's jurisdiction or
+  contractual needs once real tenants sign.
+- **Remediation:** counsel review before the first paid tenant; update the
+  "Last updated" date on both pages when revised.

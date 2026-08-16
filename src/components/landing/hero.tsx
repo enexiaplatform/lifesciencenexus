@@ -1,11 +1,9 @@
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { ScreenshotFrame } from "@/components/landing/screenshot-frame";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const GITHUB_URL = "https://github.com/enexiaplatform/lifesciencenexus";
 
 /**
  * Abstract node-graph motif for the hero background. Decorative only.
@@ -52,9 +50,8 @@ export function LandingHero() {
             <p className="mt-5 max-w-xl text-base leading-7 text-slate-600">
               Organizations, products, SKUs, standards, suppliers, observed
               prices, tenders, and installed base — connected in one graph,
-              every fact carrying its evidence. Initial wedge: industrial
-              microbiology in Vietnam, QC labs in pharma and food
-              manufacturing.
+              every fact carrying its evidence. Global coverage of the
+              bioprocess portfolio: upstream, downstream, and QC.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
@@ -64,19 +61,17 @@ export function LandingHero() {
                 Open demo workspace
                 <ArrowRight aria-hidden="true" />
               </Link>
-              <a
-                href={GITHUB_URL}
-                target="_blank"
-                rel="noreferrer"
-                className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-spectral-600 underline-offset-4 transition-colors duration-120 hover:text-spectral-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2"
               >
-                Explore the docs
-                <ArrowUpRight aria-hidden="true" />
-              </a>
+                Request access
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
             </div>
             <p className="mt-4 text-xs text-slate-500">
-              The demo workspace runs without signup on synthetic,
-              Demo-labeled data.
+              The demo workspace runs without signup; every market fact
+              carries its source evidence.
             </p>
           </div>
 

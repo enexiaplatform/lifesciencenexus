@@ -12,9 +12,10 @@ export function CtaBand() {
           Explore the demo workspace
         </h2>
         <p className="mt-3 max-w-xl text-sm leading-6 text-nexus-200">
-          Browse the seeded graph for industrial microbiology in Vietnam:
-          organizations, products, SKUs, standards, suppliers, observed
-          prices, and tenders. No signup required.
+          Browse the seeded graph for the global bioprocess market —
+          upstream, downstream, and QC: organizations, products, SKUs,
+          standards, suppliers, observed prices, and tenders. No signup
+          required.
         </p>
         <div className="mt-8">
           <Link

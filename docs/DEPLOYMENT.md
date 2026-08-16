@@ -57,6 +57,7 @@ settings for deployment):
 
 | Variable | Scope | Required | Purpose |
 |---|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | browser + server | no | Canonical origin (metadata, auth redirects); default `http://localhost:3000` |
 | `NEXT_PUBLIC_SUPABASE_URL` | browser + server | for Supabase backend | Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | browser + server | for Supabase backend | Publishable anon key; safe for browser (RLS enforces) |
 | `SUPABASE_SERVICE_ROLE_KEY` | **server only** | for publish pipeline/engine writes | Bypasses RLS; never expose to the browser, never commit |
@@ -69,6 +70,30 @@ settings for deployment):
 With no Supabase vars set, the app runs in demo mode — this is deliberate and
 visible ("Demo workspace" badge). Misconfiguration fails closed, never
 silently into demo for a production URL.
+
+### Supabase Auth setup
+
+Setting `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` enables
+Supabase Auth: workspace routes require a session (middleware redirects
+anonymous visitors to `/login?next=…`), while `/`, `/pricing`, `/contact`,
+`/legal/*`, the auth pages, and `/api/*` stay public. Unset ⇒ demo mode, all
+routes open, auth pages render a "Demo deployment" notice instead of forms.
+
+In the Supabase dashboard (Authentication → Sign In / Providers and → URL
+Configuration):
+
+- Enable the **Email** provider.
+- Set **Site URL** to the deployment origin (same value as
+  `NEXT_PUBLIC_SITE_URL`).
+- Add redirect URLs: `<site>/auth/callback` and, for local dev,
+  `http://localhost:3000/auth/callback`.
+
+Flow behavior: signup shows a check-your-email panel and confirmation links
+land on `/auth/callback`; password recovery uses the same callback and
+continues to `/reset-password` (magic-link style). After confirmation,
+workspace access is still provisioned manually by the operator in this
+release — see `docs/KNOWN_LIMITATIONS.md` item 11 (seed/demo users require
+manual auth provisioning).
 
 ## 5. Vercel project
 

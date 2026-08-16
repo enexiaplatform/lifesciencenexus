@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Commercial readiness: marketing surface + auth UI** (Phase 11). Marketing:
+  `/pricing` (Demo / Professional / Enterprise tiers with a 13-row plan
+  comparison covering only shipped modules), `/contact` request-access form
+  (shared zod schema, server action with honest no-persistence success copy
+  and an explicit demo-mode note), `/legal/privacy` and `/legal/terms`
+  (content verified against actual codebase behavior), landing FAQ section +
+  pricing teaser, navbar Sign in / Request access CTAs with section anchors
+  that work from any page, footer Company column, marketing routes in the
+  sitemap. Auth UI: env-gated Supabase Auth — `/login`, `/signup`,
+  `/forgot-password`, `/reset-password`, `GET /auth/callback`,
+  `POST /auth/sign-out`; pure `decideAccess` middleware gating (workspace
+  routes require a session only when Supabase is configured; demo mode and
+  `/api` key auth unchanged); account dropdown in the app shell for
+  authenticated users. `NEXT_PUBLIC_SITE_URL` env + Supabase Auth setup docs
+  in `docs/DEPLOYMENT.md`. Tests: 351 vitest (+49), 52/52 Playwright (+30).
+
+### Added (earlier in this cycle)
+
 - **Demand-side biologics account + cleanroom standard anchor** (demo dataset
   950 → 985 records): Bach Dang Biologics (Hai Phong mAb plant, CDMO) closes
   the loop on the upstream → downstream portfolio — upstream PD and QC/BET

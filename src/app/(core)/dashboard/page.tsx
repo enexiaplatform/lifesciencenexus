@@ -217,7 +217,7 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       <PageHeader
         title="Dashboard"
-        description="Industrial microbiology · Vietnam — workspace pulse across market, product and evidence data."
+        description="Bioprocess portfolio · Global — workspace pulse across market, product and evidence data."
       />
 
       {/* Stat cards */}

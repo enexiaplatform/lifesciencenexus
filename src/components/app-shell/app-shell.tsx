@@ -8,6 +8,13 @@ import { Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { Wordmark } from "@/components/brand/wordmark";
 import { DataModeBadge } from "@/components/data-mode-badge";
 import { QuickSearch } from "@/components/search/quick-search";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import type { DataBackend } from "@/lib/env";
 
@@ -16,9 +23,11 @@ import { navSections } from "./nav";
 type AppShellProps = {
   children: ReactNode;
   backend: DataBackend;
+  /** Signed-in user (email). Null/undefined renders the demo avatar. */
+  user?: { email: string } | null;
 };
 
-export function AppShell({ children, backend }: AppShellProps) {
+export function AppShell({ children, backend, user }: AppShellProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -108,15 +117,19 @@ export function AppShell({ children, backend }: AppShellProps) {
 
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden text-xs text-slate-500 md:inline">
-              Industrial Microbiology · Vietnam
+              Bioprocess Portfolio · Global
             </span>
-            <span
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-nexus-100 text-xs font-semibold text-nexus-700"
-              aria-label="Demo analyst account"
-              title="Demo analyst"
-            >
-              DA
-            </span>
+            {user ? (
+              <UserMenu email={user.email} />
+            ) : (
+              <span
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-nexus-100 text-xs font-semibold text-nexus-700"
+                aria-label="Demo analyst account"
+                title="Demo analyst"
+              >
+                DA
+              </span>
+            )}
           </div>
         </header>
 
@@ -125,6 +138,39 @@ export function AppShell({ children, backend }: AppShellProps) {
         </main>
       </div>
     </div>
+  );
+}
+
+function UserMenu({ email }: { email: string }) {
+  // Deterministic initial: first letter of the email local part, uppercase.
+  const initial = (email.split("@")[0]?.charAt(0) ?? "").toUpperCase() || "?";
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className="flex h-8 w-8 items-center justify-center rounded-full bg-nexus-700 text-xs font-semibold text-white transition-colors duration-120 hover:bg-nexus-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2"
+        aria-label="Account menu"
+        title={email}
+      >
+        {initial}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem disabled className="truncate">
+          {email}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/settings">Settings</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <form action="/auth/sign-out" method="post" className="w-full">
+            <button type="submit" className="w-full cursor-pointer text-left">
+              Sign out
+            </button>
+          </form>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

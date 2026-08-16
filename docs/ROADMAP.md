@@ -27,7 +27,7 @@ Green build: typecheck / lint / 302 vitest tests / `next build` pass.
 |---|---|---|
 | Live Supabase verification | provision project, apply migrations, run `verify:rls` + `verify:data-isolation` (limitation 1) | Supabase credentials |
 | `SupabaseRepository` implementation | replace the throwing stub (limitation 2); same `NexusRepository` seam, no UI changes | live verification |
-| Auth UI with Supabase Auth | sign-in/up, session via `src/middleware.ts`, tenant membership flow; demo users via Admin-API script (limitation 11) | SupabaseRepository |
+| Auth UI with Supabase Auth | sign-in/up, session via `src/middleware.ts`, tenant membership flow; demo users via Admin-API script (limitation 11). **UI shipped in Phase 11** (pages, middleware gating, account menu); remaining: tenant membership flow + live verification (limitation 12) | SupabaseRepository |
 | Remaining 7 signal rules | new_factory_or_lab, facility_expansion, new_production_line, regulatory_change, missing_local_supplier, portfolio_whitespace, cross_sell_gap — each behind explicit source-type gates (limitation 7) | source ingestion for the new feeds |
 | Review assignments | route claims to named reviewers (`review_assignments` table exists), workload view on `/review` | auth UI |
 | Per-consumer API keys | wire the existing `api_clients` table; JWT verification replacing the static key (limitation 8) | auth UI |

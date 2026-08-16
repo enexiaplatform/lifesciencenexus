@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -8,22 +8,22 @@ import { Wordmark } from "@/components/brand/wordmark";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const GITHUB_URL = "https://github.com/enexiaplatform/lifesciencenexus";
-
 const SECTION_LINKS = [
-  { href: "#platform", label: "Platform" },
-  { href: "#intelligence", label: "Intelligence" },
-  { href: "#evidence", label: "Evidence" },
-  { href: "#ecosystem", label: "Ecosystem" },
+  { href: "/#platform", label: "Platform" },
+  { href: "/#intelligence", label: "Intelligence" },
+  { href: "/#evidence", label: "Evidence" },
+  { href: "/#ecosystem", label: "Ecosystem" },
+  { href: "/pricing", label: "Pricing" },
 ] as const;
 
 const linkClasses =
   "rounded-md px-2 py-1 text-sm text-slate-600 transition-colors duration-120 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-spectral-600 focus-visible:ring-offset-2";
 
 /**
- * Landing page chrome: sticky navbar with section anchors, GitHub link, and
- * the demo-workspace CTA. Collapses to an accessible disclosure menu on
- * small viewports.
+ * Landing page chrome: sticky navbar with section anchors and the
+ * sign-in / demo / request-access CTAs. Section anchors are rooted at
+ * `/` so they resolve from any page. Collapses to an accessible
+ * disclosure menu on small viewports.
  */
 export function LandingNavbar() {
   const [open, setOpen] = useState(false);
@@ -45,20 +45,29 @@ export function LandingNavbar() {
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noreferrer"
-            className={cn(linkClasses, "inline-flex items-center gap-1")}
+          <Link
+            href="/login"
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "h-9 px-3 text-sm",
+            )}
           >
-            GitHub
-            <ArrowUpRight className="size-3.5" aria-hidden="true" />
-          </a>
+            Sign in
+          </Link>
           <Link
             href="/dashboard"
+            className={cn(
+              buttonVariants({ variant: "outline", size: "sm" }),
+              "h-9 px-4 text-sm",
+            )}
+          >
+            Open demo
+          </Link>
+          <Link
+            href="/contact"
             className={cn(buttonVariants({ size: "sm" }), "h-9 px-4 text-sm")}
           >
-            Open demo workspace
+            Request access
           </Link>
         </div>
 
@@ -94,22 +103,35 @@ export function LandingNavbar() {
                 {link.label}
               </a>
             ))}
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noreferrer"
-              className={cn(linkClasses, "inline-flex items-center gap-1 px-3 py-2")}
-            >
-              GitHub
-              <ArrowUpRight className="size-3.5" aria-hidden="true" />
-            </a>
-            <Link
-              href="/dashboard"
-              className={cn(buttonVariants({ size: "sm" }), "mt-2 h-10 text-sm")}
-              onClick={() => setOpen(false)}
-            >
-              Open demo workspace
-            </Link>
+            <div className="mt-2 flex flex-col gap-2">
+              <Link
+                href="/login"
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "h-10 text-sm",
+                )}
+                onClick={() => setOpen(false)}
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/dashboard"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "sm" }),
+                  "h-10 text-sm",
+                )}
+                onClick={() => setOpen(false)}
+              >
+                Open demo
+              </Link>
+              <Link
+                href="/contact"
+                className={cn(buttonVariants({ size: "sm" }), "h-10 text-sm")}
+                onClick={() => setOpen(false)}
+              >
+                Request access
+              </Link>
+            </div>
           </div>
         </div>
       ) : null}

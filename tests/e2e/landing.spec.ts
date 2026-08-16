@@ -20,7 +20,7 @@ test.describe("Landing page", () => {
       page.getByRole("link", { name: "Open demo workspace" }).first(),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Explore the docs" }),
+      page.getByRole("link", { name: "Request access" }).first(),
     ).toBeVisible();
 
     // Exactly one h1 on the page.
@@ -30,7 +30,7 @@ test.describe("Landing page", () => {
   test("navbar CTA navigates to the demo workspace", async ({ page }) => {
     await page.goto("/");
     const nav = page.getByRole("navigation", { name: "Landing" });
-    await nav.getByRole("link", { name: "Open demo workspace" }).click();
+    await nav.getByRole("link", { name: "Open demo" }).click();
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(
       page.getByRole("heading", { name: "Dashboard", level: 1 }),
@@ -95,7 +95,7 @@ test.describe("Landing page", () => {
       menu.getByRole("link", { name: "Platform" }),
     ).toBeVisible();
     await expect(
-      menu.getByRole("link", { name: "Open demo workspace" }),
+      menu.getByRole("link", { name: "Open demo" }),
     ).toBeVisible();
 
     // Selecting a link closes the disclosure.

@@ -33,6 +33,8 @@ const envSchema = z.object({
     .transform((value) => value === "true" || value === "1"),
   MEMOIRE_INTEGRATION_URL: optionalUrl,
   ATLAS_INTEGRATION_URL: optionalUrl,
+  /** Public base URL of the deployment, used for sitemap/robots/metadata. */
+  NEXT_PUBLIC_SITE_URL: optionalUrl,
 });
 
 export type NexusEnv = z.infer<typeof envSchema>;
@@ -81,6 +83,9 @@ export function getServiceRoleKey(): string | null {
 }
 
 export const demoTenantId = env.NEXUS_DEMO_TENANT_ID ?? "tenant_demo";
+
+/** Public base URL of this deployment (no trailing slash). */
+export const siteUrl = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const featureFlags = {
   aiExtraction: env.NEXUS_ENABLE_AI_EXTRACTION,

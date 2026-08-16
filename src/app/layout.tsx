@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s · Life Science Nexus",
   },
   description:
-    "Industry and Product Intelligence Graph for life science markets. Initial wedge: industrial microbiology in Vietnam.",
+    "Industry and Product Intelligence Graph for life science markets. Global coverage of the bioprocess portfolio: upstream, downstream, and QC.",
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     apple: [{ url: "/apple-icon.svg", type: "image/svg+xml" }],
